@@ -21,7 +21,7 @@ new, delete는 생성자 소멸자를 호출한다.
 복제 생성자를 직접 재정의해줘야한다.
 
 dynamic cast
-rtti, virtual 함수를 보고 되는지 여부를 판단한다.
+runtime 에서 cast 성공여부가 결정된다. rtti(런타임 형식정보), virtual 함수를 보고 되는지 여부를 판단한다.
 static cast
 int->float등 일반적 형변환
 const cast
@@ -30,3 +30,17 @@ const cast
 virtual 함수는 런타임때 테이블이 생기며 upcasting으로 생성된 객체가 override된 함수를 사용할 수 있게 해준다.
 최상위 class의 함수가 virtual이면 그 아래 클래스의 같은 함수들은 전부 virtual이 된다.
 virtual 소멸자를 안쓰면 부모 클래스만 지우고 지나가기 때문에 자식클래스의 메모리는 남아버려서 메모리 누수가 생긴다.
+
+순수가상함수: 자식클래스에서 필수적으로 재정의 되어야하는 함수, 재정의 되지않으면 선언되지않는다.
+interface: 규격
+
+
+클래스 접근순서는 private->protected -> public이다.
+상속이 public 속성인 이유는 접근을 public까지 앞에 private, protected까지보고 public까지 접근하기 위해서다.
+
+이동생성자: 한 객체를 다른 객체로 아예 넘길때 원본이 소멸할 것을 확신할때 사용한다. 얕은 복사로 정보를 보내고 원본은 맴버변수중 포인터의 주소를 nullptr로 잊어버리고 이동한 객체가 가지게한다.
+
+vector는 push_back은 임시객체에 저장하고 넘기는 이동생성을 하기 때문에 생성자가 두번 소멸자가 두번 호출된다. emplace_back은 바로 박기 때문에 생성자는 한번만 호출한다.
+modern c++에서는 emplace_back을 사용한다.
+vector가 가득차면 이사를 하는데 capacity는 벡터가 커질때 자주 이사하지 않도록 안정용량을 잡아둔다.
+reserve를 사용해서 용량을 미리 잡아두는 것도 가능하다.
