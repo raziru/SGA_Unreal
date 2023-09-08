@@ -1,0 +1,38 @@
+NDC(Normalized Device Coordinates)
+좌표계
+
+Vertex Shader
+
+WVP        Transform
+
+World      Transform : local 좌표계(오브젝트 자체의 좌표계)을 Global(world) 좌표계로 바꿔주는 변환
+View        Transform : Global 좌표계를 Camera좌표계로 변환(뷰 변환)
+Projection Transform : Camera좌표계를 투영좌표계로 변환(투영 변환) 가려지는 곳을 안그리게 하는 과정
+->normalize 좌표를 픽셀 좌표로 바꾸줌
+
+World 행렬 * view 행렬 * projection 행렬
+
+fov : field of view
+
+Perspective vs Orthographic
+
+Perspective: 3d게임의 오브젝트
+Orthographic: 2D게임의 오브젝트, 3D게임에서 쓰는 UI, 인벤토리 등 크기가 고정되어야하는 창
+
+행렬
+단위행렬: 주대각선이 1이고 나머지가 0인 정사각행렬 identity martix
+역행렬: 어떤 행렬과 곱했을 때 단위행렬이 되는 행렬, inverse martix
+전치행렬: 주대각선을 기준으로 행과 열의 원소를 교환한 행렬, transpose martix - 행우선 행렬을 전치하면 열우선행렬로 변경한다.
+현대수학은 행 우선 행렬이지만 Shader는 열 우선 행렬이다. 열 우선 행렬이 더 빠르기 때문
+
+DX의 도형은 최초에는 (0,0)에 둔다- 회전을 할때 자전을 하기 위함
+
+SRT
+scale, rotating(자전), translation
+도형의 연산은 전부 정점에 연산하다. 순서를 꼭 지켜야한다.
+
+회전은 +에서 -를 볼때 시계방향으로 돈다. 엄지로 z축 방향을 가르키고 손가락 방향이 양방향 회전이다.
+
+vector4(x,y,z,w) w가 1이면 점, 0이면 벡터, float4를 사용한다.
+
+회전은 한 축을 묶어놓고 다른 점을 회전시키는 것이다. 4X4행렬에서 축이 되는 축의 변화를 막고 나머지 4칸을 회전행렬로 취급한다.
