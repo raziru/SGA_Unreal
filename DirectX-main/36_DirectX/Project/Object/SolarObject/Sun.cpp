@@ -14,7 +14,6 @@ void Sun::Update()
 {
 	translation = WIN_CENTER;
 	angle += Time::Delta();
-	Star::Update();
 }
 
 void Sun::Render()

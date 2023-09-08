@@ -11,6 +11,8 @@ Star::Star()
 
     worldBuffer = new MatrixBuffer();
 
+    
+
     S = {};
     R = {};
     T = {};
@@ -24,7 +26,10 @@ Star::~Star()
 
 void Star::Update()
 {
+    //translation = WIN_CENTER;
     
+    angle += (dir) * Time::Delta();
+
 
     S = XMMatrixScaling(scale.x, scale.y, 1.0f);
     R = XMMatrixRotationZ(angle);

@@ -10,6 +10,8 @@ public:
 
 	XMFLOAT2& Scale()       { return scale; }
 	XMFLOAT2& Translation() { return translation; }
+
+	float& Dir()         { return dir; }
 	XMMATRIX& SetParent()   { return parentWorld; }
 	XMMATRIX& GetWorld()    { return world; }
 
@@ -33,6 +35,8 @@ protected:
 
 
 	float angle = 0.0f;
+
+	float dir = 1.0f;
 
 	
 };
