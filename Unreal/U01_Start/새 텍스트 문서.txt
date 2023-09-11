@@ -1,0 +1,5 @@
+uobject
+actor - SceneComponent
+pawn - pComponent
+character 
+bp_player
