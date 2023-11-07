@@ -1,0 +1,12 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "01_Actor/C02_SpawnActor_Cube.h"
+#include "Global.h"
+
+AC02_SpawnActor_Cube::AC02_SpawnActor_Cube()
+{
+	UStaticMesh* mesh;
+	CHelpers::GetAsset<UStaticMesh>(&mesh, "StaticMesh'/Game/Meshs/M_Cube.M_Cube'");
+	Mesh->SetStaticMesh(mesh);
+}

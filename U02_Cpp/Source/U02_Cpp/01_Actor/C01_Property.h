@@ -26,8 +26,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 		int Test = 20;
 
-	UFUNCTION(BlueprintPure)
-		int Hello();
+
 
 
 public:	
