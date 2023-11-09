@@ -9,7 +9,7 @@
 UCLASS()
 class U02_CPP_API AC01_Property : public AActor
 {
-	GENERATED_BODY()
+	GENERATED_BODY()// 빨간줄이 잘안 사라진다 빌드되면 고쳐짐
 
 private:
 	UPROPERTY(EditAnywhere)
