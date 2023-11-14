@@ -9,3 +9,4 @@
 
 #include "Utilities/CHelpers.h"
 #include "Utilities/Defines.h"
+#include "CLog.h"
