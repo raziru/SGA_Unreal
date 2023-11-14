@@ -10,6 +10,14 @@ UCLASS()
 class UCPP_API AC_ActorBeginOverlap : public AActor
 {
 	GENERATED_BODY()
+	UPROPERTY(VisibleDefaultsOnly)
+		class USceneComponent* Scene;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UBoxComponent* Box;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UTextRenderComponent* Text;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -19,8 +27,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
+private:
+	UFUNCTION()
+		void ActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
+
+	UFUNCTION()
+		void ActorEndOverlap(AActor* OverlappedActor, AActor* OtherActor);
 };
