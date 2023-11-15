@@ -50,6 +50,16 @@ public:
 
 		InActor->SetRootComponent((*InComponent));
 	}
+	template<typename T>
+	static void FindActors(class UWorld* InWorld, TArray<T*>& OutActors)
+	{
+		OutActors.Empty();
 
+		TArray<AActor*> actors;
+		UGameplayStatics::GetAllActorsOfClass(InWorld, T::StaticClass(), actors);
+
+		for (AActor* actor : actors)
+			OutActors.Add(Cast<T>(actor));
+	}
 
 };

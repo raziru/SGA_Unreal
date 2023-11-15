@@ -4,6 +4,7 @@
 #include "Global.h"
 #include "Components/BoxComponent.h"
 #include "Components/TextRenderComponent.h"
+
 AC03_Trigger::AC03_Trigger()
 {
 	CHelpers::CreateComponent<USceneComponent>(this, &Scene, "Scene");

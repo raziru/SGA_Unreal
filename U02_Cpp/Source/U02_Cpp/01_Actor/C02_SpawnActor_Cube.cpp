@@ -7,6 +7,6 @@
 AC02_SpawnActor_Cube::AC02_SpawnActor_Cube()
 {
 	UStaticMesh* mesh;
-	CHelpers::GetAsset<UStaticMesh>(&mesh, "StaticMesh'/Game/Meshs/M_Cube.M_Cube'");
+	CHelpers::GetAsset<UStaticMesh>(&mesh, "StaticMesh'/Game/Meshes/M_Cube.M_Cube'");
 	Mesh->SetStaticMesh(mesh);
 }
