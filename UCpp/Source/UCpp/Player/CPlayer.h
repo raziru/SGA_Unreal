@@ -35,4 +35,10 @@ private:
 private:
 	void OnRunning();
 	void OffRunning();
+public:
+	UFUNCTION(BlueprintCallable)
+		void ChangeColor(FLinearColor InColor);
+private:
+	class UMaterialInstanceDynamic* BodyMaterial;
+	class UMaterialInstanceDynamic* LogoMaterial;
 };
