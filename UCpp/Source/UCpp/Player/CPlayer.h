@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Interface/IRifle.h"
 #include "GameFramework/Character.h"
 #include "CPlayer.generated.h"
 
 UCLASS()
-class UCPP_API ACPlayer : public ACharacter
+class UCPP_API ACPlayer : public ACharacter, public IIRifle
 {
 	GENERATED_BODY()
 
@@ -15,6 +16,8 @@ class UCPP_API ACPlayer : public ACharacter
 		class USpringArmComponent* SpringArm;
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
+public:
+	FORCEINLINE class ACRifle* GetRifle() override { return Rifle; }
 public:
 	ACPlayer();
 
@@ -35,10 +38,15 @@ private:
 private:
 	void OnRunning();
 	void OffRunning();
+
+	void OnRifle();
 public:
 	UFUNCTION(BlueprintCallable)
 		void ChangeColor(FLinearColor InColor);
 private:
 	class UMaterialInstanceDynamic* BodyMaterial;
 	class UMaterialInstanceDynamic* LogoMaterial;
+
+private:
+	class ACRifle* Rifle;
 };

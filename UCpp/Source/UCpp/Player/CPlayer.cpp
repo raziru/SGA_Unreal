@@ -3,6 +3,7 @@
 
 #include "Player/CPlayer.h"
 #include "Global.h"
+#include "Weapons/CRifle.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -61,6 +62,8 @@ void ACPlayer::BeginPlay()
 
 	GetMesh()->SetMaterial(0, BodyMaterial);
 	GetMesh()->SetMaterial(1, LogoMaterial);
+
+	Rifle = ACRifle::Spawn(GetWorld(), this);//unreal½Ä new
 }
 
 // Called every frame
@@ -83,6 +86,8 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Running", EInputEvent::IE_Pressed, this,  &ACPlayer::OnRunning);
 	PlayerInputComponent->BindAction("Running", EInputEvent::IE_Released, this, &ACPlayer::OffRunning);
+
+	PlayerInputComponent->BindAction("Rifle", EInputEvent::IE_Pressed, this, &ACPlayer::OnRifle);
 }
 void ACPlayer::OnMoveForward(float Axis)
 {
@@ -118,6 +123,19 @@ void ACPlayer::OnRunning()
 void ACPlayer::OffRunning()
 {
 	GetCharacterMovement()->MaxWalkSpeed = 400;
+}
+
+void ACPlayer::OnRifle()
+{
+	if (Rifle->GetEquipped())
+	{
+		Rifle->Unequip();
+
+		return;
+	}
+	Rifle->Equip();
+
+
 }
 
 void ACPlayer::ChangeColor(FLinearColor InColor)
