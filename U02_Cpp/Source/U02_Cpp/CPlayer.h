@@ -11,12 +11,21 @@ class U02_CPP_API ACPlayer : public ACharacter, public IIRifle
 	GENERATED_BODY()
 
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
+		TSubclassOf<class UCUserWidget_CrossHair> CrossHairClass;
+
+private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class USpringArmComponent* SpringArm;
-
-	UPROPERTY(VisibleDefaultsOnly)
+protected:
+	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
+protected:
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnZoomIn();
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void OnZoomOut();
 public:
 	FORCEINLINE class ACRifle* GetRifle() override { return Rifle; }
 
@@ -43,14 +52,19 @@ private:
 
 	void OnRifle();
 
+	void OnAim();
+	void OffAim();
+
 
 public:
 	UFUNCTION(BlueprintCallable)
 		void ChangeColor(FLinearColor InColor);
+
 private:
 	class UMaterialInstanceDynamic* BodyMaterial;
 	class UMaterialInstanceDynamic* LogoMaterial;
 
 private:
 	class ACRifle* Rifle;
+	class UCUserWidget_CrossHair* CrossHair;
 };

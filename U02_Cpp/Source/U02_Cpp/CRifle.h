@@ -32,6 +32,7 @@ public:
 public:
 	FORCEINLINE bool GetEquipped() { return bEquipped; }//Unreal에서는 inline 함수가 안정적이게 사용하기 위해 forceinline을 사용을 권고한다.(강제 inline화)
 	FORCEINLINE bool GetEquipping() { return bEquipping; }
+	FORCEINLINE bool GetAiming() { return bAiming; }
 
 public:	
 	ACRifle();
@@ -43,6 +44,10 @@ public:
 	void Unequip();
 	void Begin_Unequip();
 	void End_Unequip();
+
+	void Begin_Aiming();
+	void End_Aiming();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -53,5 +58,5 @@ private:
 
 	bool bEquipped;
 	bool bEquipping;
-
+	bool bAiming;
 };
