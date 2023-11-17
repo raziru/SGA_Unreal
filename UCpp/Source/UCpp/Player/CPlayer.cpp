@@ -10,6 +10,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "Widgets/CUserWidget_CrossHair.h"
 
 // Sets default values
 ACPlayer::ACPlayer()
@@ -45,6 +46,7 @@ ACPlayer::ACPlayer()
 	SpringArm->TargetArmLength = 200.0f;
 	SpringArm->bDoCollisionTest = false;
 	SpringArm->bUsePawnControlRotation = true;
+	CHelpers::GetClass<UCUserWidget_CrossHair>(&CrossHairClass, "WidgetBlueprint'/Game/Widgets/WB_CrossHair.WB_CrossHair_C'");
 }
 
 // Called when the game starts or when spawned
@@ -63,7 +65,12 @@ void ACPlayer::BeginPlay()
 	GetMesh()->SetMaterial(0, BodyMaterial);
 	GetMesh()->SetMaterial(1, LogoMaterial);
 
+	CrossHair = CreateWidget<UCUserWidget_CrossHair, APlayerController>(GetController<APlayerController>(), CrossHairClass);
+	CrossHair->AddToViewport();
+	
 	Rifle = ACRifle::Spawn(GetWorld(), this);//unreal½Ä new
+	OnRifle();
+	CrossHair->SetVisibility(ESlateVisibility::Hidden);
 }
 
 // Called every frame
@@ -86,6 +93,9 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Running", EInputEvent::IE_Pressed, this,  &ACPlayer::OnRunning);
 	PlayerInputComponent->BindAction("Running", EInputEvent::IE_Released, this, &ACPlayer::OffRunning);
+
+	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Pressed, this, &ACPlayer::OnAim);
+	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Released, this, &ACPlayer::OffAim);
 
 	PlayerInputComponent->BindAction("Rifle", EInputEvent::IE_Pressed, this, &ACPlayer::OnRifle);
 }
@@ -123,6 +133,41 @@ void ACPlayer::OnRunning()
 void ACPlayer::OffRunning()
 {
 	GetCharacterMovement()->MaxWalkSpeed = 400;
+}
+
+void ACPlayer::OnAim()
+{
+	CheckFalse(Rifle->GetEquipped());
+	CheckTrue(Rifle->GetEquipping());
+
+	bUseControllerRotationYaw = true;
+	GetCharacterMovement()->bOrientRotationToMovement = false;
+
+	SpringArm->TargetArmLength = 100;
+	SpringArm->SocketOffset = FVector(0, 30, 10);
+	//Camera->FieldOfView = 40;
+	OnZoomIn();
+
+	Rifle->Begin_Aiming();
+	
+	CrossHair->SetVisibility(ESlateVisibility::Visible);
+}
+
+void ACPlayer::OffAim()
+{
+	CheckFalse(Rifle->GetEquipped());
+	CheckTrue(Rifle->GetEquipping());
+
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	SpringArm->TargetArmLength = 200;
+	SpringArm->SocketOffset = FVector(0, 60, 0);
+	//Camera->FieldOfView = 90;
+	OnZoomOut();
+
+	Rifle->End_Aiming();
+	CrossHair->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void ACPlayer::OnRifle()

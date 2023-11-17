@@ -26,6 +26,6 @@ void UC_AnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (!!rifle)
 	{
 		bEquipped = rifle->GetRifle()->GetEquipped();
-		//bAiming = rifle->GetRifle()->GetAiming();
+		bAiming = rifle->GetRifle()->GetAiming();
 	}
 }
