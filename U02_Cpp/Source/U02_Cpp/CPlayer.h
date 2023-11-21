@@ -13,7 +13,8 @@ class U02_CPP_API ACPlayer : public ACharacter, public IIRifle
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 		TSubclassOf<class UCUserWidget_CrossHair> CrossHairClass;
-
+	UPROPERTY(EditDefaultsOnly, Category = "Camera")
+		TSubclassOf<class UCameraShakeBase> CameraShakeClass;
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class USpringArmComponent* SpringArm;
@@ -31,8 +32,12 @@ public:
 
 public:
 	ACPlayer();
+	virtual void GetLocationAndDirection(FVector& OutStart, FVector& OutEnd, FVector& OutDirection) override;
 
+	void OnFocus() override;
+	void OffFocus() override;
 
+	void PlayCameraShake();
 protected:
 	virtual void BeginPlay() override;
 
@@ -55,6 +60,9 @@ private:
 	void OnAim();
 	void OffAim();
 
+	void OnFire();
+	void OffFire();//¿¬»çÇü
+
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -67,4 +75,6 @@ private:
 private:
 	class ACRifle* Rifle;
 	class UCUserWidget_CrossHair* CrossHair;
+
+	
 };

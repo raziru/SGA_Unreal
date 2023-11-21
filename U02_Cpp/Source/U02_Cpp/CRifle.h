@@ -26,6 +26,25 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Rifle")
 		class UAnimMontage* FireMontage;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Rifle")
+		class UParticleSystem* FlashParticle;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Rifle")
+		class UParticleSystem* EjectParticle;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Rifle")
+		class UParticleSystem* ImpactParticle;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Rifle")
+		class USoundCue* FireSoundCue;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Rifle")
+		TSubclassOf<class ACBullet> BulletClass;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Rifle")
+		class UMaterialInstanceConstant* DecalMaterial;
+
 public:
 	static ACRifle* Spawn(class UWorld* InWorld, class ACharacter* InOwner);
 
@@ -48,6 +67,10 @@ public:
 	void Begin_Aiming();
 	void End_Aiming();
 
+	void Begin_Fire();
+	void Firing();
+	void End_Fire();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -59,4 +82,5 @@ private:
 	bool bEquipped;
 	bool bEquipping;
 	bool bAiming;
+	bool bFiring;
 };

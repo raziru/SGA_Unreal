@@ -12,6 +12,7 @@
 #include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Widgets/CUserWidget_CrossHair.h"
+#include "Camera/CameraShakeBase.h"
 
 ACPlayer::ACPlayer()
 {
@@ -48,8 +49,28 @@ ACPlayer::ACPlayer()
 	SpringArm->bDoCollisionTest = false;
 	SpringArm->bUsePawnControlRotation = true;
 
+	//기능있는 Unreal에 저장된 C
 	CHelpers::GetClass<UCUserWidget_CrossHair>(&CrossHairClass, "WidgetBlueprint'/Game/Widgets/WB_CrossHair.WB_CrossHair_C'");
+	CHelpers::GetClass<UCameraShakeBase>(&CameraShakeClass, "Blueprint'/Game/Player/BP_CameraShake.BP_CameraShake_C'");
+
 }
+
+void ACPlayer::GetLocationAndDirection(FVector& OutStart, FVector& OutEnd, FVector& OutDirection)
+{
+	OutDirection = Camera->GetForwardVector();
+
+	FTransform transform = Camera->GetComponentToWorld();//current camera location
+	FVector cameraLocation = transform.GetLocation();
+	OutStart = cameraLocation + OutDirection;
+
+	//탄착군 생성, 둥근 콘을 만들어서 그 안에서 무작위로 정해진다.
+	FVector conDirection = UKismetMathLibrary::RandomUnitVectorInEllipticalConeInDegrees(OutDirection, 0.2f, 0.3f);
+	conDirection *= 3000.0f;
+
+	OutEnd = cameraLocation + conDirection;
+
+}
+
 
 void ACPlayer::BeginPlay()
 {
@@ -99,6 +120,9 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Pressed, this, &ACPlayer::OnAim);
 	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Released, this, &ACPlayer::OffAim);
+
+	PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, &ACPlayer::OnFire);
+	PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Released, this, &ACPlayer::OffFire);
 }
 
 void ACPlayer::OnMoveForward(float Axis)
@@ -185,9 +209,33 @@ void ACPlayer::OffAim()
 	CrossHair->SetVisibility(ESlateVisibility::Hidden);
 }
 
+void ACPlayer::OnFire()
+{
+	Rifle->Begin_Fire();
+}
+
+void ACPlayer::OffFire()
+{
+	Rifle->End_Fire();
+}
+
 void ACPlayer::ChangeColor(FLinearColor InColor)
 {
 	BodyMaterial->SetVectorParameterValue("BodyColor", InColor);
 	LogoMaterial->SetVectorParameterValue("BodyColor", InColor);
 }
 
+void ACPlayer::OnFocus()
+{
+	CrossHair->OnFocus();
+}
+
+void ACPlayer::OffFocus()
+{
+	CrossHair->OffFocus();
+}
+
+void ACPlayer::PlayCameraShake()
+{
+	GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(CameraShakeClass);
+}
