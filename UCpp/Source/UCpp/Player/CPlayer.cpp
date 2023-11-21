@@ -98,6 +98,9 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Released, this, &ACPlayer::OffAim);
 
 	PlayerInputComponent->BindAction("Rifle", EInputEvent::IE_Pressed, this, &ACPlayer::OnRifle);
+
+	PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, &ACPlayer::OnFire);
+	PlayerInputComponent->BindAction("Fire", EInputEvent::IE_Released, this, &ACPlayer::OffFire);
 }
 void ACPlayer::OnMoveForward(float Axis)
 {
@@ -170,6 +173,27 @@ void ACPlayer::OffAim()
 	CrossHair->SetVisibility(ESlateVisibility::Hidden);
 }
 
+void ACPlayer::OnFocus()
+{
+	CrossHair->OnFocus();
+}
+
+void ACPlayer::OffFocus()
+{
+	CrossHair->OffFocus();
+
+}
+
+void ACPlayer::OnFire()
+{
+	Rifle->Begin_Fire();
+}
+
+void ACPlayer::OffFire()
+{
+	Rifle->End_Fire();
+}
+
 void ACPlayer::OnRifle()
 {
 	if (Rifle->GetEquipped())
@@ -187,4 +211,19 @@ void ACPlayer::ChangeColor(FLinearColor InColor)
 {
 	BodyMaterial->SetVectorParameterValue("BodyColor", InColor);
 	LogoMaterial->SetVectorParameterValue("BodyColor", InColor);
+}
+
+void ACPlayer::GetLocationAndDirection(FVector& OutStart, FVector& OutEnd, FVector& OutDirection)
+{
+	OutDirection = Camera->GetForwardVector();
+
+	FTransform transform = Camera->GetComponentToWorld();//current camera location
+	FVector cameraLocation = transform.GetLocation();
+	OutStart = cameraLocation + OutDirection;
+
+	//탄착군 생성, 둥근 콘을 만들어서 그 안에서 무작위로 정해진다.
+	FVector conDirection = UKismetMathLibrary::RandomUnitVectorInEllipticalConeInDegrees(OutDirection, 0.2f, 0.3f);
+	conDirection *= 3000.0f;
+
+	OutEnd = cameraLocation + conDirection;
 }

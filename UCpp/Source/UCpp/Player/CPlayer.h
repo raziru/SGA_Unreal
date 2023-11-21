@@ -11,6 +11,7 @@ UCLASS()
 class UCPP_API ACPlayer : public ACharacter, public IIRifle
 {
 	GENERATED_BODY()
+
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Widgets")
 		TSubclassOf<class UCUserWidget_CrossHair> CrossHairClass;
@@ -30,7 +31,7 @@ public:
 	FORCEINLINE class ACRifle* GetRifle() override { return Rifle; }
 public:
 	ACPlayer();
-
+	virtual void GetLocationAndDirection(FVector& OutStart, FVector& OutEnd, FVector& OutDirection) override;
 protected:
 	virtual void BeginPlay() override;
 
@@ -51,6 +52,12 @@ private:
 
 	void OnAim();
 	void OffAim();
+	
+	virtual void OnFocus() override;
+	virtual void OffFocus() override;
+
+	void OnFire();
+	void OffFire();//for burst
 
 	void OnRifle();
 public:
@@ -63,4 +70,6 @@ private:
 private:
 	class ACRifle* Rifle;
 	class UCUserWidget_CrossHair* CrossHair;
+
+	
 };
