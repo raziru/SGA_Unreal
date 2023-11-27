@@ -1,12 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
-#define PrintLine(){CLog::Log(__FUNCTION__,__LINE__);}
 
+#define PrintLine(){ CLog::Log(__FUNCTION__, __LINE__); }
 
-class UCPP_API CLog
+class  UCPP_API CLog
 {
 public:
 	static void Print(int32 InValue, int32 InKey = -1, float Duration = 10.0f, FColor InColor = FColor::Blue);

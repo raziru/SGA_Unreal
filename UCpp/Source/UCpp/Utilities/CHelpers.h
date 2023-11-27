@@ -4,16 +4,14 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Engine/World.h"
 
-class UCPP_API CHelpers//대문자여야야 매크로로 인식한다.
+class UCPP_API CHelpers
 {
 public:
 	template<typename T>
-	static void GetAsset(T** OutObject, FString Inpath)
+	static void GetAsset(T** OutObject, FString InPath)
 	{
-		ConstructorHelpers::FObjectFinder<T>
-			asset(*Inpath);
-		verifyf(asset.Succeeded(), L"asset.Succeeded()");//== assert
-
+		ConstructorHelpers::FObjectFinder<T> asset(*InPath);
+		verifyf(asset.Succeeded(), L"asset.Succeeded()");
 
 		*OutObject = asset.Object;
 	}
@@ -22,7 +20,8 @@ public:
 	static void GetAssetDynamic(T** OutObject, FString InPath)
 	{
 		T* obj = Cast<T>(StaticLoadObject(T::StaticClass(), NULL, *InPath));
-		verifyf(!!obj, L"!!asset");//!! null은 false, null아니면 true
+		verifyf(!!obj, L"!!asset");
+
 		*OutObject = obj;
 	}
 
@@ -57,7 +56,13 @@ public:
 	}
 
 	template<typename T>
-	static void FindActors(class UWorld* InWorld, TArray<T*>& OutActors)
+	static T* GetComponent(AActor* InActor)
+	{
+		return Cast<T>(InActor->GetComponentByClass(T::StaticClass()));
+	}
+
+	template<typename T>
+	static void FindActors(class UWorld* InWorld, TArray<T *>& OutActors)
 	{
 		OutActors.Empty();
 

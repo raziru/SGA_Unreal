@@ -13,7 +13,7 @@ UCLASS()
 class UCPP_API ACGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
+
 public:
 	ACGameMode();
-	
 };
