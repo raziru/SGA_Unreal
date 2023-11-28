@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Character/CPlayer.h"
+#include "Characters/CPlayer.h"
 #include "Global.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -9,9 +9,12 @@
 #include "Animation/AnimInstance.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/CActionComponent.h"
 #include "Components/COptionComponent.h"
 #include "Components/CMontagesComponent.h"
-// 
+
+
+
 // Sets default values
 ACPlayer::ACPlayer()
 {
@@ -19,6 +22,12 @@ ACPlayer::ACPlayer()
 	CHelpers::CreateComponent<USpringArmComponent>(this, &SpringArm, "SpringArm", GetMesh());
 	CHelpers::CreateComponent<UCameraComponent>(this, &Camera, "Camera", SpringArm);
 	
+
+	//기능만 달린 컴포넌트들을 생성하여 player 클래스를 관리하기 쉽게한다.
+
+	//ActionComponent에 DataAsset을 둬서 무기 종류, 장착방식, 장비 정보를 Asset에서 자유롭게 설정하고
+	//그 내용을 캐릭터가 가져가서 사용하게 만든다. 재사용성과 추상화를 신경쓴 설계
+	CHelpers::CreateActorComponent<UCActionComponent>(this, &Action, "Action");
 	CHelpers::CreateActorComponent<UCMontagesComponent>(this, &Montages, "Montages");
 	CHelpers::CreateActorComponent<UCOptionComponent>(this, &Option, "Option");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
@@ -70,6 +79,10 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("MoveRight", this, &ACPlayer::OnMoveRight);
 	PlayerInputComponent->BindAxis("HorizontalLook", this, &ACPlayer::OnHorizontalLook);
 	PlayerInputComponent->BindAxis("VerticalLook", this, &ACPlayer::OnVerticalLook);
+
+	PlayerInputComponent->BindAction("Avoid", EInputEvent::IE_Pressed, this, &ACPlayer::OnAvoid);
+	PlayerInputComponent->BindAction("OneHand", EInputEvent::IE_Pressed, this, &ACPlayer::OnOneHand);
+
 }
 
 void ACPlayer::OnMoveForward(float InAxis)
@@ -173,3 +186,10 @@ void ACPlayer::End_Backstep()
 	State->SetIdleMode();
 }
 
+
+void ACPlayer::OnOneHand()
+{
+	CheckFalse(State->IsIdleMode());
+
+	Action->SetOneHandMode();
+}

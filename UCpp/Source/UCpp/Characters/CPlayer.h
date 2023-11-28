@@ -13,6 +13,8 @@ class UCPP_API ACPlayer : public ACharacter
 	GENERATED_BODY()
 
 private:
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCActionComponent* Action;
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCMontagesComponent* Montages;
@@ -62,4 +64,6 @@ private:
 public:
 	void End_Roll();
 	void End_Backstep();
+private:
+	void OnOneHand();
 };

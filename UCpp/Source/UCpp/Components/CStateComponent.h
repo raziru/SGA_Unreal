@@ -56,6 +56,7 @@ protected:
 public:
 	UPROPERTY(BlueprintAssignable)
 		FStateTypeChanged OnStateTypeChanged;
+
 private:
 	EStateType Type;
 

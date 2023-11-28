@@ -24,12 +24,23 @@ void UCMontagesComponent::BeginPlay()
 	TArray< FMontageData*> datas;
 	DataTable->GetAllRows<FMontageData>("", datas);
 
-	for (const FMontageData* data : datas)
+	/*for (const FMontageData* data : datas)
 	{
 		if (!!data)
 			CLog::Print(data->AnimMontage->GetPathName());
-	}
-	
+	}*/
+	for (int32 i = 0; i < (int32)EStateType::Max; i++)
+	{
+		for (FMontageData* data : datas)
+		{
+			if ((EStateType)i == data->Type)
+			{
+				Datas[i] = data;
+
+				continue;
+			}
+		}//for(data)
+	}//for(i)
 }
 
 void UCMontagesComponent::PlayRoll()
