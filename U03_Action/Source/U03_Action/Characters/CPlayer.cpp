@@ -7,9 +7,9 @@
 #include "Animation/AnimInstance.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/CActionComponent.h"
 #include "Components/COptionComponent.h"
 #include "Components/CMontagesComponent.h"
-
 
 
 //if On Map 생성자는 게임이 시작하기전에 실행된다.
@@ -21,6 +21,7 @@ ACPlayer::ACPlayer()
 	CHelpers::CreateComponent<USpringArmComponent>(this, &SpringArm, "SpringArm", GetMesh());
 	CHelpers::CreateComponent<UCameraComponent>(this, &Camera, "Camera", SpringArm);
 
+	CHelpers::CreateActorComponent<UCActionComponent>(this, &Action, "Action");
 	CHelpers::CreateActorComponent<UCOptionComponent>(this, &Option, "Option");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
 	CHelpers::CreateActorComponent<UCMontagesComponent>(this, &Montages, "Montages");
@@ -48,6 +49,7 @@ ACPlayer::ACPlayer()
 
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
+
 }
 
 
@@ -74,6 +76,11 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("MoveRight", this, &ACPlayer::OnMoveRight);
 	PlayerInputComponent->BindAxis("HorizontalLook", this, &ACPlayer::OnHorizontalLook);
 	PlayerInputComponent->BindAxis("VerticalLook", this, &ACPlayer::OnVerticalLook);
+
+	PlayerInputComponent->BindAction("Avoid", EInputEvent::IE_Pressed, this, &ACPlayer::OnAvoid);
+
+	PlayerInputComponent->BindAction("OneHand", EInputEvent::IE_Pressed, this, &ACPlayer::OnOneHand);
+
 }
 
 void ACPlayer::OnMoveForward(float InAxis)
@@ -132,23 +139,23 @@ void ACPlayer::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
 
 void ACPlayer::Begin_Roll()
 {
-	/*bUseControllerRotationYaw = false;
+	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	FVector start = GetActorLocation();
 	FVector from = start + GetVelocity().GetSafeNormal2D();
 	SetActorRotation(UKismetMathLibrary::FindLookAtRotation(start, from));
 
-	Montages->PlayRoll();*/
+	Montages->PlayRoll();
 }
 
 void ACPlayer::End_Roll()
 {
-	/*if (Action->IsUnarmedMode() == false)
+	//if (Action->IsUnarmedMode() == false)
 	{
 		bUseControllerRotationYaw = true;
 		GetCharacterMovement()->bOrientRotationToMovement = false;
-	}*/
+	}
 
 	State->SetIdleMode();
 }
@@ -158,16 +165,23 @@ void ACPlayer::Begin_Backstep()
 	bUseControllerRotationYaw = true;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 
-	//Montages->PlayBackstep();
+	Montages->PlayBackstep();
 }
 
 void ACPlayer::End_Backstep()
 {
-	/*if (Action->IsUnarmedMode())
+	//if (Action->IsUnarmedMode())
 	{
 		bUseControllerRotationYaw = false;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
-	}*/
+	}
 
 	State->SetIdleMode();
+}
+
+void ACPlayer::OnOneHand()
+{
+	CheckFalse(State->IsIdleMode());
+
+	Action->SetOneHandMode();
 }
