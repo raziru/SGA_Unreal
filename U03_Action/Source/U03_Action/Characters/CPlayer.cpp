@@ -9,10 +9,11 @@
 #include "Components/InputComponent.h"
 #include "Components/CActionComponent.h"
 #include "Components/COptionComponent.h"
+#include "Components/CStatusComponent.h"
 #include "Components/CMontagesComponent.h"
 
 
-//if On Map 생성자는 게임이 시작하기전에 실행된다.
+//if On Map, 생성자는 게임이 시작하기전에 실행된다.
 ACPlayer::ACPlayer()
 {
 
@@ -22,9 +23,10 @@ ACPlayer::ACPlayer()
 	CHelpers::CreateComponent<UCameraComponent>(this, &Camera, "Camera", SpringArm);
 
 	CHelpers::CreateActorComponent<UCActionComponent>(this, &Action, "Action");
-	CHelpers::CreateActorComponent<UCOptionComponent>(this, &Option, "Option");
-	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
 	CHelpers::CreateActorComponent<UCMontagesComponent>(this, &Montages, "Montages");
+	CHelpers::CreateActorComponent<UCOptionComponent>(this, &Option, "Option");
+	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
+	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
 
 	USkeletalMesh* mesh;
 	CHelpers::GetAsset<USkeletalMesh>(&mesh, "SkeletalMesh'/Game/Character/Mesh/SK_Mannequin.SK_Mannequin'");
@@ -80,7 +82,7 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Avoid", EInputEvent::IE_Pressed, this, &ACPlayer::OnAvoid);
 
 	PlayerInputComponent->BindAction("OneHand", EInputEvent::IE_Pressed, this, &ACPlayer::OnOneHand);
-
+	PlayerInputComponent->BindAction("Action", EInputEvent::IE_Pressed, this, &ACPlayer::OnDoAction);
 }
 
 void ACPlayer::OnMoveForward(float InAxis)
@@ -184,4 +186,9 @@ void ACPlayer::OnOneHand()
 	CheckFalse(State->IsIdleMode());
 
 	Action->SetOneHandMode();
+}
+
+void ACPlayer::OnDoAction()
+{
+	Action->DoAction();
 }

@@ -13,13 +13,6 @@ class U03_ACTION_API ACPlayer : public ACharacter
 
 
 private:
-
-	UPROPERTY(VisibleDefaultsOnly)
-		class UCActionComponent* Action;
-
-	UPROPERTY(VisibleDefaultsOnly)
-		class UCMontagesComponent* Montages;
-
 	UPROPERTY(VisibleDefaultsOnly)
 		class USpringArmComponent* SpringArm;
 
@@ -29,7 +22,16 @@ private:
 private:
 
 	UPROPERTY(VisibleDefaultsOnly)
+		class UCActionComponent* Action;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCMontagesComponent* Montages;
+
+	UPROPERTY(VisibleDefaultsOnly)
 		class UCOptionComponent* Option;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCStatusComponent* Status;
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCStateComponent* State;
@@ -70,4 +72,6 @@ public:
 
 private:
 	void OnOneHand();
+
+	void OnDoAction();
 };

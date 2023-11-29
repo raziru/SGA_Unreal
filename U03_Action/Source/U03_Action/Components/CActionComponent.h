@@ -17,10 +17,10 @@ class U03_ACTION_API UCActionComponent : public UActorComponent
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
+	UPROPERTY(EditDefaultsOnly, Category = "Weapons")//Can Edit->상속받은 블루프린트에서 편집가능하다.
 		class UCActionData* Datas[(int32)EActionType::Max];
 public:
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure)//like pure in blueprint
 		FORCEINLINE class UCActionData* GetCurrent() { return Datas[(int32)Type]; }
 
 
@@ -41,6 +41,8 @@ public:
 	void SetOneHandMode();
 	void SetTwoHandMode();
 
+public:
+	void DoAction();
 protected:
 	virtual void BeginPlay() override;
 
@@ -48,7 +50,7 @@ private:
 	void SetMode(EActionType InType);
 	void ChangeType(EActionType InNewType);
 
-private:
+public:
 	UPROPERTY(BlueprintAssignable)
 		FActionTypeChanged OnActionTypeChanged;
 

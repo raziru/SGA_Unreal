@@ -4,17 +4,16 @@
 #include "Components/CActionComponent.h"
 #include "Global.h"
 #include "Actions/CActionData.h"
+#include "Actions/CAttachment.h"
 #include "Actions/CEquipment.h"
+#include "Actions/CDoAction.h"
 #include "GameFramework/Character.h"
+
 
 UCActionComponent::UCActionComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-
-	// ...
+	
 }
-
 
 void UCActionComponent::BeginPlay()
 {
@@ -23,7 +22,8 @@ void UCActionComponent::BeginPlay()
 	ACharacter* character = Cast<ACharacter>(GetOwner());
 	for (int32 i = 0; i < (int32)EActionType::Max; i++)
 	{
-		if (!!Datas[i])
+		//execute beginplay at data asset
+		if (!!Datas[i])//== is valid
 			Datas[i]->BeginPlay(character);
 	}
 }
@@ -69,6 +69,11 @@ void UCActionComponent::SetMode(EActionType InType)
 		equipment->Unequip();
 	}
 	
+	ACEquipment* equipment = Datas[(int32)InType]->GetEquipment();
+	CheckNull(equipment);
+
+	equipment->Equip();
+
 	ChangeType(InType);
 
 
@@ -79,6 +84,19 @@ void UCActionComponent::ChangeType(EActionType InNewType)
 	EActionType prevType = InNewType;
 	Type = InNewType;
 
+	//delegate 구조로 함수포인터를 만들면 누가 adddynamic을 하든 마음껏 쓸수있다.
 	if (OnActionTypeChanged.IsBound())
 		OnActionTypeChanged.Broadcast(prevType, InNewType);
+}
+void UCActionComponent::DoAction()
+{
+	CheckTrue(IsUnarmedMode());
+
+	if (!!Datas[(int32)Type])
+	{
+		ACDoAction* action = Datas[(int32)Type]->GetDoAction();
+
+		if (!!action)
+			action->DoAction();
+	}
 }

@@ -7,7 +7,7 @@
 #include "Actions/CActionData.h"
 #include "CEquipment.generated.h"
 
-
+//if delegate, must public for adddynamic
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEquipmentDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FUnequipmentDelegate);
 
@@ -24,9 +24,9 @@ public:
 
 public:
 	//장착 명령
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintNativeEvent)//블루프린트에서 재정의할거라 생각되는 기능이다
 		void Equip();
-	void Equip_Implementation();
+	void Equip_Implementation();//재정의가 없을 것을 대비한 디폴트 기능.
 
 	//장착 개시
 	UFUNCTION(BlueprintNativeEvent)
@@ -47,6 +47,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+
+//must public!!!!!
 public:
 	UPROPERTY(BlueprintAssignable)
 		FEquipmentDelegate OnEquipmentDelegate;
@@ -61,6 +63,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 		class UCStateComponent* State;
+
+	UPROPERTY(BlueprintReadOnly)
+		class UCStatusComponent* Status;
 
 private:
 	FEquipmentData Data;

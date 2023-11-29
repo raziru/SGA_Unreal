@@ -13,7 +13,7 @@ class U03_ACTION_API ACDoAction : public AActor
 {
 	GENERATED_BODY()
 public:
-	//FORCEINLINE void SetDatas(TArray<FDoActionData> InDatas) { Datas = InDatas; }
+	FORCEINLINE void SetDatas(TArray<FDoActionData> InDatas) { Datas = InDatas; }
 
 public:	
 	ACDoAction();
@@ -36,9 +36,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 		class UCStateComponent* State;
 
-	/*UPROPERTY(BlueprintReadOnly)
-		class UCStatusComponent* Status;*/
+	UPROPERTY(BlueprintReadOnly)
+		class UCStatusComponent* Status;
 
 protected:
-	//TArray<FDoActionData> Datas;
+	TArray<FDoActionData> Datas;
 };
