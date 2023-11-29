@@ -12,6 +12,8 @@
 #include "Components/CActionComponent.h"
 #include "Components/COptionComponent.h"
 #include "Components/CMontagesComponent.h"
+#include "Components/CStatusComponent.h"
+
 
 
 
@@ -30,6 +32,7 @@ ACPlayer::ACPlayer()
 	CHelpers::CreateActorComponent<UCActionComponent>(this, &Action, "Action");
 	CHelpers::CreateActorComponent<UCMontagesComponent>(this, &Montages, "Montages");
 	CHelpers::CreateActorComponent<UCOptionComponent>(this, &Option, "Option");
+	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
 
 	USkeletalMesh* mesh;
@@ -82,7 +85,7 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Avoid", EInputEvent::IE_Pressed, this, &ACPlayer::OnAvoid);
 	PlayerInputComponent->BindAction("OneHand", EInputEvent::IE_Pressed, this, &ACPlayer::OnOneHand);
-
+	PlayerInputComponent->BindAction("Action", EInputEvent::IE_Pressed, this, &ACPlayer::OnDoAction);
 }
 
 void ACPlayer::OnMoveForward(float InAxis)
@@ -155,7 +158,7 @@ void ACPlayer::Begin_Roll()
 
 void ACPlayer::End_Roll()
 {
-	//if (Action->IsUnarmedMode() == false)
+	if (Action->IsUnarmedMode() == false)
 	{
 		bUseControllerRotationYaw = true;
 		GetCharacterMovement()->bOrientRotationToMovement = false;
@@ -177,7 +180,7 @@ void ACPlayer::Begin_Backstep()
 
 void ACPlayer::End_Backstep()
 {
-	//if (Action->IsUnarmedMode())
+	if (Action->IsUnarmedMode())
 	{
 		bUseControllerRotationYaw = false;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -192,4 +195,9 @@ void ACPlayer::OnOneHand()
 	CheckFalse(State->IsIdleMode());
 
 	Action->SetOneHandMode();
+}
+
+void ACPlayer::OnDoAction()
+{
+	Action->DoAction();
 }

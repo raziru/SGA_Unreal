@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CStateComponent.h"
+#include "Components/CStatusComponent.h"
 // Sets default values
 ACEquipment::ACEquipment()
 {
@@ -18,7 +19,7 @@ void ACEquipment::BeginPlay()
 
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
 	State = CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
-	//Status = CHelpers::GetComponent<UCStatusComponent>(OwnerCharacter);
+	Status = CHelpers::GetComponent<UCStatusComponent>(OwnerCharacter);
 	Super::BeginPlay();
 	
 }

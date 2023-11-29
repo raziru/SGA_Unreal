@@ -5,7 +5,7 @@
 #include "Global.h"
 #include "GameFramework/Character.h"
 #include "Components/CStateComponent.h"
-//#include "Components/CStatusComponent.h"
+#include "Components/CStatusComponent.h"
 
 // Sets default values
 ACDoAction::ACDoAction()
@@ -21,7 +21,7 @@ void ACDoAction::BeginPlay()
 	Super::BeginPlay();
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
 	State = CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
-	//Status = CHelpers::GetComponent<UCStatusComponent>(OwnerCharacter);
+	Status = CHelpers::GetComponent<UCStatusComponent>(OwnerCharacter);
 	Super::BeginPlay();
 	
 }

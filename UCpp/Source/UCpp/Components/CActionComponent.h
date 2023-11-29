@@ -11,8 +11,10 @@ enum class EActionType : uint8
 {
 	Unarmed, OneHand, TwoHand, Max,
 };
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActionTypeChanged, EActionType, InPrevType, EActionType, InNewType);
 
+//delegate는 무조건 public으로 열어줘야 다른쪽에서 사용할 수 있다.
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActionTypeChanged, EActionType, InPrevType, EActionType, InNewType);
+//Multicast: 함수를 여러개 바인딩해놓을 수 있음 바인딩할 함수는 UFUNCTION이어야 한다.
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
 class UCPP_API UCActionComponent : public UActorComponent
 {
@@ -43,11 +45,13 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+public:
+	void DoAction();
 private:
 	void SetMode(EActionType InType);
 	void ChangeType(EActionType InNewType);
 
-private:
+public:
 	UPROPERTY(BlueprintAssignable)
 		FActionTypeChanged OnActionTypeChanged;
 

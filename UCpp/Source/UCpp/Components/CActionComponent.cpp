@@ -5,6 +5,7 @@
 #include "Global.h"
 #include "Actions/CActionData.h"
 #include "Actions/CEquipment.h"
+#include "Actions/CDoAction.h"
 #include "GameFramework/Character.h"
 // Sets default values for this component's properties
 UCActionComponent::UCActionComponent()
@@ -52,6 +53,19 @@ void UCActionComponent::SetTwoHandMode()
 
 }
 
+void UCActionComponent::DoAction()
+{
+	CheckTrue(IsUnarmedMode());
+
+	if (!!Datas[(int32)Type])
+	{
+		ACDoAction* action = Datas[(int32)Type]->GetDoAction();
+
+		if (!!action)
+			action->DoAction();
+	}
+}
+
 void UCActionComponent::SetMode(EActionType InType)
 {
 	if (Type == InType)//같은 무기 일때 해제
@@ -68,6 +82,11 @@ void UCActionComponent::SetMode(EActionType InType)
 		equipment->Unequip();
 	}
 
+	ACEquipment* equipment = Datas[(int32)InType]->GetEquipment();
+	CheckNull(equipment);
+
+	equipment->Equip();
+
 	ChangeType(InType);
 
 
@@ -80,6 +99,7 @@ void UCActionComponent::ChangeType(EActionType InNewType)
 
 	if (OnActionTypeChanged.IsBound())
 		OnActionTypeChanged.Broadcast(prevType, InNewType);
+	//delegate에 AddDynamic으로 저장된 모든 함수를 한번에 실행한다.
 }
 
 

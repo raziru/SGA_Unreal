@@ -33,4 +33,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 		class UCStateComponent* State;
 
+	UPROPERTY(BlueprintReadOnly)
+		class UCStatusComponent* Status;
+
 };

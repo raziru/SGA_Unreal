@@ -6,7 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/CStateComponent.h"
-//#include "Components/CStatusComponent.h"
+#include "Components/CStatusComponent.h"
 
 // Sets default values
 ACAttachment::ACAttachment()
@@ -21,7 +21,7 @@ void ACAttachment::BeginPlay()
 	//그래서 변수 할당을 먼저하고 부모함수를 호출해야 null참조가 발생하지 않는다.
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
 	State = CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
-	//Status = CHelpers::GetComponent<UCStatusComponent>(OwnerCharacter);
+	Status = CHelpers::GetComponent<UCStatusComponent>(OwnerCharacter);
 	Super::BeginPlay();
 	
 }
