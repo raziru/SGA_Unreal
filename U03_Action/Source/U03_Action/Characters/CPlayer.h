@@ -3,11 +3,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Characters/ICharacter.h"
 #include "Components/CStateComponent.h"//enum can't be Forward Declaration
 #include "CPlayer.generated.h"
 
 UCLASS()
-class U03_ACTION_API ACPlayer : public ACharacter
+class U03_ACTION_API ACPlayer : public ACharacter, public IICharacter
 {
 	GENERATED_BODY()
 
@@ -74,4 +75,9 @@ private:
 	void OnOneHand();
 
 	void OnDoAction();
+public:
+	virtual void ChangeColor(FLinearColor InColor) override;
+private:
+	class UMaterialInstanceDynamic* BodyMaterial;
+	class UMaterialInstanceDynamic* LogoMaterial;
 };

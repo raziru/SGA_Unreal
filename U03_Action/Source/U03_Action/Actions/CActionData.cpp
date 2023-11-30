@@ -13,12 +13,14 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter)
 {
 	FTransform transform;
 	//Attachment
+	if(!!AttachmentClass)
 	{
 		Attachment = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACAttachment>(AttachmentClass, transform, InOwnerCharacter);
 		Attachment->SetActorLabel(InOwnerCharacter->GetActorLabel() + "_Attachment");
 		UGameplayStatics::FinishSpawningActor(Attachment, transform);
 	}
 	//Equipment
+	if (!!EquipmentClass)
 	{
 		Equipment = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACEquipment>
 			(EquipmentClass, transform, InOwnerCharacter);
@@ -26,11 +28,16 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter)
 			FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
 		Equipment->SetActorLabel(InOwnerCharacter->GetActorLabel() + "_Equipment");
 		Equipment->SetData(EquipmentData);
+		Equipment->SetColor(EquipmentColor);
+
 
 		UGameplayStatics::FinishSpawningActor(Equipment, transform);
-
-		Equipment->OnEquipmentDelegate.AddDynamic(Attachment, &ACAttachment::OnEquip);
-		Equipment->OnUnequipmentDelegate.AddDynamic(Attachment, &ACAttachment::OnUnequip);
+		if (!!Attachment)
+		{
+			Equipment->OnEquipmentDelegate.AddDynamic(Attachment, &ACAttachment::OnEquip);
+			Equipment->OnUnequipmentDelegate.AddDynamic(Attachment, &ACAttachment::OnUnequip);
+		}
+		
 	}
 
 	if (!!DoActionClass)

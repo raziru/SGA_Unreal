@@ -3,6 +3,7 @@
 
 #include "Actions/CEquipment.h"
 #include "Global.h"
+#include "Characters/ICharacter.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CStateComponent.h"
@@ -33,6 +34,11 @@ void ACEquipment::Equip_Implementation()
 
 	OwnerCharacter->bUseControllerRotationYaw = true;
 	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
+
+	IICharacter* character = Cast<IICharacter>(OwnerCharacter);
+	CheckNull(character);
+
+	character->ChangeColor(Color);
 }
 
 void ACEquipment::Begin_Equip_Implementation()
@@ -44,11 +50,15 @@ void ACEquipment::Begin_Equip_Implementation()
 
 void ACEquipment::End_Equip_Implementation()
 {
+	bEquipped = true;
 	State->SetIdleMode();
 }
 
 void ACEquipment::Unequip_Implementation()
 {
+	bEquipped = false;
+	
+
 	if (OnUnequipmentDelegate.IsBound())
 		OnUnequipmentDelegate.Broadcast();
 

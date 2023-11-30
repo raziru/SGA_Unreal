@@ -64,7 +64,8 @@ void ACPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	State->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
-	//OnstatetypeChanged가 호출되면 묶여있는 함수가 같이 연계된다. --  delegate는 함수포인터를 사용한것과 비슷하다.
+	//State에서 선언한 OnstatetypeChanged가 broadcast로 호출되면 
+	//묶여있는 함수가 같이 연계된다. --  delegate는 함수포인터를 사용한것과 비슷하다.
 	//함수포인터는 인자로 받아야하지만 delegate는 필요가없다.
 }
 

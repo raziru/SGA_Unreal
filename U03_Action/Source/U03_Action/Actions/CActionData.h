@@ -69,6 +69,9 @@ public:
         FEquipmentData EquipmentData;
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere)
+        FLinearColor EquipmentColor;
+
+    UPROPERTY(BlueprintReadOnly, EditAnywhere)
         TSubclassOf<class ACDoAction> DoActionClass;
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere)

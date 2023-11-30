@@ -17,7 +17,6 @@ UCActionComponent::UCActionComponent()
 
 void UCActionComponent::BeginPlay()
 {
-	Super::BeginPlay();
 
 	ACharacter* character = Cast<ACharacter>(GetOwner());
 	for (int32 i = 0; i < (int32)EActionType::Max; i++)
@@ -26,6 +25,7 @@ void UCActionComponent::BeginPlay()
 		if (!!Datas[i])//== is valid
 			Datas[i]->BeginPlay(character);
 	}
+	Super::BeginPlay();
 }
 
 void UCActionComponent::SetUnarmedMode()
@@ -37,6 +37,11 @@ void UCActionComponent::SetUnarmedMode()
 
 		equipment->Unequip();
 	}
+
+	ACEquipment* equipment = Datas[(int32)EActionType::Unarmed]->GetEquipment();
+	CheckNull(equipment);
+
+	equipment->Equip();
 
 	ChangeType(EActionType::Unarmed);
 }

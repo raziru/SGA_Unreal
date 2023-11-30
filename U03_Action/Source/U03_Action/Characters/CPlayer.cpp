@@ -11,7 +11,8 @@
 #include "Components/COptionComponent.h"
 #include "Components/CStatusComponent.h"
 #include "Components/CMontagesComponent.h"
-
+#include "Materials/MaterialInstanceConstant.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 //if On Map, 생성자는 게임이 시작하기전에 실행된다.
 ACPlayer::ACPlayer()
@@ -58,8 +59,22 @@ ACPlayer::ACPlayer()
 //if gamestart
 void ACPlayer::BeginPlay()
 {
+	UMaterialInstanceConstant* body;
+	UMaterialInstanceConstant* logo;
+
+	CHelpers::GetAssetDynamic<UMaterialInstanceConstant>(&body, "MaterialInstanceConstant'/Game/Materials/M_UE4Man_Body_Inst.M_UE4Man_Body_Inst'");
+	CHelpers::GetAssetDynamic<UMaterialInstanceConstant>(&logo, "MaterialInstanceConstant'/Game/Materials/M_UE4Man_ChestLogo_Inst.M_UE4Man_ChestLogo_Inst'");
+
+	BodyMaterial = UMaterialInstanceDynamic::Create(body, this);
+	LogoMaterial = UMaterialInstanceDynamic::Create(logo, this);
+
+	GetMesh()->SetMaterial(0, BodyMaterial);
+	GetMesh()->SetMaterial(1, LogoMaterial);
+
 	Super::BeginPlay();
 	
+	Action->SetUnarmedMode();
+
 	State->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
 	//OnstatetypeChanged가 호출되면 묶여있는 함수가 같이 연계된다. --  delegate는 함수포인터를 사용한것과 비슷하다.
 	//함수포인터는 인자로 받아야하지만 delegate는 필요가없다.
@@ -87,7 +102,7 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ACPlayer::OnMoveForward(float InAxis)
 {
-	//CheckFalse(Status->CanMove());
+	CheckFalse(Status->CanMove());
 
 	FRotator rotator = FRotator(0, GetControlRotation().Yaw, 0);
 	FVector direction = FQuat(rotator).GetForwardVector();
@@ -97,7 +112,7 @@ void ACPlayer::OnMoveForward(float InAxis)
 
 void ACPlayer::OnMoveRight(float InAxis)
 {
-	//CheckFalse(Status->CanMove());
+	CheckFalse(Status->CanMove());
 
 	FRotator rotator = FRotator(0, GetControlRotation().Yaw, 0);
 	FVector direction = FQuat(rotator).GetRightVector();
@@ -153,7 +168,7 @@ void ACPlayer::Begin_Roll()
 
 void ACPlayer::End_Roll()
 {
-	//if (Action->IsUnarmedMode() == false)
+	if (Action->IsUnarmedMode() == false)
 	{
 		bUseControllerRotationYaw = true;
 		GetCharacterMovement()->bOrientRotationToMovement = false;
@@ -172,7 +187,7 @@ void ACPlayer::Begin_Backstep()
 
 void ACPlayer::End_Backstep()
 {
-	//if (Action->IsUnarmedMode())
+	if (Action->IsUnarmedMode())
 	{
 		bUseControllerRotationYaw = false;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -191,4 +206,12 @@ void ACPlayer::OnOneHand()
 void ACPlayer::OnDoAction()
 {
 	Action->DoAction();
+}
+
+void ACPlayer::ChangeColor(FLinearColor InColor)
+{
+	
+	BodyMaterial->SetVectorParameterValue("BodyColor", InColor);
+	LogoMaterial->SetVectorParameterValue("BodyColor", InColor);
+	
 }
