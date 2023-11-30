@@ -17,6 +17,8 @@ class UCPP_API ACEquipment : public AActor
 
 public:
 	FORCEINLINE void SetData(FEquipmentData InData) { Data = InData; }
+	FORCEINLINE void SetColor(FLinearColor InColor) { Color = InColor; }
+	FORCEINLINE const bool* GetEquipped() { return &bEquipped; }
 public:	
 	// Sets default values for this actor's properties
 	ACEquipment();
@@ -63,7 +65,8 @@ protected:
 		class UCStatusComponent* Status;
 
 private:
+	bool bEquipped;
 	FEquipmentData Data;
-
+	FLinearColor Color;
 
 };

@@ -5,6 +5,7 @@
 #include "Global.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Characters/ICharacter.h"
 #include "Components/CStateComponent.h"
 #include "Components/CStatusComponent.h"
 // Sets default values
@@ -35,6 +36,11 @@ void ACEquipment::Equip_Implementation()
 
 	OwnerCharacter->bUseControllerRotationYaw = true;
 	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
+
+	IICharacter* character = Cast<IICharacter>(OwnerCharacter);
+	CheckNull(character);
+
+	character->ChangeColor(Color);
 }
 
 void ACEquipment::Begin_Equip_Implementation()
@@ -45,11 +51,13 @@ void ACEquipment::Begin_Equip_Implementation()
 
 void ACEquipment::End_Equip_Implementation()
 {
+	bEquipped = true;
 	State->SetIdleMode();
 }
 
 void ACEquipment::Unequip_Implementation()
 {
+	bEquipped = false;
 	if (OnUnequipmentDelegate.IsBound())
 		OnUnequipmentDelegate.Broadcast();
 

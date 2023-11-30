@@ -13,8 +13,16 @@ class UCPP_API ACDoAction_Melee : public ACDoAction
 	GENERATED_BODY()
 
 public:
+	FORCEINLINE void EnableCombo() { bEnable = true; }
+	FORCEINLINE void DisableCombo() { bEnable = false; }
+public:
 	virtual void DoAction()       override;
 	virtual void Begin_DoAction() override;
 	virtual void End_DoAction()   override;
+private:
+	bool bExist;
+	bool bEnable;
+	bool bLast;
 
+	int32 Index;
 };
