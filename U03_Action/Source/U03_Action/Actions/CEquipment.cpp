@@ -32,8 +32,12 @@ void ACEquipment::Equip_Implementation()
 	else
 		End_Equip();
 
-	OwnerCharacter->bUseControllerRotationYaw = true;
-	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
+	if (Data.bCanMove == true)
+	{
+		OwnerCharacter->bUseControllerRotationYaw = true;
+		OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
+	}
+	
 
 	IICharacter* character = Cast<IICharacter>(OwnerCharacter);
 	CheckNull(character);

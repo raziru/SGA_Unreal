@@ -5,14 +5,18 @@
 #include "Global.h"
 #include "GameFramework/Character.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/ShapeComponent.h"
 #include "Components/CStateComponent.h"
 #include "Components/CStatusComponent.h"
 
 // Sets default values
 ACAttachment::ACAttachment()
 {
- 	
+	CHelpers::CreateComponent<USceneComponent>(this, &Scene, "Scene");
+
 }
+
+
 
 // Called when the game starts or when spawned
 void ACAttachment::BeginPlay()
@@ -24,6 +28,20 @@ void ACAttachment::BeginPlay()
 	Status = CHelpers::GetComponent<UCStatusComponent>(OwnerCharacter);
 	Super::BeginPlay();
 	
+}
+void ACAttachment::OnCollision()
+{
+}
+
+void ACAttachment::OffCollision()
+{
+}
+
+void ACAttachment::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+}
+void ACAttachment::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
 }
 void ACAttachment::AttachTo(FName InSocketName)
 {

@@ -20,6 +20,13 @@ public:
 	virtual void Begin_DoAction() override;//combo 전환 delay 감소
 	virtual void End_DoAction() override;
 
+
+public:
+	virtual void OnAttachmentBeginOverlap(class ACharacter* InAttacker, class AActor* InAttackCauser, class ACharacter* InOtherCharacter) override;
+	virtual void OnAttachmentEndOverlap(class ACharacter* InAttacker, class AActor* InAttackCauser, class ACharacter* InOtherCharacter) override;
+
+	virtual void OnAttachmentCollision()  override;
+	virtual void OffAttachmentCollision() override;
 private:
 	bool bExist;
 	bool bEnable;

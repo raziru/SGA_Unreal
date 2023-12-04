@@ -23,6 +23,10 @@ public:
 
     UPROPERTY(EditAnywhere)
         bool bCanMove = true;
+
+    UPROPERTY(EditAnywhere)
+        bool bPawnControl = true;
+
 };
 USTRUCT(BlueprintType)
 struct FDoActionData : public FEquipmentData

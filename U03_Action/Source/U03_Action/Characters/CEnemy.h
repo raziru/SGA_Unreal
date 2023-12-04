@@ -12,6 +12,12 @@ UCLASS()
 class U03_ACTION_API ACEnemy : public ACharacter, public IICharacter
 {
 	GENERATED_BODY()
+protected:
+	UPROPERTY(VisibleDefaultsOnly)
+		class UWidgetComponent* NameWidget;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UWidgetComponent* HealthWidget;
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly)
@@ -29,6 +35,8 @@ protected:
 public:
 	ACEnemy();
 
+	float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -38,4 +46,8 @@ public:
 private:
 	class UMaterialInstanceDynamic* BodyMaterial;
 	class UMaterialInstanceDynamic* LogoMaterial;
+
+private:
+	class AController* DamageInstigator;
+	float DamageValue;
 };
