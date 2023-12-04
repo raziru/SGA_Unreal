@@ -59,3 +59,22 @@ void ACDoAction_Melee::End_DoAction()
 	Status->SetMove();
 	Index = 0;
 }
+
+void ACDoAction_Melee::OnAttachmentBeginOverlap(ACharacter* InAttacker, AActor* InAttackCauser, ACharacter* InOtherCharacter)
+{
+	//CLog::Log(InOtherCharacter->GetName());
+	FDamageEvent e;//이벤트를 요구해서 빈공간 넣어주는 것이다.
+	InOtherCharacter->TakeDamage(Datas[Index].Power, e, OwnerCharacter->GetController(), this);
+}
+
+void ACDoAction_Melee::OnAttachmentEndOverlap(ACharacter* InAttacker, AActor* InAttackCauser, ACharacter* InOtherCharacter)
+{
+}
+
+void ACDoAction_Melee::OnAttachmentCollision()
+{
+}
+
+void ACDoAction_Melee::OffAttachmentCollision()
+{
+}

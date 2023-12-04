@@ -19,6 +19,15 @@ public:
 	virtual void DoAction()       override;
 	virtual void Begin_DoAction() override;
 	virtual void End_DoAction()   override;
+
+public:
+
+	virtual void OnAttachmentBeginOverlap(class ACharacter* InAttacker, class AActor* InAttackCauser, class ACharacter* InOtherCharacter) override;
+	//unarmed를 쓴다면 무조건 재정의를 안할수도 있기 때문에 {}을 써서 빈공간으로 남긴다.
+	virtual void OnAttachmentEndOverlap(class ACharacter* InAttacker, class AActor* InAttackCauser, class ACharacter* InOtherCharacter) override;
+	virtual void OnAttachmentCollision() override;
+	virtual void OffAttachmentCollision() override;
+
 private:
 	bool bExist;
 	bool bEnable;

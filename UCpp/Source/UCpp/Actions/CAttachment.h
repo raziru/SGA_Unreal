@@ -6,8 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "CAttachment.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FAttamentBeginOverlap, class ACharacter*, InAttacker, class AActor*, InAttackCauser, class ACharacter*, InOtherCharacter);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FAttamentEndOverlap, class ACharacter*, InAttacker, class AActor*, InAttackCauser, class ACharacter*, InOtherCharacter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FAttachmentBeginOverlap, class ACharacter*, InAttacker, class AActor*, InAttackCauser, class ACharacter*, InOtherCharacter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FAttachmentEndOverlap, class ACharacter*, InAttacker, class AActor*, InAttackCauser, class ACharacter*, InOtherCharacter);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAttachmentCollision);
 
 UCLASS()
@@ -42,10 +42,10 @@ private:
 
 public:
 	UPROPERTY(BlueprintAssignable)
-		FAttamentBeginOverlap OnAttamentBeginOverlap;
+		FAttachmentBeginOverlap OnAttachmentBeginOverlap;
 
 	UPROPERTY(BlueprintAssignable)
-		FAttamentEndOverlap OnAttamentEndOverlap;
+		FAttachmentEndOverlap OnAttachmentEndOverlap;
 
 	UPROPERTY(BlueprintAssignable)
 		FAttachmentCollision OnAttachmentCollision;
