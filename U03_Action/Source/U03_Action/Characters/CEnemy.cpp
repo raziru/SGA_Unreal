@@ -80,7 +80,7 @@ void ACEnemy::BeginPlay()
 
 	HealthWidget->InitWidget();
 	Cast<UCUserWidget_Health>(HealthWidget->GetUserWidgetObject())->Update(Status->GetHealth(), Status->GetMaxHealth());
-	
+	State->OnStateTypeChanged.AddDynamic(this, &ACEnemy::OnStateTypeChanged);//매크로임
 
 	Action->SetUnarmedMode();
 }
@@ -99,14 +99,62 @@ void ACEnemy::ChangeColor(FLinearColor InColor)
 	
 }
 
+void ACEnemy::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
+{
+	switch (InNewType)
+	{
+	case EStateType::Hitted: Hitted(); break;
+	case EStateType::Dead: Dead(); break;
+	}
+}
+
 float ACEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	DamageInstigator = EventInstigator;
+	
 	DamageValue = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+	
 	CLog::Log(Damage);
-	//State->SetHittedMode();
+	
+	State->SetHittedMode();
 
 	return Status->GetHealth();
 }
 
+
+
+void ACEnemy::Hitted()
+{
+	Status->SubHealth(DamageValue);
+	Cast<UCUserWidget_Health>(HealthWidget->GetUserWidgetObject())->Update(Status->GetHealth(), Status->GetMaxHealth());
+	DamageValue = 0.0f;
+
+	Status->SetStop();
+
+	Montages->PlayHitted();
+
+	FVector start = GetActorLocation();
+	FVector target = DamageInstigator->GetPawn()->GetActorLocation();
+	SetActorRotation(UKismetMathLibrary::FindLookAtRotation(start, target));
+	DamageInstigator = NULL;
+
+	FVector direction = target - start;
+	direction.Normalize();
+	LaunchCharacter(-direction * LaunchAmount, true, false);//z축이 개입할거냐 아닐거냐
+
+	ChangeColor(FLinearColor(1, 0, 0, 1));
+
+	UKismetSystemLibrary::K2_SetTimer(this, "RestoreColor", 0.1f, false);//delay
+}
+
+void ACEnemy::Dead()
+{
+}
+
+void ACEnemy::RestoreColor()
+{
+	FLinearColor color = Action->GetCurrent()->GetEquipmentColor();
+
+	ChangeColor(color);
+}
 

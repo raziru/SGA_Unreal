@@ -46,7 +46,8 @@ public:
     UPROPERTY(EditAnywhere)
         FTransform EffectTransform;
 
-
+    UPROPERTY(EditAnywhere)
+        TSubclassOf<class UCameraShakeBase> ShakeClass;
 };
 
 UCLASS()
@@ -59,6 +60,7 @@ public:
     FORCEINLINE class ACDoAction* GetDoAction() { return DoAction; }
     FORCEINLINE class ACAttachment* GetAttachment() { return Attachment; }
 
+    FORCEINLINE FLinearColor GetEquipmentColor() { return EquipmentColor; }
 
 public:
     //데이터를 채우는 것은 기획의 일이기 때문에 개발자는 변수들을 열어줘서 블루프린트에서 조작가능하게 해야한다.
@@ -79,6 +81,8 @@ public:
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere)
         TArray<FDoActionData> DoActionDatas;
+
+
 
 public:
     void BeginPlay(class ACharacter* InOwnerCharacter);

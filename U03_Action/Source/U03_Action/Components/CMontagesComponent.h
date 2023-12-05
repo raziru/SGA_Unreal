@@ -39,7 +39,8 @@ public:
 
 	void PlayRoll();
 	void PlayBackstep();
-
+	void PlayHitted();
+	void PlayDead();
 protected:
 	virtual void BeginPlay() override;
 
