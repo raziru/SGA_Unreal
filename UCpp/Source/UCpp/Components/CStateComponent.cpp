@@ -43,7 +43,15 @@ void UCStateComponent::SetActionMode()
 {
 	ChangeType(EStateType::Action);
 }
+void UCStateComponent::SetHittedMode()
+{
+	ChangeType(EStateType::Hitted);
+}
 
+void UCStateComponent::SetDeadMode()
+{
+	ChangeType(EStateType::Dead);
+}
 void UCStateComponent::ChangeType(EStateType InType)
 {
 	EStateType type = Type;

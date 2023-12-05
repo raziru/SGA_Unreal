@@ -46,7 +46,8 @@ public:
     UPROPERTY(EditAnywhere)
         FTransform EffectTransform;
 
-
+    UPROPERTY(EditAnywhere)
+        TSubclassOf<class UCameraShakeBase> ShakeClass;
 };
 
 
@@ -59,6 +60,8 @@ public:
     FORCEINLINE class ACDoAction* GetDoAction() { return DoAction; }
     FORCEINLINE class ACAttachment* GetAttachment() { return Attachment; }
 
+
+    FORCEINLINE FLinearColor GetEquipmentColor() { return EquipmentColor; }
 // For Blueprint// 블루 프린트로 내용 수정을 마음대로 할 수 있기 하기위함
 public:
     UPROPERTY(BlueprintReadOnly, EditAnywhere)
@@ -78,6 +81,8 @@ public:
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere)
         TArray<FDoActionData> DoActionDatas;//TArray: vector, Unreal이 제공하는 컨테이너이다.
+
+
 
 public:
     void BeginPlay(class ACharacter* InOwnerCharacter);

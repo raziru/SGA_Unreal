@@ -13,6 +13,10 @@ class UCPP_API ACEnemy : public ACharacter, public IICharacter
 {
 	GENERATED_BODY()
 
+
+private:
+	UPROPERTY(EditAnywhere, Category = "Hitted")
+		float LaunchAmount = 100.0f;
 protected:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UWidgetComponent* NameWidget;
@@ -35,6 +39,7 @@ public:
 	ACEnemy();
 
 	float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -42,6 +47,17 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void ChangeColor(FLinearColor InColor);
+
+
+private:
+	UFUNCTION()
+		void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
+
+	UFUNCTION()
+		void RestoreColor();
+private:
+	void Hitted();
+	void Dead();
 private:
 	class UMaterialInstanceDynamic* BodyMaterial;
 	class UMaterialInstanceDynamic* LogoMaterial;

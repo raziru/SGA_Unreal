@@ -28,10 +28,16 @@ public:
 	virtual void OnAttachmentCollision() override;
 	virtual void OffAttachmentCollision() override;
 
+
+private:
+	UFUNCTION()
+		void RestoreDilation();
 private:
 	bool bExist;
 	bool bEnable;
 	bool bLast;
 
 	int32 Index;
+
+	TArray<class ACharacter*> HittedCharacters;
 };

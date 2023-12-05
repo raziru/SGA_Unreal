@@ -41,7 +41,8 @@ public:
 
 	void PlayRoll();
 	void PlayBackstep();
-
+	void PlayHitted();
+	void PlayDead();
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
