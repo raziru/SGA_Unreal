@@ -62,7 +62,7 @@ void ACDoAction_Melee::End_DoAction()
 
 void ACDoAction_Melee::OnAttachmentBeginOverlap(ACharacter* InAttacker, AActor* InAttackCauser, ACharacter* InOtherCharacter)
 {
-	
+	CheckNull(InOtherCharacter); 
 
 	for (const ACharacter* other : HittedCharacters)
 	{

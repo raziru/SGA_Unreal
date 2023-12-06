@@ -72,6 +72,7 @@ public:
 	void End_Roll();
 	void End_Backstep();
 private:
+	void OnFist();
 	void OnOneHand();
 	void OnTwoHand();
 

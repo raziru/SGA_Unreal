@@ -20,6 +20,9 @@ protected:
 protected:
 	UFUNCTION(BlueprintCallable)//Can use in blueprint
 		void AttachTo(FName InSocketName);
+
+	UFUNCTION(BlueprintCallable)//Can use in blueprint
+		void AttachToCollision(class UShapeComponent* InComponent, FName InSocketName);
 public:	
 	ACAttachment();
 

@@ -9,6 +9,8 @@
 #include "Components/CStateComponent.h"
 #include "Components/CStatusComponent.h"
 
+
+
 // Sets default values
 ACAttachment::ACAttachment()
 {
@@ -74,5 +76,11 @@ void ACAttachment::OffCollision()
 void ACAttachment::AttachTo(FName InSocketName)
 {
 	AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), InSocketName);
+}
+
+void ACAttachment::AttachToCollision(UShapeComponent* InComponent, FName InSocketName)
+{
+	CLog::Log(InComponent->GetName());
+	InComponent->AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), InSocketName);
 }
 

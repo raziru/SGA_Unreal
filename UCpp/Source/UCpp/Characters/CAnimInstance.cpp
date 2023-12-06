@@ -3,6 +3,7 @@
 
 #include "Characters/CAnimInstance.h"
 #include "Global.h"
+#include "Components/CActionComponent.h"
 #include "GameFramework/Character.h"
 
 void UCAnimInstance::NativeBeginPlay()
@@ -19,4 +20,13 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	Speed = character->GetVelocity().Size2D();
 	Direction = CalculateDirection(character->GetVelocity(), character->GetControlRotation());
 
+	UCActionComponent* action = CHelpers::GetComponent<UCActionComponent>(character);
+	CheckNull(action);
+
+	action->OnActionTypeChanged.AddDynamic(this, &UCAnimInstance::OnActionTypeChanged);
+}
+
+void UCAnimInstance::OnActionTypeChanged(EActionType InPrevType, EActionType InNewType)
+{
+	ActionType = InNewType;
 }
