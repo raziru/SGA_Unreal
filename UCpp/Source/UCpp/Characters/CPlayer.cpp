@@ -212,6 +212,13 @@ void ACPlayer::OnOneHand()
 	Action->SetOneHandMode();
 }
 
+
+void ACPlayer::OnTwoHand()
+{
+	CheckFalse(State->IsIdleMode());
+
+	Action->SetTwoHandMode();
+}
 void ACPlayer::OnDoAction()
 {
 	Action->DoAction();

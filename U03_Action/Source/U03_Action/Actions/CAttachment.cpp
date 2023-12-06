@@ -51,6 +51,12 @@ void ACAttachment::AttachTo(FName InSocketName)
 	AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), InSocketName);
 }
 
+void ACAttachment::AttachToCollision(UShapeComponent* InComponent, FName InSocketName)
+{
+	CLog::Log(InComponent->GetName());
+	InComponent->AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), InSocketName);
+}
+
 void ACAttachment::OnCollision()
 {
 	for (UShapeComponent* component : ShapeComponents)

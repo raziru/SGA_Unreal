@@ -73,6 +73,7 @@ public:
 	void End_Backstep();
 private:
 	void OnOneHand();
+	void OnTwoHand();
 
 	void OnDoAction();
 public:

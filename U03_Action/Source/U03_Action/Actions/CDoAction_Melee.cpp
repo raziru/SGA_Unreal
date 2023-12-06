@@ -64,8 +64,10 @@ void ACDoAction_Melee::End_DoAction()
 	Index = 0;
 }
 void ACDoAction_Melee::OnAttachmentBeginOverlap(class ACharacter* InAttacker, class AActor* InAttackCauser, class ACharacter* InOtherCharacter)
-{
+{//Character 객체들만 공격이 인정된다. 그래서 pawn 클래스의 함수인 takeDamage사용가능
 	//CLog::Log(InOtherCharacter->GetName());
+	//Null 체크를 넣어서 잘못된 충돌 검출-- fist에 달려있는 충돌체가 서로 충돌하면서 overlap이라 인식하는 듯
+	CheckNull(InOtherCharacter);
 	for (const ACharacter* other : HittedCharacters)
 	{
 		if (InOtherCharacter == other)

@@ -39,8 +39,9 @@ protected:
 
 public:
 	ACEnemy();
-
+	//pawn 단계의 함수 재정의
 	float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
 
 protected:
 	virtual void BeginPlay() override;

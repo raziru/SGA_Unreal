@@ -98,7 +98,7 @@ void ACEnemy::ChangeColor(FLinearColor InColor)
 	LogoMaterial->SetVectorParameterValue("BodyColor", InColor);
 	
 }
-
+//delegate 전달받음
 void ACEnemy::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
 {
 	switch (InNewType)
@@ -122,7 +122,7 @@ float ACEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AContro
 }
 
 
-
+//상태변화 함수에서 호출됨
 void ACEnemy::Hitted()
 {
 	Status->SubHealth(DamageValue);
@@ -149,6 +149,7 @@ void ACEnemy::Hitted()
 
 void ACEnemy::Dead()
 {
+	
 }
 
 void ACEnemy::RestoreColor()

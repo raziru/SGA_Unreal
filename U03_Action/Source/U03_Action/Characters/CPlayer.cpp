@@ -94,10 +94,15 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("HorizontalLook", this, &ACPlayer::OnHorizontalLook);
 	PlayerInputComponent->BindAxis("VerticalLook", this, &ACPlayer::OnVerticalLook);
 
-	PlayerInputComponent->BindAction("Avoid", EInputEvent::IE_Pressed, this, &ACPlayer::OnAvoid);
+	PlayerInputComponent->BindAction("Avoid",   EInputEvent::IE_Pressed, this, &ACPlayer::OnAvoid);
 
+	PlayerInputComponent->BindAction("Fist", EInputEvent::IE_Pressed, this, &ACPlayer::OnFist);
 	PlayerInputComponent->BindAction("OneHand", EInputEvent::IE_Pressed, this, &ACPlayer::OnOneHand);
-	PlayerInputComponent->BindAction("Action", EInputEvent::IE_Pressed, this, &ACPlayer::OnDoAction);
+	PlayerInputComponent->BindAction("TwoHand", EInputEvent::IE_Pressed, this, &ACPlayer::OnTwoHand);
+
+	PlayerInputComponent->BindAction("Action",  EInputEvent::IE_Pressed, this, &ACPlayer::OnDoAction);
+
+
 }
 
 void ACPlayer::OnMoveForward(float InAxis)
@@ -196,6 +201,13 @@ void ACPlayer::End_Backstep()
 	State->SetIdleMode();
 }
 
+void ACPlayer::OnFist()
+{
+	CheckFalse(State->IsIdleMode());
+
+	Action->SetFistMode();
+}
+
 void ACPlayer::OnOneHand()
 {
 	CheckFalse(State->IsIdleMode());
@@ -203,6 +215,13 @@ void ACPlayer::OnOneHand()
 	Action->SetOneHandMode();
 }
 
+
+void ACPlayer::OnTwoHand()
+{
+	CheckFalse(State->IsIdleMode());
+
+	Action->SetTwoHandMode();
+}
 void ACPlayer::OnDoAction()
 {
 	Action->DoAction();
