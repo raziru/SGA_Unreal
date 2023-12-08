@@ -87,6 +87,9 @@ public:
 public:
     void BeginPlay(class ACharacter* InOwnerCharacter);
 
+
+private:
+    FString GetLabelName(class ACharacter* InOwnerCharacter, FString InName);
 private:
     class ACEquipment* Equipment;
     class ACAttachment* Attachment;

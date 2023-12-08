@@ -75,6 +75,8 @@ private:
 	void OnFist();
 	void OnOneHand();
 	void OnTwoHand();
+	void OnWarp();
+
 
 	void OnDoAction();
 public:

@@ -13,6 +13,7 @@ class UCPP_API ACDoAction : public AActor
 	GENERATED_BODY()
 public:
 	FORCEINLINE void SetDatas(TArray<FDoActionData> InDatas) { Datas = InDatas; }
+	FORCEINLINE void SetEquipped(const bool* InEquipped) { bEquipped = InEquipped; }
 
 public:	
 	// Sets default values for this actor's properties
@@ -52,5 +53,7 @@ protected:
 		class UCStatusComponent* Status;
 
 protected:
+
+	const bool* bEquipped;
 	TArray<FDoActionData> Datas;
 };
