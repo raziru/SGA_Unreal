@@ -19,7 +19,7 @@ class U03_ACTION_API ACEquipment : public AActor
 public:
 	FORCEINLINE void SetData(FEquipmentData InData) { Data = InData; }
 	FORCEINLINE void SetColor(FLinearColor InColor) { Color = InColor; }
-	FORCEINLINE const bool* GetEquipped() { return &bEquipped; }
+	FORCEINLINE const bool* GetEquipped() { return &bEquipped; }//read only
 public:	
 	ACEquipment();
 

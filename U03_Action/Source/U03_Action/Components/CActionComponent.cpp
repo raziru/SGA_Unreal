@@ -63,7 +63,10 @@ void UCActionComponent::SetTwoHandMode()
 
 }
 
-
+void UCActionComponent::SetWarpMode()
+{
+	SetMode(EActionType::Warp);
+}
 
 void UCActionComponent::SetMode(EActionType InType)
 {

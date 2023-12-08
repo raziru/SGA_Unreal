@@ -25,7 +25,7 @@ void ACEquipment::BeginPlay()
 
 void ACEquipment::Equip_Implementation()
 {
-	State->SetEquipMode();
+	State->SetEquipMode();//동작 종료여부 확인, 장착 성공여부는 확인이 어렵다
 
 	if (Data.AnimMontage != NULL)
 		OwnerCharacter->PlayAnimMontage(Data.AnimMontage, Data.PlayRatio, Data.StartSection);
@@ -55,13 +55,13 @@ void ACEquipment::Begin_Equip_Implementation()
 void ACEquipment::End_Equip_Implementation()
 {
 	bEquipped = true;
+
 	State->SetIdleMode();
 }
 
 void ACEquipment::Unequip_Implementation()
 {
-	bEquipped = false;
-	
+	bEquipped = false;	
 
 	if (OnUnequipmentDelegate.IsBound())
 		OnUnequipmentDelegate.Broadcast();
