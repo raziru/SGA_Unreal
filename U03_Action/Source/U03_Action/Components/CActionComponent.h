@@ -49,7 +49,7 @@ public:
 	void SetTwoHandMode();
 	void SetWarpMode();
 
-
+	void OffAllCollision();
 public:
 	void DoAction();
 protected:

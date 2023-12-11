@@ -26,6 +26,9 @@ private:
 		class UCActionComponent* Action;
 
 	UPROPERTY(VisibleDefaultsOnly)
+		class UCTargetComponent* Target;
+
+	UPROPERTY(VisibleDefaultsOnly)
 		class UCMontagesComponent* Montages;
 
 	UPROPERTY(VisibleDefaultsOnly)
@@ -78,6 +81,11 @@ private:
 	void OnWarp();
 
 	void OnDoAction();
+
+	void OnTarget();
+	void OnTargetLeft();
+	void OnTargetRight();
+
 public:
 	virtual void ChangeColor(FLinearColor InColor) override;
 private:

@@ -68,6 +68,20 @@ void UCActionComponent::SetWarpMode()
 	SetMode(EActionType::Warp);
 }
 
+void UCActionComponent::OffAllCollision()
+{
+	for (UCActionData* data : Datas)
+	{
+		if (!!data == false)
+			continue;
+
+		if (!!data->GetAttachment() == false)
+			continue;
+
+		data->GetAttachment()->OffCollision();
+	}
+}
+
 void UCActionComponent::SetMode(EActionType InType)
 {
 	if (Type==InType)//같은 무기 일때 해제

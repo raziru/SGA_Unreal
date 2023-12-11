@@ -131,6 +131,14 @@ void ACEnemy::Hitted()
 
 	Status->SetStop();
 
+	if (Status->GetHealth() <= 0.0f)
+	{
+		State->SetDeadMode();
+
+		return;
+	}
+
+
 	Montages->PlayHitted();
 
 	FVector start = GetActorLocation();
@@ -149,7 +157,22 @@ void ACEnemy::Hitted()
 
 void ACEnemy::Dead()
 {
+	CheckFalse(State->IsDeadMode());
+
+	Montages->PlayDead();
+}
+
+void ACEnemy::Begin_Dead()
+{
+	Action->OffAllCollision();
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+void ACEnemy::End_Dead()
+{
+	Destroy();
 	
+
 }
 
 void ACEnemy::RestoreColor()

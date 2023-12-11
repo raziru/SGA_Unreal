@@ -53,6 +53,7 @@ void UCStateComponent::SetDeadMode()
 {
 	ChangeType(EStateType::Dead);
 }
+
 void UCStateComponent::ChangeType(EStateType InType)
 {
 	EStateType type = Type;
