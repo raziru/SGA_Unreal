@@ -10,6 +10,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/CActionComponent.h"
+#include "Components/CTargetComponent.h"
 #include "Components/COptionComponent.h"
 #include "Components/CMontagesComponent.h"
 #include "Components/CStatusComponent.h"
@@ -31,6 +32,7 @@ ACPlayer::ACPlayer()
 	//ActionComponent에 DataAsset을 둬서 무기 종류, 장착방식, 장비 정보를 Asset에서 자유롭게 설정하고
 	//그 내용을 캐릭터가 가져가서 사용하게 만든다. 재사용성과 추상화를 신경쓴 설계
 	CHelpers::CreateActorComponent<UCActionComponent>(this, &Action, "Action");
+	CHelpers::CreateActorComponent<UCTargetComponent>(this, &Target, "Target");
 	CHelpers::CreateActorComponent<UCMontagesComponent>(this, &Montages, "Montages");
 	CHelpers::CreateActorComponent<UCOptionComponent>(this, &Option, "Option");
 	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
@@ -106,6 +108,9 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Warp", EInputEvent::IE_Pressed, this, &ACPlayer::OnWarp);
 
 	PlayerInputComponent->BindAction("Action", EInputEvent::IE_Pressed, this, &ACPlayer::OnDoAction);
+	PlayerInputComponent->BindAction("Targeting", EInputEvent::IE_Pressed, this, &ACPlayer::OnTarget);
+	PlayerInputComponent->BindAction("TargetLeft", EInputEvent::IE_Pressed, this, &ACPlayer::OnTargetLeft);
+	PlayerInputComponent->BindAction("TargetRight", EInputEvent::IE_Pressed, this, &ACPlayer::OnTargetRight);
 }
 
 void ACPlayer::OnMoveForward(float InAxis)
@@ -239,6 +244,21 @@ void ACPlayer::OnWarp()
 void ACPlayer::OnDoAction()
 {
 	Action->DoAction();
+}
+
+void ACPlayer::OnTarget()
+{
+	Target->ToggleTarget();
+}
+
+void ACPlayer::OnTargetLeft()
+{
+	Target->ChangeTargetLeft();
+}
+
+void ACPlayer::OnTargetRight()
+{
+	Target->ChangeTargetRight();
 }
 
 void ACPlayer::ChangeColor(FLinearColor InColor)

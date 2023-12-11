@@ -58,6 +58,11 @@ private:
 private:
 	void Hitted();
 	void Dead();
+
+private:
+	virtual void Begin_Dead() override;
+	virtual void End_Dead()   override;
+
 private:
 	class UMaterialInstanceDynamic* BodyMaterial;
 	class UMaterialInstanceDynamic* LogoMaterial;

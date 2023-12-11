@@ -128,6 +128,13 @@ void ACEnemy::Hitted()
 	Cast<UCUserWidget_Health>(HealthWidget->GetUserWidgetObject())->Update(Status->GetHealth(), Status->GetMaxHealth());
 	DamageValue = 0.0f;
 
+	if (Status->GetHealth() <= 0.0f)
+	{
+		State->SetDeadMode();
+
+		return;
+	}
+
 	Status->SetStop();
 
 	Montages->PlayHitted();
@@ -148,6 +155,18 @@ void ACEnemy::Hitted()
 
 void ACEnemy::Dead()
 {
+	CheckFalse(State->IsDeadMode());
+
+	Montages->PlayDead();
+}
+void ACEnemy::Begin_Dead()
+{
+	Action->OffAllCollision();
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+void ACEnemy::End_Dead()
+{
+	Destroy();
 }
 void ACEnemy::RestoreColor()
 {
