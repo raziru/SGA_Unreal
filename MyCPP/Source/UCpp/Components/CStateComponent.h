@@ -37,6 +37,7 @@ public:
 
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE bool IsHittedMode() { return Type == EStateType::Hitted; }
+
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE bool IsDeadMode() { return Type == EStateType::Dead; }
 

@@ -1,7 +1,7 @@
 
 
 #include "Components/CInventoryComponent.h"
-
+#include "Inventory/CInventory.h"
 
 //#include "Engine/Texture2D.h"
 UCInventoryComponent::UCInventoryComponent()

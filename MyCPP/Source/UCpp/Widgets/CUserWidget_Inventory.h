@@ -6,9 +6,6 @@
 #include "Blueprint/UserWidget.h"
 #include "CUserWidget_Inventory.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class UCPP_API UCUserWidget_Inventory : public UUserWidget
 {

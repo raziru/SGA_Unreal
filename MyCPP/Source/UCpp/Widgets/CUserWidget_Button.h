@@ -4,11 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Inventory/CItem.h"
 #include "CUserWidget_Button.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class UCPP_API UCUserWidget_Button : public UUserWidget
 {

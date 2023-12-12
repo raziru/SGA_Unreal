@@ -38,8 +38,15 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCOptionComponent* Option;
+
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCStateComponent* State;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCInventoryComponent* Inventory;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCInteractComponent* Interaction;
 public:
 	ACPlayer();
 
@@ -51,6 +58,7 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void Interact() override;
 
 	
 private:

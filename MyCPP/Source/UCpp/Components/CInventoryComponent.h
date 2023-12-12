@@ -6,10 +6,11 @@
 #include "Components/ActorComponent.h"
 #include "CInventoryComponent.generated.h"
 
+
 UENUM(BlueprintType)
 enum class EItemType : uint8
 {
-	Weapon, Tool, Consumable, Max,
+	Weapon, Armor, Tool, Consumable, Max,
 };
 
 USTRUCT(BlueprintType)
@@ -24,6 +25,9 @@ public:
 		FName ItemName;
 
 	UPROPERTY(EditAnywhere)
+		FText ItemDescription;
+
+	UPROPERTY(EditAnywhere)
 		class UTexture2D* ItemImage;
 
 	UPROPERTY(EditAnywhere)
@@ -36,6 +40,7 @@ public:
 		int ItemIndex;
 
 };
+
 UCLASS( ClassGroup=(GamePlay), meta=(BlueprintSpawnableComponent) )
 class UCPP_API UCInventoryComponent : public UActorComponent
 {
@@ -45,8 +50,7 @@ public:
 	// Sets default values for this component's properties
 	UCInventoryComponent();
 
-	UPROPERTY(EditAnywhere)
-		EItemType Type;
+	
 
 protected:
 	// Called when the game starts

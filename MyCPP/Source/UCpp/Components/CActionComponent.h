@@ -38,6 +38,7 @@ public:
 
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE bool IsTwoHandMode() { return Type == EActionType::TwoHand; }
+
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE bool IsWarpMode() { return Type == EActionType::Warp; }
 public:	

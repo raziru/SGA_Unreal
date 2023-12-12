@@ -12,7 +12,9 @@
 #include "Components/CActionComponent.h"
 #include "Components/CTargetComponent.h"
 #include "Components/COptionComponent.h"
+#include "Components/CInteractComponent.h"
 #include "Components/CMontagesComponent.h"
+#include "Components/CInventoryComponent.h"
 #include "Components/CStatusComponent.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
@@ -34,6 +36,9 @@ ACPlayer::ACPlayer()
 	CHelpers::CreateActorComponent<UCActionComponent>(this, &Action, "Action");
 	CHelpers::CreateActorComponent<UCTargetComponent>(this, &Target, "Target");
 	CHelpers::CreateActorComponent<UCMontagesComponent>(this, &Montages, "Montages");
+	CHelpers::CreateActorComponent<UCInventoryComponent>(this, &Inventory, "Inventory");
+	CHelpers::CreateActorComponent<UCInteractComponent>(this, &Interaction, "Interact");
+
 	CHelpers::CreateActorComponent<UCOptionComponent>(this, &Option, "Option");
 	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
@@ -111,6 +116,14 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Targeting", EInputEvent::IE_Pressed, this, &ACPlayer::OnTarget);
 	PlayerInputComponent->BindAction("TargetLeft", EInputEvent::IE_Pressed, this, &ACPlayer::OnTargetLeft);
 	PlayerInputComponent->BindAction("TargetRight", EInputEvent::IE_Pressed, this, &ACPlayer::OnTargetRight);
+
+	PlayerInputComponent->BindAction("Interact", EInputEvent::IE_Pressed, this, &ACPlayer::Interact);
+
+}
+
+void ACPlayer::Interact()
+{
+	Interaction->Interact();
 }
 
 void ACPlayer::OnMoveForward(float InAxis)
