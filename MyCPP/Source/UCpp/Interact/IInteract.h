@@ -18,5 +18,6 @@ class UCPP_API IIInteract
 	GENERATED_BODY()
 
 public:
-	virtual void Interact() {};
+	//virtual void Interact() {}
+	virtual void Interact(AActor* InOther) {}
 };

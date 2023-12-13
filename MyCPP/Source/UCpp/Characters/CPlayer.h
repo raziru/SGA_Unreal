@@ -21,6 +21,8 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
 
+	UPROPERTY(VisibleDefaultsOnly)
+		class UBoxComponent* InteractBox;
 
 
 private:
@@ -60,6 +62,7 @@ public:
 
 	virtual void Interact() override;
 
+	virtual void PickUp(class ACItem* InItem) override;
 	
 private:
 	void OnMoveForward(float InAxis);
@@ -74,6 +77,9 @@ private:
 	UFUNCTION()
 		void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
 
+
+private:
+	void OpenInventory();
 
 private:
 	void Begin_Roll();

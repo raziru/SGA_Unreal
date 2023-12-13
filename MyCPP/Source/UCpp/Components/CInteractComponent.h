@@ -22,11 +22,15 @@ public:
 
 	void Interact();
 
+
+
+private:
 	UFUNCTION()
-		void OnInteractBeginOverlap(class AActor* InInteracted);
+		void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-		void OnInteractEndOverlap  (class AActor* InInteracted);
+		void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 
 protected:
 	virtual void BeginPlay() override;
@@ -36,4 +40,6 @@ protected:
 private:
 	TArray<class IIInteract*> InteractArray;
 
+	TArray<class UShapeComponent*> InteractBox;
+	
 };

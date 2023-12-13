@@ -101,6 +101,12 @@ void ACEnemy::ChangeColor(FLinearColor InColor)
 	LogoMaterial->SetVectorParameterValue("BodyColor", InColor);
 }
 
+void ACEnemy::Interact(AActor* InOther)
+{
+	CLog::Print(InOther->GetName());
+	Destroy();
+}
+
 
 
 float ACEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

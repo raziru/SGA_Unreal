@@ -13,10 +13,21 @@ void ACItem::BeginPlay()
 	
 }
 
-void ACItem::Interact()
+void ACItem::Interact(AActor* InOther)
 {
-//	character
+	ACPlayer* Player = Cast<ACPlayer>(InOther);
+	CheckNull(Player);
+	Player->PickUp(this);
+	CLog::Print(InOther->GetName());
 	Destroy();
+}
+
+void ACItem::ShowData()
+{
+	CLog::Print(ItemData.ItemName.ToString());
+	CLog::Print(ItemData.ItemDescription.ToString());
+	CLog::Print(ItemData.CurrentStack);
+
 }
 
 

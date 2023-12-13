@@ -5,11 +5,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "ICharacter.h"
+#include "Interact/IInteract.h"
 #include "Components/CStateComponent.h"
 #include "CEnemy.generated.h"
 
 UCLASS()
-class UCPP_API ACEnemy : public ACharacter, public IICharacter
+class UCPP_API ACEnemy : public ACharacter, public IICharacter, public IIInteract
 {
 	GENERATED_BODY()
 
@@ -47,6 +48,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void ChangeColor(FLinearColor InColor);
+
+
+	virtual void Interact(AActor* InOther) override;
 
 
 private:

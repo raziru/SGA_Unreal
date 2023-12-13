@@ -8,6 +8,7 @@
 #include "Camera/CameraComponent.h"
 #include "Animation/AnimInstance.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/BoxComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/CActionComponent.h"
 #include "Components/CTargetComponent.h"
@@ -27,7 +28,7 @@ ACPlayer::ACPlayer()
 	PrimaryActorTick.bCanEverTick = true;
 	CHelpers::CreateComponent<USpringArmComponent>(this, &SpringArm, "SpringArm", GetMesh());
 	CHelpers::CreateComponent<UCameraComponent>(this, &Camera, "Camera", SpringArm);
-	
+	CHelpers::CreateComponent<UBoxComponent>(this, &InteractBox, "InteractBox", GetMesh());
 
 	//기능만 달린 컴포넌트들을 생성하여 player 클래스를 관리하기 쉽게한다.
 
@@ -57,6 +58,9 @@ ACPlayer::ACPlayer()
 	SpringArm->bDoCollisionTest = false;
 	SpringArm->bUsePawnControlRotation = true;
 	SpringArm->bEnableCameraLag = true;
+
+	InteractBox->SetRelativeLocation(FVector(0, 80, 100));
+	InteractBox->SetRelativeScale3D(FVector(3, 3, 3));
 
 	////GetCharacterMovement()->MaxWalkSpeed = 
 	GetCharacterMovement()->RotationRate = FRotator(0, 720, 0);
@@ -118,14 +122,11 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("TargetRight", EInputEvent::IE_Pressed, this, &ACPlayer::OnTargetRight);
 
 	PlayerInputComponent->BindAction("Interact", EInputEvent::IE_Pressed, this, &ACPlayer::Interact);
+	PlayerInputComponent->BindAction("Inventory", EInputEvent::IE_Pressed, this, &ACPlayer::OpenInventory);
 
 }
 
-void ACPlayer::Interact()
-{
-	Interaction->Interact();
-}
-
+//Moving
 void ACPlayer::OnMoveForward(float InAxis)
 {
 	CheckFalse(Status->CanMove());
@@ -180,6 +181,22 @@ void ACPlayer::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
 		case EStateType::Backstep: Begin_Backstep(); break;
 	}
 	
+}
+
+//Interacting
+void ACPlayer::Interact()
+{
+	Interaction->Interact();
+}
+
+void ACPlayer::PickUp(class ACItem* InItem)
+{
+	Inventory->PickUp(InItem);
+}
+
+void ACPlayer::OpenInventory()
+{
+	Inventory->OpenInventory();
 }
 
 void ACPlayer::Begin_Roll()

@@ -4,10 +4,43 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/CInventoryComponent.h"
 #include "Interact/IInteract.h"
 #include "CItem.generated.h"
 
+
+UENUM(BlueprintType)
+enum class EItemType : uint8
+{
+	Weapon, Armor, Tool, Consumable, Max,
+};
+
+USTRUCT(BlueprintType)
+struct FItemData
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere)
+		EItemType ItemType;
+
+	UPROPERTY(EditAnywhere)
+		FName ItemName;
+
+	UPROPERTY(EditAnywhere)
+		FText ItemDescription;
+
+	UPROPERTY(EditAnywhere)
+		class UTexture2D* ItemImage;
+
+	UPROPERTY(EditAnywhere)
+		int CurrentStack;
+
+	UPROPERTY(EditAnywhere)
+		int MaxStack;
+
+	UPROPERTY(EditAnywhere)
+		int ItemIndex;
+
+};
 
 UCLASS()
 class UCPP_API ACItem : public AActor, public IIInteract
@@ -17,12 +50,17 @@ class UCPP_API ACItem : public AActor, public IIInteract
 public:	
 	ACItem();
 
+	UFUNCTION(BlueprintPure)
+		FORCEINLINE FItemData& GetItemData() { return ItemData; }
+
 private:
 	UPROPERTY(EditAnywhere)
 		FItemData  ItemData;
 public:
 
-	virtual void Interact() override;
+	virtual void Interact(AActor* InOther) override;
+
+	void ShowData();
 
 protected:
 	virtual void BeginPlay() override;
