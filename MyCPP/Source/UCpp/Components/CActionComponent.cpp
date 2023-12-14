@@ -68,6 +68,11 @@ void UCActionComponent::SetWarpMode()
 	SetMode(EActionType::Warp);
 }
 
+void UCActionComponent::SetFireStormMode()
+{
+	SetMode(EActionType::FireStorm);
+}
+
 void UCActionComponent::OffAllCollision()
 {
 	for (UCActionData* data : Datas)

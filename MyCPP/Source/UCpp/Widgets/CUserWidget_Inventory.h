@@ -11,4 +11,17 @@ class UCPP_API UCUserWidget_Inventory : public UUserWidget
 {
 	GENERATED_BODY()
 	
+
+
+
+public:
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void RefreshInventory(const TArray<class ACItem*>& Inventory, int MaxInventorySize, int ColumnSize);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void ClearInventory();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void BuildInventory(const TArray<class ACItem*>& Inventory, int MaxInventorySize, int ColumnSize);
+
 };

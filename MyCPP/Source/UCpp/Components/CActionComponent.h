@@ -9,7 +9,7 @@
 UENUM(BlueprintType)
 enum class EActionType : uint8
 {
-	Unarmed, Fist, OneHand, TwoHand, Warp, Max,
+	Unarmed, Fist, OneHand, TwoHand, Warp, FireStorm, Max,
 };
 
 //delegate는 무조건 public으로 열어줘야 다른쪽에서 사용할 수 있다.
@@ -41,6 +41,9 @@ public:
 
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE bool IsWarpMode() { return Type == EActionType::Warp; }
+
+	UFUNCTION(BlueprintPure)
+		FORCEINLINE bool IsFireStormMode() { return Type == EActionType::FireStorm; }
 public:	
 	// Sets default values for this component's properties
 	UCActionComponent();
@@ -49,6 +52,7 @@ public:
 	void SetOneHandMode();
 	void SetTwoHandMode();
 	void SetWarpMode();
+	void SetFireStormMode();
 
 
 	void OffAllCollision();

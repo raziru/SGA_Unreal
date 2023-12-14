@@ -93,7 +93,7 @@ private:
 	void OnOneHand();
 	void OnTwoHand();
 	void OnWarp();
-
+	void OnFireStorm();
 
 	void OnDoAction();
 

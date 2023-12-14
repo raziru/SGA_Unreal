@@ -3,3 +3,4 @@
 
 #include "CUserWidget_Inventory.h"
 #include "Global.h"
+#include "Inventory/CItem.h"
