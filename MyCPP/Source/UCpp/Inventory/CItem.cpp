@@ -19,7 +19,9 @@ void ACItem::Interact(AActor* InOther)
 	CheckNull(Player);
 	Player->PickUp(this);
 	CLog::Print(InOther->GetName());
-	Destroy();
+	//Destroy();//강한 복사 약한 복사 문제
+
+	
 }
 
 void ACItem::ShowData()

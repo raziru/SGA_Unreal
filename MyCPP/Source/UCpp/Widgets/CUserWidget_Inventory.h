@@ -10,18 +10,27 @@ UCLASS()
 class UCPP_API UCUserWidget_Inventory : public UUserWidget
 {
 	GENERATED_BODY()
-	
-
-
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-		void RefreshInventory(const TArray<class ACItem*>& Inventory, int MaxInventorySize, int ColumnSize);
+	//CUserWidget_Inventory(const TArray<class ACItem*>& Inventory, int MaxInventorySize, int ColumnSize);
+	//void Construct();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-		void ClearInventory();
+public:
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+		class UUniformGridPanel* InventoryPanel;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Widget")
+		TSubclassOf<UUserWidget> ItemButtonWidgetClass;
+	
+
+public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		void BuildInventory(const TArray<class ACItem*>& Inventory, int MaxInventorySize, int ColumnSize);
+	
+	//UFUNCTION(BlueprintImplementableEvent)
+	void ClearInventory();
+	//UFUNCTION(BlueprintImplementableEvent)
+	void RefreshInventory(const TArray<class ACItem*>& Inventory, int MaxInventorySize, int ColumnSize);
+
 
 };

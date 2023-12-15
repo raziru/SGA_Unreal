@@ -11,12 +11,22 @@ UCLASS()
 class UCPP_API UCUserWidget_ItemButton : public UUserWidget
 {
 	GENERATED_BODY()
+
+public:
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+		class UButton* ItemButton;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+		class UTextBlock* ItemName;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+		class UTextBlock* ItemQuantity; 
+	
+
 public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-		void SetItem(class ACItem* Item);
+		void SetItem(const class ACItem* Item);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-		void MakeButtonStyle(class UTexture2D* Texture, int ItemCount, FName ItemName);
+		void MakeButtonStyle(class UTexture2D* Texture, int ItemCount, FName Name);
 
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE class UTexture2D* GetTexture(class ACItem* Item) { return Item->GetItemData().ItemImage; }

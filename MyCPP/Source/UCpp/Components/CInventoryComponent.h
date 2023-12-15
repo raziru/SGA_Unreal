@@ -11,6 +11,23 @@ class UCPP_API UCInventoryComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "InventorySize")
+		int MaxInventorySize = 25;
+
+	UPROPERTY(EditDefaultsOnly, Category = "InventorySize")
+		int ColumnSize = 5;
+
+
+protected:
+	UPROPERTY(EditAnywhere, Category = "Widget")
+		TSubclassOf<UUserWidget> InventoryWidgetClass;
+
+	UPROPERTY()
+		class UCUserWidget_Inventory* InventoryWidget;
+	
+
 public:	
 	// Sets default values for this component's properties
 	UCInventoryComponent();
@@ -24,5 +41,7 @@ protected:
 
 private:
 	TArray<ACItem*> Inventory;
+
+	bool IsInventoryOpened;
 
 };

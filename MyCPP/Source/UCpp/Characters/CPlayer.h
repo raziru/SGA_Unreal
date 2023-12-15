@@ -25,6 +25,8 @@ private:
 		class UBoxComponent* InteractBox;
 
 
+
+
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCStatusComponent* Status;

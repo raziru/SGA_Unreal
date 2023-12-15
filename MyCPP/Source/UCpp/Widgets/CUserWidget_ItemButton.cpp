@@ -3,6 +3,6 @@
 
 #include "CUserWidget_ItemButton.h"
 #include "Global.h"
-#include "Styling/SlateBrush.h"
+#include "Brushes/SlateImageBrush.h"
 #include "Inventory/CItem.h"
 

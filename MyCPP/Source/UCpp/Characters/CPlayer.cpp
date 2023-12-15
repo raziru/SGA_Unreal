@@ -37,12 +37,12 @@ ACPlayer::ACPlayer()
 	CHelpers::CreateActorComponent<UCActionComponent>(this, &Action, "Action");
 	CHelpers::CreateActorComponent<UCTargetComponent>(this, &Target, "Target");
 	CHelpers::CreateActorComponent<UCMontagesComponent>(this, &Montages, "Montages");
-	CHelpers::CreateActorComponent<UCInventoryComponent>(this, &Inventory, "Inventory");
-	CHelpers::CreateActorComponent<UCInteractComponent>(this, &Interaction, "Interact");
-
 	CHelpers::CreateActorComponent<UCOptionComponent>(this, &Option, "Option");
+
 	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
+	CHelpers::CreateActorComponent<UCInteractComponent>(this, &Interaction, "Interact");
+	CHelpers::CreateActorComponent<UCInventoryComponent>(this, &Inventory, "Inventory");
 
 	USkeletalMesh* mesh;
 	CHelpers::GetAsset<USkeletalMesh>(&mesh, "SkeletalMesh'/Game/Character/Mesh/SK_Mannequin.SK_Mannequin'");
