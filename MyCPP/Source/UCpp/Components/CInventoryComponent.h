@@ -6,6 +6,10 @@
 #include "Inventory/CItem.h"
 #include "CInventoryComponent.generated.h"
 
+
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSendItemData, FItemData, Item);
+
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
 class UCPP_API UCInventoryComponent : public UActorComponent
 {
@@ -36,12 +40,20 @@ public:
 
 	void PickUp(ACItem* InItem);
 
+
+private:
+	UFUNCTION()
+		void OnSelected(const FItemData Item);
+
 protected:
 	virtual void BeginPlay() override;
 
 private:
-	TArray<ACItem*> Inventory;
+	TArray<FItemData> Inventory;
 
 	bool IsInventoryOpened;
 
+public:
+	UPROPERTY(BlueprintAssignable)
+		FSendItemData SendItemData;
 };

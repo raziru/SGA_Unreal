@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Inventory/CItem.h"
 #include "CUserWidget_Inventory.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FItemSelected, FItemData, Item);
 
 UCLASS()
 class UCPP_API UCUserWidget_Inventory : public UUserWidget
@@ -25,12 +28,19 @@ public:
 public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-		void BuildInventory(const TArray<class ACItem*>& Inventory, int MaxInventorySize, int ColumnSize);
+		void BuildInventory(const TArray<FItemData>& Inventory, int MaxInventorySize, int ColumnSize);
 	
 	//UFUNCTION(BlueprintImplementableEvent)
 	void ClearInventory();
 	//UFUNCTION(BlueprintImplementableEvent)
-	void RefreshInventory(const TArray<class ACItem*>& Inventory, int MaxInventorySize, int ColumnSize);
+	void RefreshInventory(const TArray<FItemData>& Inventory, int MaxInventorySize, int ColumnSize);
 
 
+public:
+	UFUNCTION(BlueprintCallable)
+		void ButtonSelected(FItemData Item);
+
+public:
+	UPROPERTY(BlueprintAssignable)
+		FItemSelected OnSelected;
 };

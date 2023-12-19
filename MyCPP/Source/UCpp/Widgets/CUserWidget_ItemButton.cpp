@@ -4,5 +4,12 @@
 #include "CUserWidget_ItemButton.h"
 #include "Global.h"
 #include "Brushes/SlateImageBrush.h"
-#include "Inventory/CItem.h"
 
+void UCUserWidget_ItemButton::ButtonClicked(const FItemData Item)
+{
+	if (OnSelected.IsBound())
+	{
+		OnSelected.Broadcast(Item);
+	}
+
+}

@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Inventory/CItem.h"
 #include "CUserWidget_ItemButton.generated.h"
 
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSelected, FItemData, Item);
 UCLASS()
 class UCPP_API UCUserWidget_ItemButton : public UUserWidget
 {
@@ -23,17 +24,23 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-		void SetItem(const class ACItem* Item);
+		void SetItem(const FItemData Item);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		void MakeButtonStyle(class UTexture2D* Texture, int ItemCount, FName Name);
 
 	UFUNCTION(BlueprintPure)
-		FORCEINLINE class UTexture2D* GetTexture(class ACItem* Item) { return Item->GetItemData().ItemImage; }
+		FORCEINLINE class UTexture2D* GetTexture(const FItemData Item) { return Item.ItemImage; }
 
 	UFUNCTION(BlueprintPure)
-		FORCEINLINE int GetCount(class ACItem* Item)  { return Item->GetItemData().CurrentStack; }
+		FORCEINLINE int GetCount(const FItemData Item)  { return Item.CurrentStack; }
 
 	UFUNCTION(BlueprintPure)
-		FORCEINLINE FName GetName(class ACItem* Item) { return Item->GetItemData().ItemName; }
+		FORCEINLINE FName GetName(const FItemData Item) { return Item.ItemName; }
+
+	UFUNCTION(BlueprintCallable)
+		void ButtonClicked(const FItemData Item);
+public:
+	UPROPERTY(BlueprintAssignable)
+		FOnSelected OnSelected;
 };

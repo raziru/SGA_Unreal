@@ -34,6 +34,8 @@ void UCInteractComponent::BeginPlay()
 		}
 		
 	}
+
+
 }
 
 

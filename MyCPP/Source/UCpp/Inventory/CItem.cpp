@@ -1,5 +1,6 @@
 #include "Inventory/CItem.h"
 #include "Global.h"
+#include "Actions/CActionData.h"
 #include "Characters/CPlayer.h"
 
 ACItem::ACItem()
@@ -10,7 +11,6 @@ ACItem::ACItem()
 void ACItem::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void ACItem::Interact(AActor* InOther)
@@ -19,7 +19,7 @@ void ACItem::Interact(AActor* InOther)
 	CheckNull(Player);
 	Player->PickUp(this);
 	CLog::Print(InOther->GetName());
-	//Destroy();//강한 복사 약한 복사 문제
+	Destroy();//강한 복사 약한 복사 문제
 
 	
 }
@@ -32,4 +32,26 @@ void ACItem::ShowData()
 
 }
 
+void FItemData::ShowData()
+{
+	
+	CLog::Log(ItemName.ToString());
+	CLog::Log(CurrentStack);	
+	CLog::Log(MaxStack);
+	CLog::Log(ItemIndex);
 
+}
+
+void FItemData::SetData(FItemData data)
+{
+	this->ItemType = data.ItemType;
+	this->ItemName = data.ItemName;
+	this->ItemDescription = data.ItemDescription;
+	this->ItemImage = data.ItemImage;
+	this->CurrentStack = data.CurrentStack;
+	this->MaxStack = data.MaxStack;
+	this->ItemIndex = data.ItemIndex;
+	this->ActionData = data.ActionData;
+
+
+}

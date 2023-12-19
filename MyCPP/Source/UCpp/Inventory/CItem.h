@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Interact/IInteract.h"
+#include "Engine/DataTable.h"
 #include "CItem.generated.h"
 
 
@@ -18,6 +19,7 @@ USTRUCT(BlueprintType)
 struct FItemData
 {
 	GENERATED_BODY()
+
 public:
 	UPROPERTY(EditAnywhere)
 		EItemType ItemType;
@@ -40,7 +42,28 @@ public:
 	UPROPERTY(EditAnywhere)
 		int ItemIndex;
 
+	UPROPERTY(EditAnywhere, BluePrintReadWrite)
+		class UCActionData* ActionData;
+public:
+	void ShowData();
+	void SetData(FItemData data);
+	
 };
+
+//USTRUCT(BlueprintType)
+//struct FItemClass:public FTableRowBase
+//{
+//	GENERATED_BODY()
+//
+//public:
+//	UPROPERTY(EditAnywhere, BluePrintReadWrite, Category = "Item")
+//		FName ItemName;
+//	UPROPERTY(EditAnywhere, BluePrintReadWrite, Category = "Item")
+//		EActionType ActionType;
+//	UPROPERTY(EditAnywhere, BluePrintReadWrite, Category = "Item")
+//		class UCActionData* Actiondata;
+//
+//};
 
 UCLASS()
 class UCPP_API ACItem : public AActor, public IIInteract
