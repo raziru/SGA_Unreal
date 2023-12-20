@@ -3,7 +3,6 @@
 
 #include "CInteractComponent.h"
 #include "Global.h"
-#include "Interact/CInteract.h"
 #include "Interact/IInteract.h"
 #include "Components/ShapeComponent.h"
 #include "GameFramework/Character.h"

@@ -15,10 +15,10 @@
 #include "Components/COptionComponent.h"
 #include "Components/CInteractComponent.h"
 #include "Components/CMontagesComponent.h"
-#include "Components/CInventoryComponent.h"
 #include "Components/CStatusComponent.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "Widgets/CUserWidget_Name.h"
 
 
 
@@ -29,6 +29,7 @@ ACPlayer::ACPlayer()
 	CHelpers::CreateComponent<USpringArmComponent>(this, &SpringArm, "SpringArm", GetMesh());
 	CHelpers::CreateComponent<UCameraComponent>(this, &Camera, "Camera", SpringArm);
 	CHelpers::CreateComponent<UBoxComponent>(this, &InteractBox, "InteractBox", GetMesh());
+
 
 	//기능만 달린 컴포넌트들을 생성하여 player 클래스를 관리하기 쉽게한다.
 
@@ -89,9 +90,11 @@ void ACPlayer::BeginPlay()
 	Super::BeginPlay();
 	Action->SetUnarmedMode();
 	State->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
+	Inventory->SetNewItem.AddDynamic(this, &ACPlayer::SetNewItem);
 	//State에서 선언한 OnstatetypeChanged가 broadcast로 호출되면 
 	//묶여있는 함수가 같이 연계된다. --  delegate는 함수포인터를 사용한것과 비슷하다.
 	//함수포인터는 인자로 받아야하지만 delegate는 필요가없다.
+
 }
 
 void ACPlayer::Tick(float DeltaTime)
@@ -116,6 +119,8 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("TwoHand", EInputEvent::IE_Pressed, this, &ACPlayer::OnTwoHand);
 	PlayerInputComponent->BindAction("Warp", EInputEvent::IE_Pressed, this, &ACPlayer::OnWarp);
 	PlayerInputComponent->BindAction("FireStorm", EInputEvent::IE_Pressed, this, &ACPlayer::OnFireStorm);
+	PlayerInputComponent->BindAction("ItemType", EInputEvent::IE_Pressed, this, &ACPlayer::OnItemType);
+
 
 	PlayerInputComponent->BindAction("Action", EInputEvent::IE_Pressed, this, &ACPlayer::OnDoAction);
 	PlayerInputComponent->BindAction("Targeting", EInputEvent::IE_Pressed, this, &ACPlayer::OnTarget);
@@ -182,6 +187,13 @@ void ACPlayer::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
 		case EStateType::Backstep: Begin_Backstep(); break;
 	}
 	
+}
+
+void ACPlayer::SetNewItem(const FItemData NewItem)
+{
+	CLog::Log(NewItem.ItemName.ToString());
+	
+	Action->SetNewAction(NewItem.ActionData, NewItem.ActionType);
 }
 
 //Interacting
@@ -277,6 +289,12 @@ void ACPlayer::OnFireStorm()
 	CheckFalse(State->IsIdleMode());
 
 	Action->SetFireStormMode();
+}
+void ACPlayer::OnItemType()
+{
+	CheckFalse(State->IsIdleMode());
+
+	Action->SetItemTypeMode();
 }
 void ACPlayer::OnDoAction()
 {

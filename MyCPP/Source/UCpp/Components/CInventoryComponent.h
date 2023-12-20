@@ -4,11 +4,13 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Inventory/CItem.h"
+#include "Inventory/CItem_Weapon.h"
 #include "CInventoryComponent.generated.h"
 
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSendItemData, FItemData, Item);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewItem, FItemData, NewItem);
+//구현중 변경이 필요할수 있으니 multicast로 구현한다.
 
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
 class UCPP_API UCInventoryComponent : public UActorComponent
@@ -39,11 +41,11 @@ public:
 	void OpenInventory();
 
 	void PickUp(ACItem* InItem);
-
+	FItemData SetData(ACItem* InItem);
 
 private:
 	UFUNCTION()
-		void OnSelected(const FItemData Item);
+		void OnSelected(const FItemData NewItem);
 
 protected:
 	virtual void BeginPlay() override;
@@ -55,5 +57,7 @@ private:
 
 public:
 	UPROPERTY(BlueprintAssignable)
-		FSendItemData SendItemData;
+		FSetNewItem SetNewItem;
+
+
 };

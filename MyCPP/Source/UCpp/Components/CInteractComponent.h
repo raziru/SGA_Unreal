@@ -14,9 +14,6 @@ class UCPP_API UCInteractComponent : public UActorComponent
 	GENERATED_BODY()
 
 
-private:
-	UPROPERTY(EditDefaultsOnly, Category = "Interact")
-		class ACInteract* InteractSystem;
 public:	
 	UCInteractComponent();
 

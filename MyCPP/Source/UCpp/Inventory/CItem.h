@@ -4,8 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Interact/IInteract.h"
 #include "Engine/DataTable.h"
+#include "Components/CActionComponent.h"
+#include "Interact/IInteract.h"
 #include "CItem.generated.h"
 
 
@@ -15,6 +16,20 @@ enum class EItemType : uint8
 	Weapon, Armor, Tool, Consumable, Max,
 };
 
+//USTRUCT(BlueprintType)
+//struct WeaponData : public FTableRowBase
+//{
+//	GENERATED_BODY()
+//
+//		UPROPERTY(EditAnywhere)
+//		FName ItemName;
+//
+//	UPROPERTY(EditAnywhere)
+//		EActionType ActionType;
+//
+//	UPROPERTY(EditAnywhere, BluePrintReadWrite)
+//		class UCActionData* ActionData;
+//};
 USTRUCT(BlueprintType)
 struct FItemData
 {
@@ -42,13 +57,19 @@ public:
 	UPROPERTY(EditAnywhere)
 		int ItemIndex;
 
+	UPROPERTY(EditAnywhere)
+		EActionType ActionType;
+
 	UPROPERTY(EditAnywhere, BluePrintReadWrite)
 		class UCActionData* ActionData;
+	
+
 public:
 	void ShowData();
 	void SetData(FItemData data);
 	
 };
+
 
 //USTRUCT(BlueprintType)
 //struct FItemClass:public FTableRowBase
@@ -72,6 +93,8 @@ class UCPP_API ACItem : public AActor, public IIInteract
 	
 public:	
 	ACItem();
+
+	//ACItem(const ACItem& Item);
 
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE FItemData& GetItemData() { return ItemData; }

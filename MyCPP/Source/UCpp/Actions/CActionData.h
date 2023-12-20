@@ -59,8 +59,6 @@ public:
     FORCEINLINE class ACEquipment* GetEquipment() { return Equipment; }
     FORCEINLINE class ACDoAction* GetDoAction() { return DoAction; }
     FORCEINLINE class ACAttachment* GetAttachment() { return Attachment; }
-
-
     FORCEINLINE FLinearColor GetEquipmentColor() { return EquipmentColor; }
 // For Blueprint// 블루 프린트로 내용 수정을 마음대로 할 수 있기 하기위함
 public:

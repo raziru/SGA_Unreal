@@ -10,14 +10,13 @@ UCInventoryComponent::UCInventoryComponent()
 
 }
 
-void UCInventoryComponent::OnSelected(const FItemData Item)
+void UCInventoryComponent::OnSelected(const FItemData NewItem)
 {
-	if (SendItemData.IsBound())
+	if (SetNewItem.IsBound())
 	{
-		SendItemData.Broadcast(Item);
+		SetNewItem.Broadcast(NewItem);
 	}
-	Item.ActionData;
-	CLog::Log(Item.ItemName.ToString());
+	//CLog::Log(Item.);
 }
 
 // Called when the game starts
@@ -58,7 +57,7 @@ void UCInventoryComponent::OpenInventory()
 
 		CheckNull(InventoryWidget);
 
-		InventoryWidget->OnSelected.AddDynamic(this, &UCInventoryComponent::OnSelected);
+		InventoryWidget->ItemSelected.AddDynamic(this, &UCInventoryComponent::OnSelected);
 		//OnSelected.AddDynamic
 	}
 	else
@@ -66,7 +65,7 @@ void UCInventoryComponent::OpenInventory()
 		CheckNull(InventoryWidget);
 		InventoryWidget->ClearInventory();
 		InventoryWidget->RemoveFromParent();
-		InventoryWidget->OnSelected.Clear(); 
+		InventoryWidget->ItemSelected.Clear();
 	}
 	IsInventoryOpened = !IsInventoryOpened;
 }
@@ -75,8 +74,13 @@ void UCInventoryComponent::PickUp(ACItem* InItem)
 {
 	InItem->ShowData();
 
+
+	//ACItem* NewItem = NewObject<ACItem>();
+	
 	FItemData CopyItem;
+	CopyItem = SetData(InItem);
 	CopyItem.SetData(InItem->GetItemData());
+	//SetData(CopyItem)
 	bool IsExist = false;
 	int index = 0;
 	for (FItemData data: Inventory)
@@ -117,6 +121,40 @@ void UCInventoryComponent::PickUp(ACItem* InItem)
 
 
 }
+
+FItemData UCInventoryComponent::SetData(ACItem* InItem)
+{
+	FItemData_Weapon NewItem;
+	NewItem.ItemType = InItem->GetItemData().ItemType;
+	NewItem.ItemName = InItem->GetItemData().ItemName;
+	NewItem.ItemDescription = InItem->GetItemData().ItemDescription;
+	NewItem.ItemImage = InItem->GetItemData().ItemImage;
+	NewItem.CurrentStack = InItem->GetItemData().CurrentStack;
+	NewItem.MaxStack = InItem->GetItemData().MaxStack;
+	NewItem.ItemIndex = InItem->GetItemData().ItemIndex;
+	return NewItem;
+
+	switch (InItem->GetItemData().ItemType)
+	{
+	case EItemType::Weapon :
+		
+		break;
+
+	case EItemType::Armor:
+		break;
+
+	case EItemType::Tool:
+		break;
+
+	case EItemType::Consumable:
+		break;
+	}
+	
+
+	
+
+}
+
 
 
 

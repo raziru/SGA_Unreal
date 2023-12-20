@@ -12,6 +12,9 @@ enum class EActionType : uint8
 	Unarmed, Fist, OneHand, TwoHand, Warp, FireStorm, Max,
 };
 
+
+
+
 //delegate는 무조건 public으로 열어줘야 다른쪽에서 사용할 수 있다.
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActionTypeChanged, EActionType, InPrevType, EActionType, InNewType);
 //Multicast: 함수를 여러개 바인딩해놓을 수 있음 바인딩할 함수는 UFUNCTION이어야 한다.
@@ -22,6 +25,13 @@ class UCPP_API UCActionComponent : public UActorComponent
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
 		class UCActionData* Datas[(int32)EActionType::Max];
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
+		class UCActionData* ItemTypeData;
+
+	EActionType ItemActionType;
+
 public:
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE class UCActionData* GetCurrent() { return Datas[(int32)Type]; }
@@ -44,6 +54,7 @@ public:
 
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE bool IsFireStormMode() { return Type == EActionType::FireStorm; }
+
 public:	
 	// Sets default values for this component's properties
 	UCActionComponent();
@@ -53,10 +64,12 @@ public:
 	void SetTwoHandMode();
 	void SetWarpMode();
 	void SetFireStormMode();
+	void SetItemTypeMode();
 
 
 	void OffAllCollision();
-	//void 
+	
+	void SetNewAction(class UCActionData* NewItemAction, EActionType NewItemActionType);
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -73,5 +86,7 @@ public:
 
 private:
 	EActionType Type;
+	
+
 	
 };

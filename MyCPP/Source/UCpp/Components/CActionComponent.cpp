@@ -73,6 +73,21 @@ void UCActionComponent::SetFireStormMode()
 	SetMode(EActionType::FireStorm);
 }
 
+void UCActionComponent::SetItemTypeMode()
+{
+	//CheckNull();
+	if (!!ItemTypeData)
+	{
+		SetMode(ItemActionType);
+	}
+	else
+	{
+		SetFistMode();
+
+	}
+
+}
+
 void UCActionComponent::OffAllCollision()
 {
 	for (UCActionData* data : Datas)
@@ -85,6 +100,14 @@ void UCActionComponent::OffAllCollision()
 
 		data->GetAttachment()->OffCollision();
 	}
+}
+
+void UCActionComponent::SetNewAction(class UCActionData* NewItemAction, EActionType NewItemActionType)
+{
+	this->ItemTypeData = NewItemAction;
+	this->ItemActionType = NewItemActionType;
+	Datas[(int32)NewItemActionType] = NewItemAction;
+
 }
 
 void UCActionComponent::DoAction()

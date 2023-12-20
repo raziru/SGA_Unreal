@@ -1,6 +1,5 @@
 #include "Inventory/CItem.h"
 #include "Global.h"
-#include "Actions/CActionData.h"
 #include "Characters/CPlayer.h"
 
 ACItem::ACItem()
@@ -52,6 +51,7 @@ void FItemData::SetData(FItemData data)
 	this->MaxStack = data.MaxStack;
 	this->ItemIndex = data.ItemIndex;
 	this->ActionData = data.ActionData;
+	this->ActionType = data.ActionType;
 
 
 }

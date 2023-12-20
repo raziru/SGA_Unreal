@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "ICharacter.h"
 #include "Components/CStateComponent.h"//enum can't be Forward Declaration
+#include "Components/CInventoryComponent.h"
 #include "CPlayer.generated.h"
 
 UCLASS()
@@ -13,6 +14,7 @@ class UCPP_API ACPlayer : public ACharacter, public IICharacter
 {
 	GENERATED_BODY()
 
+//Camera
 private:
 	
 	UPROPERTY(VisibleDefaultsOnly)
@@ -21,12 +23,12 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
 
+//Interact
+private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UBoxComponent* InteractBox;
 
-
-
-
+//Components
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCStatusComponent* Status;
@@ -51,6 +53,10 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCInteractComponent* Interaction;
+//Widget
+protected:
+	UPROPERTY(VisibleDefaultsOnly)
+		class UWidgetComponent* EquipWidget;
 public:
 	ACPlayer();
 
@@ -65,7 +71,8 @@ public:
 	virtual void Interact() override;
 
 	virtual void PickUp(class ACItem* InItem) override;
-	
+
+//Moving
 private:
 	void OnMoveForward(float InAxis);
 	void OnMoveRight(float InAxis);
@@ -78,7 +85,8 @@ private:
 private:
 	UFUNCTION()
 		void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
-
+	UFUNCTION()
+		void SetNewItem(const FItemData NewItem);
 
 private:
 	void OpenInventory();
@@ -96,6 +104,7 @@ private:
 	void OnTwoHand();
 	void OnWarp();
 	void OnFireStorm();
+	void OnItemType();
 
 	void OnDoAction();
 

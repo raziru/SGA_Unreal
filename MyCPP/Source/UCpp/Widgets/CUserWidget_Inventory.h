@@ -38,9 +38,9 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable)
-		void ButtonSelected(FItemData Item);
+		void OnSelected(FItemData Item);
 
 public:
 	UPROPERTY(BlueprintAssignable)
-		FItemSelected OnSelected;
+		FItemSelected ItemSelected;
 };
