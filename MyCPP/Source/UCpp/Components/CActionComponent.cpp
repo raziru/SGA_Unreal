@@ -75,7 +75,6 @@ void UCActionComponent::SetFireStormMode()
 
 void UCActionComponent::SetItemTypeMode()
 {
-	//CheckNull();
 	if (!!ItemTypeData)
 	{
 		SetMode(ItemActionType);
@@ -83,7 +82,6 @@ void UCActionComponent::SetItemTypeMode()
 	else
 	{
 		SetFistMode();
-
 	}
 
 }
@@ -104,8 +102,18 @@ void UCActionComponent::OffAllCollision()
 
 void UCActionComponent::SetNewAction(class UCActionData* NewItemAction, EActionType NewItemActionType)
 {
-	this->ItemTypeData = NewItemAction;
-	this->ItemActionType = NewItemActionType;
+	if (this->ItemTypeData == NewItemAction && this->ItemActionType == NewItemActionType)
+	{
+		this->ItemTypeData   = Datas[(int32)EActionType::Unarmed];
+		this->ItemActionType = EActionType::Unarmed;
+		//return;
+	}
+	else
+	{
+		this->ItemTypeData = NewItemAction;
+		this->ItemActionType = NewItemActionType;
+	}
+	
 	Datas[(int32)NewItemActionType] = NewItemAction;
 
 }

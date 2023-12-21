@@ -40,6 +40,33 @@ void UCStatusComponent::SetStop()
 	bCanMove = false;
 }
 
+void UCStatusComponent::AddStatus(const FStatusData NewStatus)
+{
+	this->MaxHealth   += NewStatus.MaxHealth;
+	this->WalkSpeed   += NewStatus.WalkSpeed;
+	this->RunSpeed    += NewStatus.RunSpeed;
+	this->SprintSpeed += NewStatus.SprintSpeed;
+
+
+	if (RefreshStatus.IsBound())
+	{
+		RefreshStatus.Broadcast();
+	}
+}
+
+void UCStatusComponent::SubStatus(const FStatusData NewStatus)
+{
+	this->MaxHealth   -= NewStatus.MaxHealth;
+	this->WalkSpeed   -= NewStatus.WalkSpeed;
+	this->RunSpeed    -= NewStatus.RunSpeed;
+	this->SprintSpeed -= NewStatus.SprintSpeed;
+
+	if (RefreshStatus.IsBound())
+	{
+		RefreshStatus.Broadcast();
+	}
+}
+
 
 
 

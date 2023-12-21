@@ -5,11 +5,19 @@
 #include "Components/ActorComponent.h"
 #include "Inventory/CItem.h"
 #include "Inventory/CItem_Weapon.h"
+#include "Inventory/CItem_Armor.h"
 #include "CInventoryComponent.generated.h"
 
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewItem, FItemData, NewItem);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSetNewAction, UCActionData*, NewItemAction, EActionType, NewItemActionType);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewStatus, FStatusData, NewStatus);
+
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewItem, FItemData, NewItem);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewItem, FItemData, NewItem);
+
 //구현중 변경이 필요할수 있으니 multicast로 구현한다.
 
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
@@ -41,7 +49,7 @@ public:
 	void OpenInventory();
 
 	void PickUp(ACItem* InItem);
-	FItemData SetData(ACItem* InItem);
+
 
 private:
 	UFUNCTION()
@@ -59,5 +67,9 @@ public:
 	UPROPERTY(BlueprintAssignable)
 		FSetNewItem SetNewItem;
 
+	UPROPERTY(BlueprintAssignable)
+		FSetNewAction SetNewAction;
 
+	UPROPERTY(BlueprintAssignable)
+		FSetNewStatus SetNewStatus;
 };

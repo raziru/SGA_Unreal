@@ -7,6 +7,27 @@
 #include "CStatusComponent.generated.h"
 
 
+
+USTRUCT(BlueprintType)
+struct FStatusData
+{
+    GENERATED_BODY()
+public:
+    UPROPERTY(EditDefaultsOnly, Category = "Health")//블프에 표현되는 스탯
+        float MaxHealth;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Speed")
+        float WalkSpeed;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Speed")
+        float RunSpeed;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Speed")
+        float SprintSpeed;
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FRefreshStatus);
+
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
 class UCPP_API UCStatusComponent : public UActorComponent
 {
@@ -16,10 +37,10 @@ private:
         float MaxHealth = 100;
 
     UPROPERTY(EditDefaultsOnly, Category = "Speed")
-        float WalkSpeed = 200.0f;
+        float WalkSpeed = 600.0f;
 
     UPROPERTY(EditDefaultsOnly, Category = "Speed")
-        float RunkSpeed = 400.0f;
+        float RunSpeed = 800.0f;
 
     UPROPERTY(EditDefaultsOnly, Category = "Speed")
         float SprintSpeed = 600.0f;
@@ -29,7 +50,7 @@ public:
     FORCEINLINE float GetHealth() { return Health; }
 
     FORCEINLINE float GetWalkSpeed() { return WalkSpeed; }
-    FORCEINLINE float GetRunkSpeed() { return RunkSpeed; }
+    FORCEINLINE float GetRunSpeed() { return RunSpeed; }
     FORCEINLINE float GetSprintSpeed() { return SprintSpeed; }
 
     FORCEINLINE bool CanMove() { return bCanMove; }
@@ -41,9 +62,16 @@ public:
 
     void SetMove();
     void SetStop();
+
+    void AddStatus(const FStatusData NewStatus);
+    void SubStatus(const FStatusData NewStatus);
+
 protected:
 	virtual void BeginPlay() override;
 
+public:
+    UPROPERTY(BlueprintAssignable)
+        FRefreshStatus RefreshStatus;
 
 private:
     float Health;

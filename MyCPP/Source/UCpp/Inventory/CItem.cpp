@@ -38,20 +38,18 @@ void FItemData::ShowData()
 	CLog::Log(CurrentStack);	
 	CLog::Log(MaxStack);
 	CLog::Log(ItemIndex);
-
+	CLog::Log(ItemClass->GetName());
 }
 
 void FItemData::SetData(FItemData data)
 {
-	this->ItemType = data.ItemType;
-	this->ItemName = data.ItemName;
+	this->ItemType  = data.ItemType;
+	this->ItemName  = data.ItemName;
+	this->ItemClass = data.ItemClass;
 	this->ItemDescription = data.ItemDescription;
 	this->ItemImage = data.ItemImage;
 	this->CurrentStack = data.CurrentStack;
-	this->MaxStack = data.MaxStack;
+	this->MaxStack  = data.MaxStack;
 	this->ItemIndex = data.ItemIndex;
-	this->ActionData = data.ActionData;
-	this->ActionType = data.ActionType;
-
 
 }

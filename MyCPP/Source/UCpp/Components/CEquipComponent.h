@@ -6,23 +6,29 @@
 #include "Components/ActorComponent.h"
 #include "CEquipComponent.generated.h"
 
+UENUM(BlueprintType)
+enum class EArmorType : uint8
+{
+	Weapon, Helmet, Top, Bottom, Shoes, Hands, Shield, Max,
+};
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
 class UCPP_API UCEquipComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
 	UCEquipComponent();
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Armors")
+		class TSubclassOf<class ACArmor> Armors[(int32)EArmorType::Max];
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+
+
+protected:
+	virtual void BeginPlay() override;
 
 		
 };

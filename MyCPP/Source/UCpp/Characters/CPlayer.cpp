@@ -16,6 +16,7 @@
 #include "Components/CInteractComponent.h"
 #include "Components/CMontagesComponent.h"
 #include "Components/CStatusComponent.h"
+#include "Components/CEquipComponent.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Widgets/CUserWidget_Name.h"
@@ -44,6 +45,9 @@ ACPlayer::ACPlayer()
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
 	CHelpers::CreateActorComponent<UCInteractComponent>(this, &Interaction, "Interact");
 	CHelpers::CreateActorComponent<UCInventoryComponent>(this, &Inventory, "Inventory");
+	CHelpers::CreateActorComponent<UCEquipComponent>(this, &Equipment, "Equipment");
+
+
 
 	USkeletalMesh* mesh;
 	CHelpers::GetAsset<USkeletalMesh>(&mesh, "SkeletalMesh'/Game/Character/Mesh/SK_Mannequin.SK_Mannequin'");
@@ -63,7 +67,10 @@ ACPlayer::ACPlayer()
 	InteractBox->SetRelativeLocation(FVector(0, 80, 100));
 	InteractBox->SetRelativeScale3D(FVector(3, 3, 3));
 
-	////GetCharacterMovement()->MaxWalkSpeed = 
+	GetCharacterMovement()->MaxWalkSpeed = Status->GetWalkSpeed();
+	GetCharacterMovement()->MaxWalkSpeed = Status->GetWalkSpeed();
+
+
 	GetCharacterMovement()->RotationRate = FRotator(0, 720, 0);
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
@@ -90,7 +97,8 @@ void ACPlayer::BeginPlay()
 	Super::BeginPlay();
 	Action->SetUnarmedMode();
 	State->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
-	Inventory->SetNewItem.AddDynamic(this, &ACPlayer::SetNewItem);
+	//Inventory->SetNewItem.AddDynamic(this, &ACPlayer::SetNewItem);
+	Inventory->SetNewAction.AddDynamic(this, &ACPlayer::SetNewAction);
 	//State에서 선언한 OnstatetypeChanged가 broadcast로 호출되면 
 	//묶여있는 함수가 같이 연계된다. --  delegate는 함수포인터를 사용한것과 비슷하다.
 	//함수포인터는 인자로 받아야하지만 delegate는 필요가없다.
@@ -193,7 +201,33 @@ void ACPlayer::SetNewItem(const FItemData NewItem)
 {
 	CLog::Log(NewItem.ItemName.ToString());
 	
-	Action->SetNewAction(NewItem.ActionData, NewItem.ActionType);
+	/*switch (NewItem.ItemType)
+	{
+	case EItemType::Weapon: 
+		CLog::Print("Check");
+		ACItem_Weapon* Item = Cast<ACItem_Weapon>(GetWorld()->SpawnActor(NewItem.ItemClass));
+		CheckNull(Item);
+		CLog::Print("Success");
+		CLog::Print((int32)Item->GetData().ActionType);
+		Item->Destroy();
+		Action->SetNewAction(Item->GetData().ActionData, Item->GetData().ActionType);
+		break;
+	
+	}*/
+
+}
+
+void ACPlayer::SetNewAction( UCActionData* NewItemAction, EActionType NewItemActionType)
+{
+	CheckNull(NewItemAction);
+	Action->SetNewAction(NewItemAction, NewItemActionType);
+
+}
+
+void ACPlayer::SetNewStatus(const FStatusData NewStatus)
+{
+	//CheckNull(NewStatus);
+
 }
 
 //Interacting

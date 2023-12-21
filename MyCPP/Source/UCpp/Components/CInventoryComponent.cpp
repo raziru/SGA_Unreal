@@ -12,6 +12,35 @@ UCInventoryComponent::UCInventoryComponent()
 
 void UCInventoryComponent::OnSelected(const FItemData NewItem)
 {
+	ACItem_Weapon* WeaponItem;
+	ACItem_Armor* ArmorItem;
+	switch (NewItem.ItemType)
+	{
+	case EItemType::Weapon:
+		CLog::Print("Check");
+		WeaponItem = Cast<ACItem_Weapon>(GetWorld()->SpawnActor(NewItem.ItemClass));
+		CheckNull(WeaponItem);
+		CLog::Print("Weapon Success");
+		CLog::Print((int32)WeaponItem->GetType());
+		if (SetNewAction.IsBound())
+		{
+			SetNewAction.Broadcast(WeaponItem->GetData(), WeaponItem->GetType());
+		}
+		WeaponItem->Destroy();
+		break;
+	case EItemType::Armor:
+		CLog::Print("Check");
+		ArmorItem = Cast<ACItem_Armor>(GetWorld()->SpawnActor(NewItem.ItemClass));
+		CheckNull(ArmorItem);
+		CLog::Print("Armor Success");
+		//CLog::Print((int32)ArmorItem->GetType());
+		if (SetNewStatus.IsBound())
+		{
+			SetNewStatus.Broadcast(ArmorItem->GetStatus());
+		}
+		ArmorItem->Destroy();
+		break;
+	}
 	if (SetNewItem.IsBound())
 	{
 		SetNewItem.Broadcast(NewItem);
@@ -22,9 +51,7 @@ void UCInventoryComponent::OnSelected(const FItemData NewItem)
 // Called when the game starts
 void UCInventoryComponent::BeginPlay()
 {
-	Super::BeginPlay();
-
-	
+	Super::BeginPlay();	
 }
 
 
@@ -73,14 +100,9 @@ void UCInventoryComponent::OpenInventory()
 void UCInventoryComponent::PickUp(ACItem* InItem)
 {
 	InItem->ShowData();
-
-
-	//ACItem* NewItem = NewObject<ACItem>();
 	
 	FItemData CopyItem;
-	CopyItem = SetData(InItem);
 	CopyItem.SetData(InItem->GetItemData());
-	//SetData(CopyItem)
 	bool IsExist = false;
 	int index = 0;
 	for (FItemData data: Inventory)
@@ -119,42 +141,7 @@ void UCInventoryComponent::PickUp(ACItem* InItem)
 		InventoryWidget->RefreshInventory(Inventory, MaxInventorySize, ColumnSize);
 	}
 
-
 }
-
-FItemData UCInventoryComponent::SetData(ACItem* InItem)
-{
-	FItemData_Weapon NewItem;
-	NewItem.ItemType = InItem->GetItemData().ItemType;
-	NewItem.ItemName = InItem->GetItemData().ItemName;
-	NewItem.ItemDescription = InItem->GetItemData().ItemDescription;
-	NewItem.ItemImage = InItem->GetItemData().ItemImage;
-	NewItem.CurrentStack = InItem->GetItemData().CurrentStack;
-	NewItem.MaxStack = InItem->GetItemData().MaxStack;
-	NewItem.ItemIndex = InItem->GetItemData().ItemIndex;
-	return NewItem;
-
-	switch (InItem->GetItemData().ItemType)
-	{
-	case EItemType::Weapon :
-		
-		break;
-
-	case EItemType::Armor:
-		break;
-
-	case EItemType::Tool:
-		break;
-
-	case EItemType::Consumable:
-		break;
-	}
-	
-
-	
-
-}
-
 
 
 

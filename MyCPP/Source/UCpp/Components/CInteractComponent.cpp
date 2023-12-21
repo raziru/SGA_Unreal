@@ -10,10 +10,9 @@
 
 UCInteractComponent::UCInteractComponent()
 {
-	//CHelpers::CreateComponent<UShapeComponent>(this, &InteractBox, "InteractBox");
+
 }
 
-// Called when the game starts
 void UCInteractComponent::BeginPlay()
 {
 	

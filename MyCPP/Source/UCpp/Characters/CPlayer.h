@@ -53,6 +53,9 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCInteractComponent* Interaction;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCEquipComponent* Equipment;
 //Widget
 protected:
 	UPROPERTY(VisibleDefaultsOnly)
@@ -87,6 +90,11 @@ private:
 		void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
 	UFUNCTION()
 		void SetNewItem(const FItemData NewItem);
+	UFUNCTION()
+		void SetNewAction(class UCActionData* NewItemAction, EActionType NewItemActionType);
+	UFUNCTION()
+		void SetNewStatus(const FStatusData NewStatus);
+
 
 private:
 	void OpenInventory();

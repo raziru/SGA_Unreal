@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Actions/CAttachment.h"
+#include "CAttachment.h"
 #include "Global.h"
 #include "GameFramework/Character.h"
 #include "Components/SkeletalMeshComponent.h"
