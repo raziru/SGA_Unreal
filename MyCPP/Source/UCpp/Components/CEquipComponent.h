@@ -4,13 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Armors/CArmor.h"
 #include "CEquipComponent.generated.h"
 
-UENUM(BlueprintType)
-enum class EArmorType : uint8
-{
-	Weapon, Helmet, Top, Bottom, Shoes, Hands, Shield, Max,
-};
 
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
 class UCPP_API UCEquipComponent : public UActorComponent
@@ -20,13 +16,23 @@ class UCPP_API UCEquipComponent : public UActorComponent
 public:	
 	UCEquipComponent();
 
+public:
+	void SetNewArmor(TSubclassOf<class ACArmor> NewArmorClass);
+
 private:
+	ACharacter* OwnerCharacter;
+private:
+	FStatusData EquipStatus;
+
+private:
+	/*UPROPERTY(EditDefaultsOnly, Category = "Armors")
+		class TSubclassOf<class ACArmor> ArmorClass[(int32)EArmorType::Max];
+
 	UPROPERTY(EditDefaultsOnly, Category = "Armors")
-		class TSubclassOf<class ACArmor> Armors[(int32)EArmorType::Max];
+		FName SocketNames[(int32)EArmorType::Max];*/
 
-
-
-
+	UPROPERTY(EditDefaultsOnly, Category = "Armors")
+		TMap<EArmorType, ACArmor*> Armors;
 protected:
 	virtual void BeginPlay() override;
 

@@ -13,7 +13,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewItem, FItemData, NewItem);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSetNewAction, UCActionData*, NewItemAction, EActionType, NewItemActionType);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewStatus, FStatusData, NewStatus);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewArmor, TSubclassOf<ACArmor>, armor);
 
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewItem, FItemData, NewItem);
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewItem, FItemData, NewItem);
@@ -71,5 +71,5 @@ public:
 		FSetNewAction SetNewAction;
 
 	UPROPERTY(BlueprintAssignable)
-		FSetNewStatus SetNewStatus;
+		FSetNewArmor SetNewArmor;
 };

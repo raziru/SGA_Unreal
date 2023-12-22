@@ -33,10 +33,9 @@ void UCInventoryComponent::OnSelected(const FItemData NewItem)
 		ArmorItem = Cast<ACItem_Armor>(GetWorld()->SpawnActor(NewItem.ItemClass));
 		CheckNull(ArmorItem);
 		CLog::Print("Armor Success");
-		//CLog::Print((int32)ArmorItem->GetType());
-		if (SetNewStatus.IsBound())
+		if (SetNewArmor.IsBound())
 		{
-			SetNewStatus.Broadcast(ArmorItem->GetStatus());
+			SetNewArmor.Broadcast(ArmorItem->GetArmorClass());
 		}
 		ArmorItem->Destroy();
 		break;

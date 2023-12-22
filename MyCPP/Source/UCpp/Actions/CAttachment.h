@@ -30,6 +30,7 @@ public:
 	void OffCollision();
 protected:
 	virtual void BeginPlay() override;
+
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void OnEquip();

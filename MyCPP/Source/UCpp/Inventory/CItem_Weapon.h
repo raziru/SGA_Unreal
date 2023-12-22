@@ -8,17 +8,6 @@
 #include "CItem_Weapon.generated.h"
 
 
-USTRUCT(BlueprintType)
-struct FWeaponData
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere)
-		EActionType ActionType;
-
-	UPROPERTY(EditAnywhere, BluePrintReadWrite)
-		class UCActionData* ActionData;
-};
 
 UCLASS()
 class UCPP_API ACItem_Weapon : public ACItem
@@ -26,11 +15,18 @@ class UCPP_API ACItem_Weapon : public ACItem
 	GENERATED_BODY()
 
 public: 
-	FORCEINLINE UCActionData* GetData() { return WeaponData.ActionData; }
-	FORCEINLINE EActionType   GetType() { return WeaponData.ActionType; }
+	FORCEINLINE UCActionData* GetData() { return ActionData; }
+	FORCEINLINE EActionType   GetType() { return ActionType; }
 
-private:
+public:
 	UPROPERTY(EditAnywhere)
-		FWeaponData WeaponData;
+		EActionType ActionType;
+
+	UPROPERTY(EditAnywhere, BluePrintReadWrite)
+		UCActionData* ActionData;
+
+
+
+	
 
 };

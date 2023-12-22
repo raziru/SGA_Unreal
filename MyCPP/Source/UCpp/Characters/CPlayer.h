@@ -95,6 +95,9 @@ private:
 	UFUNCTION()
 		void SetNewStatus(const FStatusData NewStatus);
 
+	UFUNCTION()
+		void SetNewArmor(TSubclassOf<class ACArmor> NewArmor);
+
 
 private:
 	void OpenInventory();

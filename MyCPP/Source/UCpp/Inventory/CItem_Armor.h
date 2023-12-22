@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Inventory/CItem.h" 
-#include "Components/CStatusComponent.h"
-#include "Components/CEquipComponent.h"
+#include "Armors/CArmor.h"
 #include "CItem_Armor.generated.h"
 
 
@@ -14,15 +13,13 @@ UCLASS()
 class UCPP_API ACItem_Armor : public ACItem
 {
 	GENERATED_BODY()
+
 public:
-    FORCEINLINE FStatusData GetStatus() { return StatusData; }
-
+    FORCEINLINE TSubclassOf<ACArmor> GetArmorClass() { return Armor; }
 private:
-    UPROPERTY(EditAnywhere)
-        FStatusData StatusData;
 
     UPROPERTY(EditAnywhere)
-        EArmorType EArmorType;
+        TSubclassOf<ACArmor> Armor;
 
     
 	

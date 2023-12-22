@@ -96,13 +96,14 @@ void ACPlayer::BeginPlay()
 
 	Super::BeginPlay();
 	Action->SetUnarmedMode();
-	State->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
-	//Inventory->SetNewItem.AddDynamic(this, &ACPlayer::SetNewItem);
-	Inventory->SetNewAction.AddDynamic(this, &ACPlayer::SetNewAction);
+	
 	//State에서 선언한 OnstatetypeChanged가 broadcast로 호출되면 
 	//묶여있는 함수가 같이 연계된다. --  delegate는 함수포인터를 사용한것과 비슷하다.
 	//함수포인터는 인자로 받아야하지만 delegate는 필요가없다.
-
+	State->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
+	//Inventory->SetNewItem.AddDynamic(this, &ACPlayer::SetNewItem);
+	Inventory->SetNewAction.AddDynamic(this, &ACPlayer::SetNewAction);
+	Inventory->SetNewArmor.AddDynamic(this, &ACPlayer::SetNewArmor);
 }
 
 void ACPlayer::Tick(float DeltaTime)
@@ -228,6 +229,11 @@ void ACPlayer::SetNewStatus(const FStatusData NewStatus)
 {
 	//CheckNull(NewStatus);
 
+}
+
+void ACPlayer::SetNewArmor(TSubclassOf<class ACArmor> NewArmor)
+{
+	Equipment->SetNewArmor(NewArmor);
 }
 
 //Interacting
