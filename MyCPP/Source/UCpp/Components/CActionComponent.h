@@ -9,11 +9,8 @@
 UENUM(BlueprintType)
 enum class EActionType : uint8
 {
-	Unarmed, Fist, OneHand, TwoHand, Warp, FireStorm, Max,
+	Unarmed, Fist, OneHand, TwoHand, Warp, FireStorm, Throw, Max,
 };
-
-
-
 
 //delegate는 무조건 public으로 열어줘야 다른쪽에서 사용할 수 있다.
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActionTypeChanged, EActionType, InPrevType, EActionType, InNewType);
@@ -55,6 +52,9 @@ public:
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE bool IsFireStormMode() { return Type == EActionType::FireStorm; }
 
+	UFUNCTION(BlueprintPure)
+		FORCEINLINE bool IsThrowMode() { return Type == EActionType::Throw; }
+
 public:	
 	// Sets default values for this component's properties
 	UCActionComponent();
@@ -64,6 +64,7 @@ public:
 	void SetTwoHandMode();
 	void SetWarpMode();
 	void SetFireStormMode();
+	void SetThrowMode();
 	void SetItemTypeMode();
 
 
@@ -76,9 +77,17 @@ protected:
 
 public:
 	void DoAction();
+
+	void OnAim();
+	void OffAim();
+
+private:
+	void SetAimMode(bool InAim);
 private:
 	void SetMode(EActionType InType);
 	void ChangeType(EActionType InNewType);
+
+
 
 public:
 	UPROPERTY(BlueprintAssignable)

@@ -36,9 +36,7 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		FName Name;
-public:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		FName SocketName;
+
 
 public:	
 	ACArmor();
@@ -46,7 +44,7 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable)
-		virtual void Attachment(class ACharacter* OwnerCharacter, FName InSocketName) {}
+		virtual void Attachment(class ACharacter* OwnerCharacter) {}
 	UFUNCTION(BlueprintCallable)
 		virtual void Detachment() {}
 

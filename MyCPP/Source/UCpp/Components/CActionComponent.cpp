@@ -73,6 +73,11 @@ void UCActionComponent::SetFireStormMode()
 	SetMode(EActionType::FireStorm);
 }
 
+void UCActionComponent::SetThrowMode()
+{
+	SetMode(EActionType::Throw);
+}
+
 void UCActionComponent::SetItemTypeMode()
 {
 	if (!!ItemTypeData)
@@ -128,6 +133,30 @@ void UCActionComponent::DoAction()
 
 		if (!!action)
 			action->DoAction();
+	}
+}
+
+void UCActionComponent::OnAim()
+{
+	SetAimMode(true);
+
+}
+
+void UCActionComponent::OffAim()
+{
+	SetAimMode(false);
+}
+
+void UCActionComponent::SetAimMode(bool InAim)
+{
+	CheckTrue(IsUnarmedMode());
+
+	if (!!Datas[(int32)Type])
+	{
+		ACDoAction* action = Datas[(int32)Type]->GetDoAction();
+
+		if (!!action)
+			InAim ? action->OnAim() : action->OffAim();
 	}
 }
 

@@ -37,6 +37,7 @@ void UCEquipComponent::SetNewArmor(TSubclassOf<class ACArmor> NewArmorClass)
 			Armor.Value->UnEquip();
 			Armors.Remove(NewArmor->GetArmorType());
 			NewArmor->Destroy();
+			SetStatus();
 			return;
 		}
 		else if (NewArmor->GetArmorType() == Armor.Key)
@@ -44,10 +45,33 @@ void UCEquipComponent::SetNewArmor(TSubclassOf<class ACArmor> NewArmorClass)
 			Armor.Value->UnEquip();
 			Armors.Add(NewArmor->GetArmorType(), NewArmor);
 			NewArmor->Equip(OwnerCharacter);
+			SetStatus();
 			return;
 		}
 	}
 	Armors.Add(NewArmor->GetArmorType(), NewArmor);
 	NewArmor->Equip(OwnerCharacter);
+	SetStatus();
+	
+}
+
+void UCEquipComponent::SetStatus()
+{
+	EquipStatus = {};
+	for (TPair<EArmorType, ACArmor*> Armor : Armors)
+	{
+		if (!!Armor.Value)
+		{
+			EquipStatus += Armor.Value->GetStatusData();
+		}
+		else
+		{
+			EquipStatus += {};
+		}
+	}
+	if (SetNewStatus.IsBound())
+	{
+		SetNewStatus.Broadcast(EquipStatus);
+	}
 }
 

@@ -67,9 +67,6 @@ ACPlayer::ACPlayer()
 	InteractBox->SetRelativeLocation(FVector(0, 80, 100));
 	InteractBox->SetRelativeScale3D(FVector(3, 3, 3));
 
-	GetCharacterMovement()->MaxWalkSpeed = Status->GetWalkSpeed();
-	GetCharacterMovement()->MaxWalkSpeed = Status->GetWalkSpeed();
-
 
 	GetCharacterMovement()->RotationRate = FRotator(0, 720, 0);
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -96,14 +93,16 @@ void ACPlayer::BeginPlay()
 
 	Super::BeginPlay();
 	Action->SetUnarmedMode();
-	
+	GetCharacterMovement()->MaxWalkSpeed = Status->GetWalkSpeed();
 	//State에서 선언한 OnstatetypeChanged가 broadcast로 호출되면 
 	//묶여있는 함수가 같이 연계된다. --  delegate는 함수포인터를 사용한것과 비슷하다.
 	//함수포인터는 인자로 받아야하지만 delegate는 필요가없다.
+
 	State->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
-	//Inventory->SetNewItem.AddDynamic(this, &ACPlayer::SetNewItem);
 	Inventory->SetNewAction.AddDynamic(this, &ACPlayer::SetNewAction);
 	Inventory->SetNewArmor.AddDynamic(this, &ACPlayer::SetNewArmor);
+	Equipment->SetNewStatus.AddDynamic(this, &ACPlayer::SetNewStatus);
+	Status->RefreshStatus.AddDynamic(this, &ACPlayer::ResfreshStatus);
 }
 
 void ACPlayer::Tick(float DeltaTime)
@@ -129,6 +128,12 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Warp", EInputEvent::IE_Pressed, this, &ACPlayer::OnWarp);
 	PlayerInputComponent->BindAction("FireStorm", EInputEvent::IE_Pressed, this, &ACPlayer::OnFireStorm);
 	PlayerInputComponent->BindAction("ItemType", EInputEvent::IE_Pressed, this, &ACPlayer::OnItemType);
+
+	PlayerInputComponent->BindAction("RightAction", EInputEvent::IE_Pressed, this, &ACPlayer::OnAim);
+	PlayerInputComponent->BindAction("RightAction", EInputEvent::IE_Released, this, &ACPlayer::OffAim);
+
+
+	PlayerInputComponent->BindAction("Throw", EInputEvent::IE_Pressed, this, &ACPlayer::OnThrow);
 
 
 	PlayerInputComponent->BindAction("Action", EInputEvent::IE_Pressed, this, &ACPlayer::OnDoAction);
@@ -201,20 +206,6 @@ void ACPlayer::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
 void ACPlayer::SetNewItem(const FItemData NewItem)
 {
 	CLog::Log(NewItem.ItemName.ToString());
-	
-	/*switch (NewItem.ItemType)
-	{
-	case EItemType::Weapon: 
-		CLog::Print("Check");
-		ACItem_Weapon* Item = Cast<ACItem_Weapon>(GetWorld()->SpawnActor(NewItem.ItemClass));
-		CheckNull(Item);
-		CLog::Print("Success");
-		CLog::Print((int32)Item->GetData().ActionType);
-		Item->Destroy();
-		Action->SetNewAction(Item->GetData().ActionData, Item->GetData().ActionType);
-		break;
-	
-	}*/
 
 }
 
@@ -227,8 +218,13 @@ void ACPlayer::SetNewAction( UCActionData* NewItemAction, EActionType NewItemAct
 
 void ACPlayer::SetNewStatus(const FStatusData NewStatus)
 {
-	//CheckNull(NewStatus);
+	Status->SetNewStatus(NewStatus);
+}
 
+void ACPlayer::ResfreshStatus(const FStatusData NewStatus)
+{
+	GetCharacterMovement()->MaxWalkSpeed = NewStatus.WalkSpeed;
+	//GetCharacterMovement()->MaxWalkSpeed = Status->GetWalkSpeed();
 }
 
 void ACPlayer::SetNewArmor(TSubclassOf<class ACArmor> NewArmor)
@@ -330,6 +326,12 @@ void ACPlayer::OnFireStorm()
 
 	Action->SetFireStormMode();
 }
+void ACPlayer::OnThrow()
+{
+	CheckFalse(State->IsIdleMode());
+
+	Action->SetThrowMode();
+}
 void ACPlayer::OnItemType()
 {
 	CheckFalse(State->IsIdleMode());
@@ -354,6 +356,16 @@ void ACPlayer::OnTargetLeft()
 void ACPlayer::OnTargetRight()
 {
 	Target->ChangeTargetRight();
+}
+
+void ACPlayer::OnAim()
+{
+	Action->OnAim();
+}
+
+void ACPlayer::OffAim()
+{
+	Action->OffAim();
 }
 
 void ACPlayer::ChangeColor(FLinearColor InColor)

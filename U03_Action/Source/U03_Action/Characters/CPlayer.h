@@ -80,12 +80,17 @@ private:
 	void OnTwoHand();
 	void OnWarp();
 	void OnFireStorm();
+	void OnIceBall();
+
 
 	void OnDoAction();
 
 	void OnTarget();
 	void OnTargetLeft();
 	void OnTargetRight();
+
+	void OnAim();
+	void OffAim();
 
 public:
 	virtual void ChangeColor(FLinearColor InColor) override;

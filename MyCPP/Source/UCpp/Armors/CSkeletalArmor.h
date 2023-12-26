@@ -19,6 +19,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Armor")
 		class USkeletalMeshComponent* Mesh;
 protected:
-	virtual void Attachment(class ACharacter* OwnerCharacter, FName InSocketName) override;
+	virtual void Attachment(class ACharacter* OwnerCharacter) override;
 	virtual void Detachment() override;
 };

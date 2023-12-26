@@ -11,9 +11,10 @@ ACSkeletalArmor::ACSkeletalArmor()
 	CHelpers::CreateComponent<USkeletalMeshComponent>(this, &Mesh, "Mesh");
 
 }
-void ACSkeletalArmor::Attachment(ACharacter* OwnerCharacter, FName InSocketName)
+void ACSkeletalArmor::Attachment(ACharacter* OwnerCharacter)
 {
-	AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), InSocketName);
+	FName Empty = "";
+	AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), Empty);
 	Mesh->SetMasterPoseComponent(OwnerCharacter->GetMesh());
 
 	if (OnAttachmentDelegate.IsBound())

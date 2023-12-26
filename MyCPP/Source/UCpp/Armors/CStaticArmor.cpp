@@ -12,9 +12,9 @@ ACStaticArmor::ACStaticArmor()
 
 }
 
-void ACStaticArmor::Attachment(ACharacter* OwnerCharacter, FName InSocketName)
+void ACStaticArmor::Attachment(ACharacter* OwnerCharacter)
 {
-	AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), InSocketName);
+	AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), SocketName);
 
 	if (OnAttachmentDelegate.IsBound())
 	{

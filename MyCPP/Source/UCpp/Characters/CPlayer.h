@@ -86,17 +86,27 @@ private:
 	void OnAvoid();
 
 private:
+//Weapon Equip
 	UFUNCTION()
 		void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
 	UFUNCTION()
 		void SetNewItem(const FItemData NewItem);
 	UFUNCTION()
 		void SetNewAction(class UCActionData* NewItemAction, EActionType NewItemActionType);
+	
+
+//Armor Equip
+	UFUNCTION()
+		void SetNewArmor(TSubclassOf<class ACArmor> NewArmor);
+
 	UFUNCTION()
 		void SetNewStatus(const FStatusData NewStatus);
 
 	UFUNCTION()
-		void SetNewArmor(TSubclassOf<class ACArmor> NewArmor);
+		void ResfreshStatus(const FStatusData NewStatus);
+
+
+	
 
 
 private:
@@ -115,6 +125,7 @@ private:
 	void OnTwoHand();
 	void OnWarp();
 	void OnFireStorm();
+	void OnThrow();
 	void OnItemType();
 
 	void OnDoAction();
@@ -122,6 +133,10 @@ private:
 	void OnTarget();
 	void OnTargetLeft();
 	void OnTargetRight();
+
+	void OnAim();
+	void OffAim();
+
 public:
 	virtual void ChangeColor(FLinearColor InColor) override;
 private:

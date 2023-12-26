@@ -24,34 +24,56 @@ public:
 
     UPROPERTY(EditDefaultsOnly, Category = "Speed")
         float SprintSpeed;
+
+    void operator +=(const FStatusData& other)
+    {
+        this->MaxHealth   += other.MaxHealth;
+        this->WalkSpeed   += other.WalkSpeed;
+        this->RunSpeed    += other.RunSpeed;
+        this->SprintSpeed += other.SprintSpeed;
+    }
+
+    FStatusData operator +(const FStatusData& other)
+    {
+        FStatusData result;
+        result.MaxHealth   = this->MaxHealth   + other.MaxHealth;
+        result.WalkSpeed   = this->WalkSpeed   + other.WalkSpeed;
+        result.RunSpeed    = this->RunSpeed    + other.RunSpeed;
+        result.SprintSpeed = this->SprintSpeed + other.SprintSpeed;
+        return result;
+    }
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FRefreshStatus);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRefreshStatus, FStatusData, NewStatus);
 
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
 class UCPP_API UCStatusComponent : public UActorComponent
 {
 	GENERATED_BODY()
 private:
-    UPROPERTY(EditDefaultsOnly, Category = "Health")//블프에 표현되는 스탯
-        float MaxHealth = 100;
+    //UPROPERTY(EditDefaultsOnly, Category = "Health")//블프에 표현되는 스탯
+    //    float MaxHealth = 100;
 
-    UPROPERTY(EditDefaultsOnly, Category = "Speed")
-        float WalkSpeed = 600.0f;
+    //UPROPERTY(EditDefaultsOnly, Category = "Speed")
+    //    float WalkSpeed = 600.0f;
 
-    UPROPERTY(EditDefaultsOnly, Category = "Speed")
-        float RunSpeed = 800.0f;
+    //UPROPERTY(EditDefaultsOnly, Category = "Speed")
+    //    float RunSpeed = 800.0f;
 
-    UPROPERTY(EditDefaultsOnly, Category = "Speed")
-        float SprintSpeed = 600.0f;
+    //UPROPERTY(EditDefaultsOnly, Category = "Speed")
+    //    float SprintSpeed = 600.0f;
+    UPROPERTY(EditDefaultsOnly, Category = "DefaultStatus")
+        FStatusData DefaultStatus;
+    //UPROPERTY(EditDefaultsOnly, Category = "DefaultStatus")
+    FStatusData CurrentStatus;
 
 public:
-    FORCEINLINE float GetMaxHealth() { return MaxHealth; }
-    FORCEINLINE float GetHealth() { return Health; }
+    FORCEINLINE float GetMaxHealth()   { return CurrentStatus.MaxHealth; }
+    FORCEINLINE float GetHealth()      { return Health; }
 
-    FORCEINLINE float GetWalkSpeed() { return WalkSpeed; }
-    FORCEINLINE float GetRunSpeed() { return RunSpeed; }
-    FORCEINLINE float GetSprintSpeed() { return SprintSpeed; }
+    FORCEINLINE float GetWalkSpeed()   { return CurrentStatus.WalkSpeed; }
+    FORCEINLINE float GetRunSpeed()    { return CurrentStatus.RunSpeed; }
+    FORCEINLINE float GetSprintSpeed() { return CurrentStatus.SprintSpeed; }
 
     FORCEINLINE bool CanMove() { return bCanMove; }
 public:	
@@ -63,8 +85,10 @@ public:
     void SetMove();
     void SetStop();
 
-    void AddStatus(const FStatusData NewStatus);
-    void SubStatus(const FStatusData NewStatus);
+
+
+    void SetNewStatus(const FStatusData NewStatus);
+
 
 protected:
 	virtual void BeginPlay() override;

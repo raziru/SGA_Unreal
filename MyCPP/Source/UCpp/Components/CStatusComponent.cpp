@@ -12,22 +12,22 @@ UCStatusComponent::UCStatusComponent()
 void UCStatusComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Health = MaxHealth;
+	CurrentStatus += DefaultStatus;
+	Health = CurrentStatus.MaxHealth;
 }
 
 void UCStatusComponent::AddHealth(float InAmount)
 {
 	Health += InAmount;
 
-	Health = FMath::Clamp(Health, 0.0f, MaxHealth);
+	Health = FMath::Clamp(Health, 0.0f, CurrentStatus.MaxHealth);
 }
 
 void UCStatusComponent::SubHealth(float InAmount)
 {
 	Health -= InAmount;
 
-	Health = FMath::Clamp(Health, 0.0f, MaxHealth);
+	Health = FMath::Clamp(Health, 0.0f, CurrentStatus.MaxHealth);
 }
 
 void UCStatusComponent::SetMove()
@@ -40,32 +40,17 @@ void UCStatusComponent::SetStop()
 	bCanMove = false;
 }
 
-void UCStatusComponent::AddStatus(const FStatusData NewStatus)
-{
-	this->MaxHealth   += NewStatus.MaxHealth;
-	this->WalkSpeed   += NewStatus.WalkSpeed;
-	this->RunSpeed    += NewStatus.RunSpeed;
-	this->SprintSpeed += NewStatus.SprintSpeed;
 
+void UCStatusComponent::SetNewStatus(const FStatusData NewStatus)
+{
+	CurrentStatus = DefaultStatus + NewStatus;
 
 	if (RefreshStatus.IsBound())
 	{
-		RefreshStatus.Broadcast();
+		RefreshStatus.Broadcast(CurrentStatus);
 	}
 }
 
-void UCStatusComponent::SubStatus(const FStatusData NewStatus)
-{
-	this->MaxHealth   -= NewStatus.MaxHealth;
-	this->WalkSpeed   -= NewStatus.WalkSpeed;
-	this->RunSpeed    -= NewStatus.RunSpeed;
-	this->SprintSpeed -= NewStatus.SprintSpeed;
-
-	if (RefreshStatus.IsBound())
-	{
-		RefreshStatus.Broadcast();
-	}
-}
 
 
 

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Characters/CEnemy.h"
+#include "CEnemy.h"
 #include "Global.h"
 #include "Actions/CActionData.h"
 #include "GameFramework/CharacterMovementComponent.h"

@@ -8,6 +8,9 @@
 #include "CEquipComponent.generated.h"
 
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewStatus, FStatusData, NewStatus);
+
+
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
 class UCPP_API UCEquipComponent : public UActorComponent
 {
@@ -19,22 +22,22 @@ public:
 public:
 	void SetNewArmor(TSubclassOf<class ACArmor> NewArmorClass);
 
+	void SetStatus();
+
 private:
 	ACharacter* OwnerCharacter;
+
 private:
 	FStatusData EquipStatus;
 
 private:
-	/*UPROPERTY(EditDefaultsOnly, Category = "Armors")
-		class TSubclassOf<class ACArmor> ArmorClass[(int32)EArmorType::Max];
-
-	UPROPERTY(EditDefaultsOnly, Category = "Armors")
-		FName SocketNames[(int32)EArmorType::Max];*/
-
 	UPROPERTY(EditDefaultsOnly, Category = "Armors")
 		TMap<EArmorType, ACArmor*> Armors;
+
 protected:
 	virtual void BeginPlay() override;
 
-		
+public:
+	UPROPERTY(BlueprintAssignable)
+		FSetNewStatus SetNewStatus;
 };
