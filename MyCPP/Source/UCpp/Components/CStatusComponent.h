@@ -25,6 +25,7 @@ public:
     UPROPERTY(EditDefaultsOnly, Category = "Speed")
         float SprintSpeed;
 
+    //Operator overloading for add operation
     void operator +=(const FStatusData& other)
     {
         this->MaxHealth   += other.MaxHealth;
