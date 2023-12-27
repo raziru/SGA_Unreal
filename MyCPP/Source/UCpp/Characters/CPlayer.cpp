@@ -101,8 +101,12 @@ void ACPlayer::BeginPlay()
 	State->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
 	Inventory->SetNewAction.AddDynamic(this, &ACPlayer::SetNewAction);
 	Inventory->SetNewArmor.AddDynamic(this, &ACPlayer::SetNewArmor);
+	
+	
 	Equipment->SetNewStatus.AddDynamic(this, &ACPlayer::SetNewStatus);
+	Equipment->OnShield.AddDynamic(this, &ACPlayer::SetOnShield);
 	Status->RefreshStatus.AddDynamic(this, &ACPlayer::ResfreshStatus);
+
 }
 
 void ACPlayer::Tick(float DeltaTime)
@@ -129,13 +133,14 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("FireStorm", EInputEvent::IE_Pressed, this, &ACPlayer::OnFireStorm);
 	PlayerInputComponent->BindAction("ItemType", EInputEvent::IE_Pressed, this, &ACPlayer::OnItemType);
 
-	PlayerInputComponent->BindAction("RightAction", EInputEvent::IE_Pressed, this, &ACPlayer::OnAim);
-	PlayerInputComponent->BindAction("RightAction", EInputEvent::IE_Released, this, &ACPlayer::OffAim);
+	//PlayerInputComponent->BindAction("RightAction", EInputEvent::IE_Pressed, this, &ACPlayer::OnAim);
+	//PlayerInputComponent->BindAction("RightAction", EInputEvent::IE_Released, this, &ACPlayer::OffAim);
+
+	PlayerInputComponent->BindAction("RightAction", EInputEvent::IE_Pressed, this, &ACPlayer::OnDoSecondAction);
+	PlayerInputComponent->BindAction("RightAction", EInputEvent::IE_Released, this, &ACPlayer::OnDoSecondActionRelease);
 
 
 	PlayerInputComponent->BindAction("Throw", EInputEvent::IE_Pressed, this, &ACPlayer::OnThrow);
-
-
 	PlayerInputComponent->BindAction("Action", EInputEvent::IE_Pressed, this, &ACPlayer::OnDoAction);
 	PlayerInputComponent->BindAction("Targeting", EInputEvent::IE_Pressed, this, &ACPlayer::OnTarget);
 	PlayerInputComponent->BindAction("TargetLeft", EInputEvent::IE_Pressed, this, &ACPlayer::OnTargetLeft);
@@ -216,6 +221,11 @@ void ACPlayer::SetNewAction( UCActionData* NewItemAction, EActionType NewItemAct
 
 }
 
+void ACPlayer::SetOnShield(const bool IsShield)
+{
+	Action->SetOnShield(IsShield);
+}
+
 void ACPlayer::SetNewStatus(const FStatusData NewStatus)
 {
 	Status->SetNewStatus(NewStatus);
@@ -224,7 +234,6 @@ void ACPlayer::SetNewStatus(const FStatusData NewStatus)
 void ACPlayer::ResfreshStatus(const FStatusData NewStatus)
 {
 	GetCharacterMovement()->MaxWalkSpeed = NewStatus.WalkSpeed;
-	//GetCharacterMovement()->MaxWalkSpeed = Status->GetWalkSpeed();
 }
 
 void ACPlayer::SetNewArmor(TSubclassOf<class ACArmor> NewArmor)
@@ -343,6 +352,21 @@ void ACPlayer::OnDoAction()
 	Action->DoAction();
 }
 
+void ACPlayer::OnDoActionRelease()
+{
+	Action->DoActionRelease();
+}
+
+void ACPlayer::OnDoSecondAction()
+{
+	Action->DoSecondAction();
+}
+
+void ACPlayer::OnDoSecondActionRelease()
+{
+	Action->DoSecondActionRelease();
+}
+
 void ACPlayer::OnTarget()
 {
 	Target->ToggleTarget();
@@ -367,6 +391,8 @@ void ACPlayer::OffAim()
 {
 	Action->OffAim();
 }
+
+
 
 void ACPlayer::ChangeColor(FLinearColor InColor)
 {

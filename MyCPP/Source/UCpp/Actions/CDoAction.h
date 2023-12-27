@@ -23,6 +23,20 @@ public:
 	virtual void Begin_DoAction() {}
 	virtual void End_DoAction() {}
 
+
+	virtual void DoActionRelease() {}
+	virtual void Begin_DoActionRelease() {}
+	virtual void End_DoActionRelease() {}
+
+
+	virtual void DoSecondAction() {}
+	virtual void Begin_DoSecondAction() {}
+	virtual void End_DoSecondAction() {}
+
+	virtual void DoSecondActionRelease() {}
+	virtual void Begin_DoSecondActionRelease() {}
+	virtual void End_DoSecondActionRelease() {}
+
 	virtual void OnAim(){}
 	virtual void OffAim() {}
 

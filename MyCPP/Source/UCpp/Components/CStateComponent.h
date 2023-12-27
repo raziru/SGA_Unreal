@@ -53,6 +53,8 @@ public:
 	void SetActionMode();
 	void SetHittedMode();
 	void SetDeadMode();
+
+
 private:
 	void ChangeType(EStateType InType);
 

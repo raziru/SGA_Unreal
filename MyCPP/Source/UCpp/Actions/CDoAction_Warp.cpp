@@ -4,6 +4,7 @@
 #include "Actions/CDoAction_Warp.h"
 #include "Global.h"
 #include "CAttachment.h"
+#include "CAim.h"
 #include "GameFramework/Character.h"
 #include "Components/DecalComponent.h"
 #include "Components/CStateComponent.h"
@@ -14,6 +15,10 @@ void ACDoAction_Warp::BeginPlay()
 {
     Super::BeginPlay();
 
+    Aim = NewObject<UCAim>();//Unreal Gabarge 컬렉터에서 인식하게 만들기 위함
+
+    Aim->BeginPlay(OwnerCharacter);
+
     for (AActor* actor : OwnerCharacter->Children)
     {
         if (actor->IsA<ACAttachment>() && actor->GetActorLabel().Contains("Warp"))
@@ -23,6 +28,8 @@ void ACDoAction_Warp::BeginPlay()
             break;
         }
     }
+
+    
 }
 
 void ACDoAction_Warp::DoAction()
@@ -60,13 +67,41 @@ void ACDoAction_Warp::End_DoAction()
     Status->SetMove();
 }
 
+void ACDoAction_Warp::DoSecondAction()
+{
+    OnAim();
+}
+
+void ACDoAction_Warp::DoSecondActionRelease()
+{
+    OffAim();
+}
+
+void ACDoAction_Warp::OnAim()
+{
+    Aim->OnZoom();
+
+}
+
+void ACDoAction_Warp::OffAim()
+{
+    Aim->OffZoom();
+
+}
+
 void ACDoAction_Warp::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+
+
     CheckFalse(*bEquipped);
+    Aim->Tick(DeltaTime);
 
     FVector location;
     FRotator rotator;
+
+
+
     if (GetCrursorLocationAndRotation(location, rotator))
     {
         Decal->SetVisibility(true);
@@ -77,6 +112,8 @@ void ACDoAction_Warp::Tick(float DeltaTime)
     }
 
     Decal->SetVisibility(false);
+
+
 }
 bool ACDoAction_Warp::GetCrursorLocationAndRotation(FVector& OutLocation, FRotator& OutRotator)
 {

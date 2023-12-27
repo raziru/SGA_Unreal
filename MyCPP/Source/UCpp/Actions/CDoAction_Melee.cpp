@@ -113,3 +113,11 @@ void ACDoAction_Melee::RestoreDilation()
 {
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
 }
+
+void ACDoAction_Melee::DoSecondAction()
+{
+}
+
+void ACDoAction_Melee::DoSecondActionRelease()
+{
+}

@@ -9,6 +9,7 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewStatus, FStatusData, NewStatus);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShield, bool, IsShield);
 
 
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
@@ -40,4 +41,7 @@ protected:
 public:
 	UPROPERTY(BlueprintAssignable)
 		FSetNewStatus SetNewStatus;
+
+	UPROPERTY(BlueprintAssignable)
+		FOnShield OnShield;
 };

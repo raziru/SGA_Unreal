@@ -73,5 +73,21 @@ void UCEquipComponent::SetStatus()
 	{
 		SetNewStatus.Broadcast(EquipStatus);
 	}
+
+
+	if (!Armors.Find(EArmorType::Shield) || !!!Armors[EArmorType::Shield])
+	{
+		if (OnShield.IsBound())
+		{
+			OnShield.Broadcast(false);
+		}
+	}
+	else
+	{
+		if (OnShield.IsBound())
+		{
+			OnShield.Broadcast(true);
+		}
+	}
 }
 

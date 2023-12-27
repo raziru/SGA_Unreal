@@ -20,6 +20,8 @@ public:
 	virtual void Begin_DoAction() override;
 	virtual void End_DoAction()   override;
 
+	virtual void DoSecondAction() override;
+	virtual void DoSecondActionRelease() override;
 public:
 
 	virtual void OnAttachmentBeginOverlap(class ACharacter* InAttacker, class AActor* InAttackCauser, class ACharacter* InOtherCharacter) override;

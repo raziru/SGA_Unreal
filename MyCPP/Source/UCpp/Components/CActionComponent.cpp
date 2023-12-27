@@ -91,6 +91,10 @@ void UCActionComponent::SetItemTypeMode()
 
 }
 
+void UCActionComponent::SetSecondItemTypeMode()
+{
+}
+
 void UCActionComponent::OffAllCollision()
 {
 	for (UCActionData* data : Datas)
@@ -111,7 +115,6 @@ void UCActionComponent::SetNewAction(class UCActionData* NewItemAction, EActionT
 	{
 		this->ItemTypeData   = Datas[(int32)EActionType::Unarmed];
 		this->ItemActionType = EActionType::Unarmed;
-		//return;
 	}
 	else
 	{
@@ -121,6 +124,10 @@ void UCActionComponent::SetNewAction(class UCActionData* NewItemAction, EActionT
 	
 	Datas[(int32)NewItemActionType] = NewItemAction;
 
+}
+
+void UCActionComponent::SetNewSecondAction(UCActionData* NewItemAction, EActionType NewItemActionType)
+{
 }
 
 void UCActionComponent::DoAction()
@@ -136,10 +143,61 @@ void UCActionComponent::DoAction()
 	}
 }
 
+void UCActionComponent::DoActionRelease()
+{
+	CheckTrue(IsUnarmedMode());
+
+	if (!!Datas[(int32)Type])
+	{
+		ACDoAction* action = Datas[(int32)Type]->GetDoAction();
+
+		if (!!action)
+			action->DoActionRelease();
+	}
+}
+
+void UCActionComponent::DoSecondAction()
+{
+	CheckTrue(IsUnarmedMode());
+
+	if (!!Datas[(int32)Type])
+	{
+		ACDoAction* action = Datas[(int32)Type]->GetDoAction();
+
+		if (!!action)
+			action->DoSecondAction();
+	}
+	CLog::Print(OnShield);
+}
+
+void UCActionComponent::DoSecondActionRelease()
+{
+	CheckTrue(IsUnarmedMode());
+
+	if (!!Datas[(int32)Type])
+	{
+		ACDoAction* action = Datas[(int32)Type]->GetDoAction();
+
+		if (!!action)
+			action->DoSecondActionRelease();
+	}
+}
+
+void UCActionComponent::DoAim()
+{
+	if (IsAiming)
+	{
+		OffAim();
+	}
+	else
+	{
+		OnAim();
+	}
+}
+
 void UCActionComponent::OnAim()
 {
 	SetAimMode(true);
-
 }
 
 void UCActionComponent::OffAim()

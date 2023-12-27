@@ -19,6 +19,13 @@ public:
 	virtual void Begin_DoAction() override;
 	virtual void End_DoAction()   override;
 
+	virtual void DoSecondAction() override;
+	virtual void DoSecondActionRelease() override;
+
+
+	virtual void OnAim() override;
+	virtual void OffAim() override;
+
 	virtual void Tick(float DeltaTime) override;
 
 private:
@@ -27,4 +34,6 @@ private:
 private:
 	class UDecalComponent* Decal;
 	FVector Location;
+
+	class UCAim* Aim;
 };

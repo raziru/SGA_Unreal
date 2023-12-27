@@ -94,6 +94,8 @@ private:
 	UFUNCTION()
 		void SetNewAction(class UCActionData* NewItemAction, EActionType NewItemActionType);
 	
+	UFUNCTION()
+		void SetOnShield(bool IsShield);
 
 //Armor Equip
 	UFUNCTION()
@@ -129,6 +131,11 @@ private:
 	void OnItemType();
 
 	void OnDoAction();
+	void OnDoActionRelease();
+
+	void OnDoSecondAction();
+	void OnDoSecondActionRelease();
+
 
 	void OnTarget();
 	void OnTargetLeft();
@@ -136,6 +143,8 @@ private:
 
 	void OnAim();
 	void OffAim();
+
+	
 
 public:
 	virtual void ChangeColor(FLinearColor InColor) override;

@@ -39,6 +39,16 @@ void ACDoAction_Throw::End_DoAction()
 	Status->SetMove();
 }
 
+void ACDoAction_Throw::DoSecondAction()
+{
+	OnAim();
+}
+
+void ACDoAction_Throw::DoSecondActionRelease()
+{
+	OffAim();
+}
+
 void ACDoAction_Throw::OnAim()
 {
 	Aim->OnZoom();

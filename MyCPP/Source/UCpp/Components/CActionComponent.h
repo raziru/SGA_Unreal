@@ -29,6 +29,12 @@ private:
 
 	EActionType ItemActionType;
 
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
+		class UCActionData* SecondItemTypeData;
+
+	EActionType SecondItemActionType;
+
 public:
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE class UCActionData* GetCurrent() { return Datas[(int32)Type]; }
@@ -66,23 +72,35 @@ public:
 	void SetFireStormMode();
 	void SetThrowMode();
 	void SetItemTypeMode();
-
+	void SetSecondItemTypeMode();
 
 	void OffAllCollision();
 	
 	void SetNewAction(class UCActionData* NewItemAction, EActionType NewItemActionType);
+	void SetNewSecondAction(class UCActionData* NewItemAction, EActionType NewItemActionType);
+
+	void SetOnShield(bool OnNewShield) { OnShield = OnNewShield; }
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:
 	void DoAction();
+	void DoActionRelease();
 
+	void DoSecondAction();
+	void DoSecondActionRelease();
+
+
+	void DoAim();
 	void OnAim();
 	void OffAim();
 
 private:
 	void SetAimMode(bool InAim);
+
+
 private:
 	void SetMode(EActionType InType);
 	void ChangeType(EActionType InNewType);
@@ -96,6 +114,6 @@ public:
 private:
 	EActionType Type;
 	
-
-	
+	bool IsAiming = false;
+	bool OnShield = false;
 };
