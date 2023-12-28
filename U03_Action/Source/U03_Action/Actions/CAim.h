@@ -35,7 +35,7 @@ private:
 private:
 	class UCurveFloat* Curve;
 
-	//class ACHUD* HUD;
+	class ACHUD* HUD;
 
 	class ACharacter* OwnerCharacter;
 	class UCStateComponent* State;

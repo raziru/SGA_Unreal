@@ -3,7 +3,7 @@
 
 #include "CAim.h"
 #include "Global.h"
-//#include "CHUD.h"
+#include "CHUD.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
@@ -12,6 +12,7 @@
 UCAim::UCAim()
 {
 	CHelpers::GetAssetDynamic<UCurveFloat>(&Curve, "CurveFloat'/Game/Actions/C_Aim.C_Aim'");
+
 }
 
 void UCAim::BeginPlay(ACharacter* InCharacter)
@@ -22,10 +23,13 @@ void UCAim::BeginPlay(ACharacter* InCharacter)
 	Camera = CHelpers::GetComponent<UCameraComponent>(OwnerCharacter);
 	State = CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
 
+	HUD = OwnerCharacter->GetWorld()->GetFirstPlayerController()->GetHUD<ACHUD>();
+
 	TimelineFloat.BindUFunction(this, "Zooming");
 
 	Timeline.AddInterpFloat(Curve, TimelineFloat);
 	Timeline.SetPlayRate(200);
+
 
 }
 
@@ -44,6 +48,8 @@ void UCAim::OnZoom()
 
 	Timeline.PlayFromStart();
 
+	HUD->SetDrawMode();
+
 }
 
 void UCAim::OffZoom()
@@ -58,7 +64,10 @@ void UCAim::OffZoom()
 
 	//Camera->FieldOfView = 90;
 
+	HUD->SetUndrawMode();
+
 	Timeline.ReverseFromEnd();
+
 }
 
 void UCAim::Tick(float DeltaTime)
@@ -68,6 +77,6 @@ void UCAim::Tick(float DeltaTime)
 
 void UCAim::Zooming(float Output)
 {
-	CLog::Print(Output, 0);
+	//CLog::Print(Output, 0);
 	Camera->FieldOfView = Output;
 }
