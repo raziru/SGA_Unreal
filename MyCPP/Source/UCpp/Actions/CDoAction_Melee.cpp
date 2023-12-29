@@ -116,8 +116,22 @@ void ACDoAction_Melee::RestoreDilation()
 
 void ACDoAction_Melee::DoSecondAction()
 {
+	
+	PressDoSecondAction = true;
+
+	if (ActionPress.IsBound())
+	{
+		ActionPress.Broadcast(PressDoAction, PressDoSecondAction);
+	}
+		
 }
 
 void ACDoAction_Melee::DoSecondActionRelease()
 {
+	PressDoSecondAction = false;
+
+	if (ActionPress.IsBound())
+	{
+		ActionPress.Broadcast(PressDoAction, PressDoSecondAction);
+	}
 }

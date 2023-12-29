@@ -7,6 +7,8 @@
 #include "Actions/CActionData.h"
 #include "CDoAction.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActionPress, bool, InPressAction, bool, InPressSecondAction);
 UCLASS()
 class UCPP_API ACDoAction : public AActor
 {
@@ -59,6 +61,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(BlueprintAssignable)
+		FActionPress ActionPress;
 protected:
 	UPROPERTY(BlueprintReadOnly)
 		class ACharacter* OwnerCharacter;
@@ -70,7 +75,8 @@ protected:
 		class UCStatusComponent* Status;
 
 protected:
-
+	bool PressDoAction;
+	bool PressDoSecondAction;
 	const bool* bEquipped;
 	TArray<FDoActionData> Datas;
 };

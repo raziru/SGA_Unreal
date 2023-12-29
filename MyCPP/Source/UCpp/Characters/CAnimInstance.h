@@ -25,6 +25,15 @@ protected:
     UPROPERTY(BlueprintReadOnly, EditAnywhere)
         EActionType ActionType;
 
+    UPROPERTY(BlueprintReadOnly, EditAnywhere)
+        bool PressAction;
+
+    UPROPERTY(BlueprintReadOnly, EditAnywhere)
+        bool PressSecondAction;
+
+    UPROPERTY(BlueprintReadOnly, EditAnywhere)
+        bool OnShield;
+
 public:
     virtual void NativeBeginPlay() override;
     virtual void NativeUpdateAnimation(float DeltaSeconds) override;
@@ -32,4 +41,7 @@ public:
 private:
     UFUNCTION()
         void OnActionTypeChanged(EActionType InPrevType, EActionType InNewType);
+
+    UFUNCTION()
+        void OnActionPress(bool InPressAction, bool InPressSecondAction, bool InOnShield);
 };

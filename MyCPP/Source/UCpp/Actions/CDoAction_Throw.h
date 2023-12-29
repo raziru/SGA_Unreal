@@ -24,8 +24,6 @@ public:
 	virtual void DoSecondAction() override;
 	virtual void DoSecondActionRelease() override;
 
-
-
 	virtual void OnAim() override;
 	virtual void OffAim() override;
 

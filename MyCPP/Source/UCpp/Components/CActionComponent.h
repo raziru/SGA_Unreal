@@ -14,6 +14,8 @@ enum class EActionType : uint8
 
 //delegate는 무조건 public으로 열어줘야 다른쪽에서 사용할 수 있다.
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActionTypeChanged, EActionType, InPrevType, EActionType, InNewType);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnActionPress, bool, InPressAction, bool, InPressSecondAction, bool, InOnShield);
+
 //Multicast: 함수를 여러개 바인딩해놓을 수 있음 바인딩할 함수는 UFUNCTION이어야 한다.
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
 class UCPP_API UCActionComponent : public UActorComponent
@@ -100,20 +102,23 @@ public:
 private:
 	void SetAimMode(bool InAim);
 
+	UFUNCTION()
+		void ActionPress(bool InPressAction, bool InPressSecondAction);
 
 private:
 	void SetMode(EActionType InType);
 	void ChangeType(EActionType InNewType);
 
-
-
 public:
 	UPROPERTY(BlueprintAssignable)
 		FActionTypeChanged OnActionTypeChanged;
-
+	UPROPERTY(BlueprintAssignable)
+		FOnActionPress OnActionPress;
+	
 private:
 	EActionType Type;
 	
 	bool IsAiming = false;
 	bool OnShield = false;
+	bool OnGuard  = false;
 };

@@ -24,7 +24,10 @@ void UCActionComponent::BeginPlay()
 	for (int32 i = 0; i < (int32)EActionType::Max; i++)
 	{
 		if (!!Datas[i])
+		{
 			Datas[i]->BeginPlay(character);
+			Datas[i]->GetDoAction()->ActionPress.AddDynamic(this, &UCActionComponent::ActionPress);
+		}
 	}
 	
 	
@@ -217,6 +220,15 @@ void UCActionComponent::SetAimMode(bool InAim)
 			InAim ? action->OnAim() : action->OffAim();
 	}
 }
+
+void UCActionComponent::ActionPress(bool InPressAction, bool InPressSecondAction)
+{
+	if (OnActionPress.IsBound())
+	{
+		OnActionPress.Broadcast(InPressAction, InPressSecondAction, OnShield);
+	}
+}
+
 
 void UCActionComponent::SetMode(EActionType InType)
 {

@@ -7,6 +7,8 @@
 #include "CDoAction_Melee.generated.h"
 
 
+
+
 UCLASS()
 class UCPP_API ACDoAction_Melee : public ACDoAction
 {

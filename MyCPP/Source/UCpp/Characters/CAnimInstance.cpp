@@ -24,9 +24,21 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	CheckNull(action);
 
 	action->OnActionTypeChanged.AddDynamic(this, &UCAnimInstance::OnActionTypeChanged);
+	action->OnActionPress.AddDynamic(this, &UCAnimInstance::OnActionPress);
 }
 
 void UCAnimInstance::OnActionTypeChanged(EActionType InPrevType, EActionType InNewType)
 {
 	ActionType = InNewType;
 }
+
+void UCAnimInstance::OnActionPress(bool InPressAction, bool InPressSecondAction, bool InOnShield)
+{
+	PressAction = InPressAction;
+	PressSecondAction = InPressSecondAction;
+	OnShield = InOnShield;
+}
+
+
+
+
