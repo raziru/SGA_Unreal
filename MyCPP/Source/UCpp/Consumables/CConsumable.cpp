@@ -1,23 +1,21 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Armors/CArmor.h"
-#include "Global.h"
-#include "GameFramework/Character.h"
+#include "CConsumable.h"
 
 // Sets default values
-ACArmor::ACArmor()
+ACConsumable::ACConsumable()
 {
+ 	
+
 }
-
-
-
 
 // Called when the game starts or when spawned
-void ACArmor::BeginPlay()
+void ACConsumable::BeginPlay()
 {
 	Super::BeginPlay();
-	OwnerCharacter = Cast<ACharacter>(GetOwner());
-
+	
 }
+
+
 

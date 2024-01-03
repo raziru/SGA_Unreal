@@ -12,6 +12,9 @@ class U03_ACTION_API ACPlayer : public ACharacter, public IICharacter
 {
 	GENERATED_BODY()
 
+private:
+	UPROPERTY(EditDefaultsOnly)
+		TSubclassOf<class UCUserWidget_ActionList> ActionListClass;
 
 private:
 	UPROPERTY(VisibleDefaultsOnly)
@@ -92,9 +95,14 @@ private:
 	void OnAim();
 	void OffAim();
 
+	void OnViewActionList();
+	void OffViewActionList();
 public:
 	virtual void ChangeColor(FLinearColor InColor) override;
 private:
 	class UMaterialInstanceDynamic* BodyMaterial;
 	class UMaterialInstanceDynamic* LogoMaterial;
+
+private:
+	class UCUserWidget_ActionList* ActionList;
 };

@@ -12,7 +12,7 @@ ACStaticArmor::ACStaticArmor()
 
 }
 
-void ACStaticArmor::Attachment(ACharacter* OwnerCharacter)
+void ACStaticArmor::Attachment()
 {
 	AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), SocketName);
 
@@ -30,5 +30,20 @@ void ACStaticArmor::Detachment()
 		OnDetachmentDelegate.Broadcast(StatusData);
 	}
 	Destroy();
+}
+
+void ACStaticArmor::AttachTo(FName InSocket)
+{
+	if (OnSocket == false)
+	{
+		AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), InSocket);
+		OnSocket = true;
+	}
+	else
+	{
+		AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), SocketName);
+		OnSocket = false;
+
+	}
 }
 

@@ -10,7 +10,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewStatus, FStatusData, NewStatus);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShield, bool, IsShield);
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHandShield);
 
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
 class UCPP_API UCEquipComponent : public UActorComponent
@@ -24,6 +24,11 @@ public:
 	void SetNewArmor(TSubclassOf<class ACArmor> NewArmorClass);
 
 	void SetStatus();
+
+	void OnSecondEquip(EArmorType InArmorType);
+
+	void OnSecondUnEquip(EArmorType InArmorType);
+
 
 private:
 	ACharacter* OwnerCharacter;
@@ -44,4 +49,7 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 		FOnShield OnShield;
+
+	UPROPERTY(BlueprintAssignable)
+		FOnHandShield OnHandShield;
 };

@@ -19,9 +19,6 @@ class UCPP_API ACArmor : public AActor
 {
 	GENERATED_BODY()
 
-
-
-
 public:
 	FORCEINLINE FStatusData GetStatusData() { return StatusData; }
 	FORCEINLINE EArmorType  GetArmorType()  { return ArmorType; }
@@ -44,16 +41,22 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable)
-		virtual void Attachment(class ACharacter* OwnerCharacter) {}
+		virtual void Attachment() {}
 	UFUNCTION(BlueprintCallable)
 		virtual void Detachment() {}
-
+	UFUNCTION(BlueprintCallable)
+		virtual void AttachTo(FName InSocket) {}
 public:
 	UFUNCTION(BlueprintImplementableEvent)
-		void Equip(class ACharacter* OwnerCharacter);
+		void Equip();
 	UFUNCTION(BlueprintImplementableEvent)
 		void UnEquip();
 
+protected: 
+	ACharacter* OwnerCharacter;
+	
+	
+	
 protected:
 	virtual void BeginPlay() override;
 

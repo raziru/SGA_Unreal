@@ -14,6 +14,7 @@
 #include "Components/CMontagesComponent.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "Widgets/CUserWidget_ActionList.h"
 
 //if On Map, 생성자는 게임이 시작하기전에 실행된다.
 ACPlayer::ACPlayer()
@@ -55,6 +56,7 @@ ACPlayer::ACPlayer()
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
 
+	CHelpers::GetClass<UCUserWidget_ActionList>(&ActionListClass, "WidgetBlueprint'/Game/Widgets/WB_ActionList.WB_ActionList_C'");
 }
 
 
@@ -80,6 +82,9 @@ void ACPlayer::BeginPlay()
 	State->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
 	//OnstatetypeChanged가 호출되면 묶여있는 함수가 같이 연계된다. --  delegate는 함수포인터를 사용한것과 비슷하다.
 	//함수포인터는 인자로 받아야하지만 delegate는 필요가없다.
+	ActionList = CreateWidget<UCUserWidget_ActionList, APlayerController>(GetController<APlayerController>(), ActionListClass);
+	ActionList->AddToViewport();
+	ActionList->SetVisibility(ESlateVisibility::Hidden);	
 }
 
 void ACPlayer::Tick(float DeltaTime)
@@ -107,6 +112,9 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Pressed, this, &ACPlayer::OnAim);
 	PlayerInputComponent->BindAction("Aim", EInputEvent::IE_Released, this, &ACPlayer::OffAim);
+
+	PlayerInputComponent->BindAction("ViewActionList", EInputEvent::IE_Pressed, this, &ACPlayer::OnViewActionList);
+	PlayerInputComponent->BindAction("ViewActionList", EInputEvent::IE_Released, this, &ACPlayer::OffViewActionList);
 
 	PlayerInputComponent->BindAction("Action",  EInputEvent::IE_Pressed, this, &ACPlayer::OnDoAction);
 	PlayerInputComponent->BindAction("Targeting", EInputEvent::IE_Pressed, this, &ACPlayer::OnTarget);
@@ -286,6 +294,27 @@ void ACPlayer::OffAim()
 	Action->UnDoAim();
 }
 
+void ACPlayer::OnViewActionList()
+{
+	CheckFalse(State->IsIdleMode());
+
+	ActionList->SetVisibility(ESlateVisibility::Visible);
+
+	GetController<APlayerController>()->bShowMouseCursor = true;
+	GetController<APlayerController>()->SetInputMode(FInputModeGameAndUI());//마우스를 받는 상태가 됨
+
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.1f);//시간 배율 변경
+}
+
+void ACPlayer::OffViewActionList()
+{
+	ActionList->SetVisibility(ESlateVisibility::Hidden);
+
+	GetController<APlayerController>()->bShowMouseCursor = false;
+	GetController<APlayerController>()->SetInputMode(FInputModeGameOnly());
+
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
+}
 
 
 void ACPlayer::ChangeColor(FLinearColor InColor)

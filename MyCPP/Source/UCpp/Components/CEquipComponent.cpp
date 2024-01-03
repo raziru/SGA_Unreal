@@ -26,7 +26,12 @@ void UCEquipComponent::SetNewArmor(TSubclassOf<class ACArmor> NewArmorClass)
 {
 	ACArmor* NewArmor;
 
-	NewArmor = Cast<ACArmor>(GetWorld()->SpawnActor(NewArmorClass));
+	FTransform transform;
+
+	//NewArmor = Cast<ACArmor>(OwnerCharacter->GetWorld()->SpawnActor(NewArmorClass));
+
+	NewArmor= OwnerCharacter->GetWorld()->SpawnActorDeferred<ACArmor>(NewArmorClass, transform, OwnerCharacter);
+	UGameplayStatics::FinishSpawningActor(NewArmor, transform);
 
 	CheckNull(NewArmor);
 
@@ -44,13 +49,13 @@ void UCEquipComponent::SetNewArmor(TSubclassOf<class ACArmor> NewArmorClass)
 		{
 			Armor.Value->UnEquip();
 			Armors.Add(NewArmor->GetArmorType(), NewArmor);
-			NewArmor->Equip(OwnerCharacter);
+			NewArmor->Equip();
 			SetStatus();
 			return;
 		}
 	}
 	Armors.Add(NewArmor->GetArmorType(), NewArmor);
-	NewArmor->Equip(OwnerCharacter);
+	NewArmor->Equip();
 	SetStatus();
 	
 }
@@ -88,6 +93,33 @@ void UCEquipComponent::SetStatus()
 		{
 			OnShield.Broadcast(true);
 		}
+	}
+}
+
+void UCEquipComponent::OnSecondEquip(EArmorType InArmorType)
+{
+	switch (InArmorType)
+	{
+	case EArmorType::Shield:
+		if (!(!Armors.Find(EArmorType::Shield) || !!!Armors[EArmorType::Shield]))
+		{
+			Armors[EArmorType::Shield]->AttachTo("Socket_Shield");
+		}
+		break;
+	}
+}
+
+void UCEquipComponent::OnSecondUnEquip(EArmorType InArmorType)
+{
+	switch (InArmorType)
+	{
+
+	case EArmorType::Shield:
+		if (!(!Armors.Find(EArmorType::Shield) || !!!Armors[EArmorType::Shield]))
+		{
+			Armors[EArmorType::Shield]->AttachTo("Holster_Shield");
+		}
+		break;
 	}
 }
 

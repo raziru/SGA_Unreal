@@ -11,7 +11,7 @@ ACSkeletalArmor::ACSkeletalArmor()
 	CHelpers::CreateComponent<USkeletalMeshComponent>(this, &Mesh, "Mesh");
 
 }
-void ACSkeletalArmor::Attachment(ACharacter* OwnerCharacter)
+void ACSkeletalArmor::Attachment()
 {
 	FName Empty = "";
 	AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), Empty);

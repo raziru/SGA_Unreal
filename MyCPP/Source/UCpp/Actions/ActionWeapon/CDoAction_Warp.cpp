@@ -3,8 +3,8 @@
 
 #include "CDoAction_Warp.h"
 #include "Global.h"
-#include "CAttachment.h"
-#include "CAim.h"
+#include "Actions/CAttachment.h"
+#include "Actions/CAim.h"
 #include "GameFramework/Character.h"
 #include "Components/DecalComponent.h"
 #include "Components/CStateComponent.h"

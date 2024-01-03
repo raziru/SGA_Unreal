@@ -1,4 +1,4 @@
-	// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Components/CActionComponent.h"
@@ -7,11 +7,14 @@
 #include "Actions/CAttachment.h"
 #include "Actions/CEquipment.h"
 #include "Actions/CDoAction.h"
-#include "GameFramework/Character.h"
+#include "Characters/CPlayer.h"
+#include "Widgets/Action/CUserWidget_ActionList.h"
+
 // Sets default values for this component's properties
 UCActionComponent::UCActionComponent()
 {
-	
+	CHelpers::GetClass<UCUserWidget_ActionList>(&ActionListClass, "WidgetBlueprint'/Game/Widgets/Action/WB_ActionList.WB_ActionList_C'");
+
 }
 
 
@@ -20,14 +23,27 @@ void UCActionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ACharacter* character = Cast<ACharacter>(GetOwner());
+	ACharacter* Owner = Cast<ACharacter>(GetOwner());
+
+	//ACharacter* Owner = Cast<ACharacter>(GetOwner());
 	for (int32 i = 0; i < (int32)EActionType::Max; i++)
 	{
 		if (!!Datas[i])
 		{
-			Datas[i]->BeginPlay(character);
+			Datas[i]->BeginPlay(Owner);
 			Datas[i]->GetDoAction()->ActionPress.AddDynamic(this, &UCActionComponent::ActionPress);
+			Datas[i]->GetEquipment()->OnEquipmentDelegate.AddDynamic(this, &UCActionComponent::OnSecondEquip);
+			Datas[i]->GetEquipment()->OnUnequipmentDelegate.AddDynamic(this, &UCActionComponent::OffSecondEquip);
+
 		}
+	}
+
+	Player = Cast<ACPlayer>(GetOwner());
+	if (!!Player)
+	{
+		ActionList = CreateWidget<UCUserWidget_ActionList, APlayerController>(Owner->GetController<APlayerController>(), ActionListClass);
+		ActionList->AddToViewport();
+		ActionList->SetVisibility(ESlateVisibility::Hidden);
 	}
 	
 	
@@ -41,6 +57,7 @@ void UCActionComponent::SetUnarmedMode()
 
 		equipment->Unequip();
 	}
+
 
 	ACEquipment* equipment = Datas[(int32)EActionType::Unarmed]->GetEquipment();
 	CheckNull(equipment);
@@ -57,7 +74,6 @@ void UCActionComponent::SetFistMode()
 void UCActionComponent::SetOneHandMode()
 {
 	SetMode(EActionType::OneHand);
-
 }
 
 void UCActionComponent::SetTwoHandMode()
@@ -208,6 +224,36 @@ void UCActionComponent::OffAim()
 	SetAimMode(false);
 }
 
+void UCActionComponent::OnViewActionList()
+{
+	if (!!Player)
+	{
+		ActionList->SetVisibility(ESlateVisibility::Visible);
+
+		Player->GetController<APlayerController>()->bShowMouseCursor = true;
+		Player->GetController<APlayerController>()->SetInputMode(FInputModeGameAndUI());//마우스를 받는 상태가 됨
+
+		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.000100f);//시간 배율 변경
+	}
+	
+	
+
+}
+
+void UCActionComponent::OffViewActionList()
+{
+	if (!!Player)
+	{
+		ActionList->SetVisibility(ESlateVisibility::Hidden);
+
+		Player->GetController<APlayerController>()->bShowMouseCursor = false;
+		Player->GetController<APlayerController>()->SetInputMode(FInputModeGameOnly());
+
+		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
+	}
+	
+}
+
 void UCActionComponent::SetAimMode(bool InAim)
 {
 	CheckTrue(IsUnarmedMode());
@@ -226,6 +272,24 @@ void UCActionComponent::ActionPress(bool InPressAction, bool InPressSecondAction
 	if (OnActionPress.IsBound())
 	{
 		OnActionPress.Broadcast(InPressAction, InPressSecondAction, OnShield);
+	}
+}
+
+void UCActionComponent::OnSecondEquip()
+{
+	
+	if (EquipSecond.IsBound())
+	{
+		EquipSecond.Broadcast(Type);
+	}
+	
+}
+
+void UCActionComponent::OffSecondEquip()
+{
+	if (UnequipSecond.IsBound())
+	{
+		UnequipSecond.Broadcast(Type);
 	}
 }
 

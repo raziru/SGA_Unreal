@@ -20,6 +20,7 @@
 #include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Widgets/CUserWidget_Name.h"
+#include "Widgets/Action/CUserWidget_ActionList.h"
 
 
 
@@ -75,6 +76,8 @@ ACPlayer::ACPlayer()
 
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
+
+
 }
 
 void ACPlayer::BeginPlay()
@@ -98,6 +101,10 @@ void ACPlayer::BeginPlay()
 	//묶여있는 함수가 같이 연계된다. --  delegate는 함수포인터를 사용한것과 비슷하다.
 	//함수포인터는 인자로 받아야하지만 delegate는 필요가없다.
 
+	Action->EquipSecond.AddDynamic(this, &ACPlayer::EquipSecond);
+	Action->UnequipSecond.AddDynamic(this, &ACPlayer::UnequipSecond);
+
+	
 	State->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
 	Inventory->SetNewAction.AddDynamic(this, &ACPlayer::SetNewAction);
 	Inventory->SetNewArmor.AddDynamic(this, &ACPlayer::SetNewArmor);
@@ -105,8 +112,10 @@ void ACPlayer::BeginPlay()
 	
 	Equipment->SetNewStatus.AddDynamic(this, &ACPlayer::SetNewStatus);
 	Equipment->OnShield.AddDynamic(this, &ACPlayer::SetOnShield);
-	Status->RefreshStatus.AddDynamic(this, &ACPlayer::ResfreshStatus);
 
+
+	Status->RefreshStatus.AddDynamic(this, &ACPlayer::ResfreshStatus);
+	
 }
 
 void ACPlayer::Tick(float DeltaTime)
@@ -148,6 +157,10 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Interact", EInputEvent::IE_Pressed, this, &ACPlayer::Interact);
 	PlayerInputComponent->BindAction("Inventory", EInputEvent::IE_Pressed, this, &ACPlayer::OpenInventory);
+
+
+	PlayerInputComponent->BindAction("QuickSlot", EInputEvent::IE_Pressed, this, &ACPlayer::OnViewActionList);
+	PlayerInputComponent->BindAction("QuickSlot", EInputEvent::IE_Released, this, &ACPlayer::OffViewActionList);
 
 }
 
@@ -224,6 +237,58 @@ void ACPlayer::SetNewAction( UCActionData* NewItemAction, EActionType NewItemAct
 void ACPlayer::SetOnShield(const bool IsShield)
 {
 	Action->SetOnShield(IsShield);
+}
+
+void ACPlayer::EquipSecond(EActionType InActionType)
+{
+	switch (InActionType)
+	{
+	case EActionType::Unarmed:
+		break;
+	case EActionType::Fist:
+		break;
+	case EActionType::OneHand:
+		Equipment->OnSecondEquip(EArmorType::Shield);
+		break;
+	case EActionType::TwoHand:
+		break;
+	case EActionType::Warp:
+		break;
+	case EActionType::FireStorm:
+		break;
+	case EActionType::Throw:
+		break;
+	case EActionType::Max:
+		break;
+	default:
+		break;
+	}
+}
+
+void ACPlayer::UnequipSecond(EActionType InActionType)
+{
+	switch (InActionType)
+	{
+	case EActionType::Unarmed:
+		break;
+	case EActionType::Fist:
+		break;
+	case EActionType::OneHand:
+		Equipment->OnSecondUnEquip(EArmorType::Shield);
+		break;
+	case EActionType::TwoHand:
+		break;
+	case EActionType::Warp:
+		break;
+	case EActionType::FireStorm:
+		break;
+	case EActionType::Throw:
+		break;
+	case EActionType::Max:
+		break;
+	default:
+		break;
+	}
 }
 
 void ACPlayer::SetNewStatus(const FStatusData NewStatus)
@@ -390,6 +455,19 @@ void ACPlayer::OnAim()
 void ACPlayer::OffAim()
 {
 	Action->OffAim();
+}
+
+void ACPlayer::OnViewActionList()
+{
+	CheckFalse(State->IsIdleMode());
+
+	Action->OnViewActionList();
+}
+
+void ACPlayer::OffViewActionList()
+{
+	Action->OffViewActionList();
+
 }
 
 

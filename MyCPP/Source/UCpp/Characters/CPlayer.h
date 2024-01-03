@@ -14,6 +14,7 @@ class UCPP_API ACPlayer : public ACharacter, public IICharacter
 {
 	GENERATED_BODY()
 
+
 //Camera
 private:
 	
@@ -93,9 +94,12 @@ private:
 		void SetNewItem(const FItemData NewItem);
 	UFUNCTION()
 		void SetNewAction(class UCActionData* NewItemAction, EActionType NewItemActionType);
-	
 	UFUNCTION()
 		void SetOnShield(bool IsShield);
+	UFUNCTION()
+		void EquipSecond(EActionType InActionType);
+	UFUNCTION()
+		void UnequipSecond(EActionType InActionType);
 
 //Armor Equip
 	UFUNCTION()
@@ -144,11 +148,14 @@ private:
 	void OnAim();
 	void OffAim();
 
-	
+	void OnViewActionList();
+	void OffViewActionList();
 
 public:
 	virtual void ChangeColor(FLinearColor InColor) override;
 private:
 	class UMaterialInstanceDynamic* BodyMaterial;
 	class UMaterialInstanceDynamic* LogoMaterial;
+
+
 };

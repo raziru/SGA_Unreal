@@ -4,7 +4,7 @@
 #include "CAnimNotifyState_EnableCombo.h"
 #include "Global.h"
 #include "Actions/CEquipment.h"
-#include "Actions/CDoAction_Melee.h"
+#include "Actions/ActionWeapon/CDoAction_Melee.h"
 #include "Components/CActionComponent.h"
 
 FString UCAnimNotifyState_EnableCombo::GetNotifyName_Implementation() const

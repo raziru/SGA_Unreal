@@ -3,7 +3,7 @@
 
 #include "CDoAction_FireStorm.h"
 #include "Global.h"
-#include "CAttachment.h"
+#include "Actions/CAttachment.h"
 #include "GameFramework/Character.h"
 #include "Components/BoxComponent.h"
 #include "Components/CStateComponent.h"

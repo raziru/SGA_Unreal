@@ -3,12 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Actions/CThrow.h"
 #include "CThrow_Magic.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class UCPP_API ACThrow_Magic : public ACThrow
 {

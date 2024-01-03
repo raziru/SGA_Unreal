@@ -9,12 +9,14 @@
 UENUM(BlueprintType)
 enum class EActionType : uint8
 {
-	Unarmed, Fist, OneHand, TwoHand, Warp, FireStorm, Throw, Max,
+	Unarmed, Fist, OneHand, TwoHand, Warp, FireStorm, Throw, Bow, Max,
 };
 
 //delegate는 무조건 public으로 열어줘야 다른쪽에서 사용할 수 있다.
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActionTypeChanged, EActionType, InPrevType, EActionType, InNewType);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnActionPress, bool, InPressAction, bool, InPressSecondAction, bool, InOnShield);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEquipSecond, EActionType, InActionType);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUnequipSecond, EActionType, InActionType);
 
 //Multicast: 함수를 여러개 바인딩해놓을 수 있음 바인딩할 함수는 UFUNCTION이어야 한다.
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
@@ -24,6 +26,9 @@ class UCPP_API UCActionComponent : public UActorComponent
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
 		class UCActionData* Datas[(int32)EActionType::Max];
+private:
+	UPROPERTY(EditDefaultsOnly)
+		TSubclassOf<class UCUserWidget_ActionList> ActionListClass;
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
@@ -36,6 +41,8 @@ private:
 		class UCActionData* SecondItemTypeData;
 
 	EActionType SecondItemActionType;
+
+	class ACPlayer* Player; 
 
 public:
 	UFUNCTION(BlueprintPure)
@@ -99,11 +106,20 @@ public:
 	void OnAim();
 	void OffAim();
 
+	void OnViewActionList();
+	void OffViewActionList();
+
 private:
 	void SetAimMode(bool InAim);
 
 	UFUNCTION()
 		void ActionPress(bool InPressAction, bool InPressSecondAction);
+
+	UFUNCTION()
+		void OnSecondEquip();
+
+	UFUNCTION()
+		void OffSecondEquip();
 
 private:
 	void SetMode(EActionType InType);
@@ -114,11 +130,19 @@ public:
 		FActionTypeChanged OnActionTypeChanged;
 	UPROPERTY(BlueprintAssignable)
 		FOnActionPress OnActionPress;
-	
+	UPROPERTY(BlueprintAssignable)
+		FEquipSecond EquipSecond;
+
+	UPROPERTY(BlueprintAssignable)
+		FUnequipSecond UnequipSecond;
+
 private:
 	EActionType Type;
 	
 	bool IsAiming = false;
 	bool OnShield = false;
 	bool OnGuard  = false;
+
+private:
+	class UCUserWidget_ActionList* ActionList;
 };

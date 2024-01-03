@@ -2,7 +2,7 @@
 
 #include "CInventoryComponent.h"
 #include "Global.h"
-#include "Widgets/CUserWidget_Inventory.h"
+#include "Widgets/Inventory/CUserWidget_Inventory.h"
 
 UCInventoryComponent::UCInventoryComponent()
 {
@@ -38,6 +38,9 @@ void UCInventoryComponent::OnSelected(const FItemData NewItem)
 			SetNewArmor.Broadcast(ArmorItem->GetArmorClass());
 		}
 		ArmorItem->Destroy();
+		break;
+	case EItemType::Consumable:
+		CLog::Print("Check");
 		break;
 	}
 	if (SetNewItem.IsBound())

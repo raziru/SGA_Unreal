@@ -18,11 +18,18 @@ public:
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Armor")
 		class UStaticMeshComponent* Mesh;
+
+
+	virtual void AttachTo(FName InSocket) override;
+
 public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 		FName SocketName;
 
 protected:
-	virtual void Attachment(class ACharacter* OwnerCharacter) override;
+	virtual void Attachment() override;
 	virtual void Detachment() override;
+
+private:
+	bool OnSocket;
 };
