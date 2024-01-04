@@ -49,6 +49,10 @@ public:
 		FORCEINLINE class UCActionData* GetCurrent() { return Datas[(int32)Type]; }
 
 public:
+
+	UFUNCTION()
+		FORCEINLINE class UCUserWidget_ActionList* GetActionList() { return ActionList; }
+
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE bool IsUnarmedMode() { return Type == EActionType::Unarmed; }
 
@@ -108,6 +112,8 @@ public:
 
 	void OnViewActionList();
 	void OffViewActionList();
+
+
 
 private:
 	void SetAimMode(bool InAim);

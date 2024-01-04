@@ -57,6 +57,10 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCEquipComponent* Equipment;
+
+public:
+	FORCEINLINE class UCUserWidget_ActionList* GetActionList() { return Action->GetActionList(); }
+
 //Widget
 protected:
 	UPROPERTY(VisibleDefaultsOnly)
@@ -111,10 +115,6 @@ private:
 	UFUNCTION()
 		void ResfreshStatus(const FStatusData NewStatus);
 
-
-	
-
-
 private:
 	void OpenInventory();
 
@@ -126,12 +126,27 @@ public:
 	void End_Roll();
 	void End_Backstep();
 private:
-	void OnFist();
+	/*void OnFist();
 	void OnOneHand();
 	void OnTwoHand();
 	void OnWarp();
 	void OnFireStorm();
-	void OnThrow();
+	void OnThrow();*/
+	UFUNCTION()
+		void OnFist();
+	UFUNCTION()
+		void OnOneHand();
+	UFUNCTION()
+		void OnTwoHand();
+	UFUNCTION()
+		void OnWarp();
+	UFUNCTION()
+		void OnFireStorm();
+	UFUNCTION()
+		void OnThrow();
+
+
+	
 	void OnItemType();
 
 	void OnDoAction();

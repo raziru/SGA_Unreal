@@ -44,6 +44,9 @@ private:
 		class UCStateComponent* State;
 
 
+public:
+	FORCEINLINE class UCUserWidget_ActionList* GetActionList() { return ActionList; }
+
 
 public:
 	ACPlayer();
@@ -78,12 +81,18 @@ public:
 	void End_Backstep();
 
 private:
-	void OnFist();
-	void OnOneHand();
-	void OnTwoHand();
-	void OnWarp();
-	void OnFireStorm();
-	void OnIceBall();
+	UFUNCTION()
+		void OnFist();
+	UFUNCTION()
+		void OnOneHand();
+	UFUNCTION()
+		void OnTwoHand();
+	UFUNCTION()
+		void OnWarp();
+	UFUNCTION()
+		void OnFireStorm();
+	UFUNCTION()
+		void OnIceBall();
 
 
 	void OnDoAction();

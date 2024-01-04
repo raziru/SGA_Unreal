@@ -6,9 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "CUserWidget_ActionItem.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class U03_ACTION_API UCUserWidget_ActionItem : public UUserWidget
 {
@@ -24,5 +22,5 @@ protected:
         void Unhover();
 
 private:
-    //class UCUserWidget_ActionList* GetActionList();
+    class UCUserWidget_ActionList* GetActionList();
 };

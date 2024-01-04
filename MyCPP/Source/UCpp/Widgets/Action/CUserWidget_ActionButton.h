@@ -24,5 +24,5 @@ protected:
         void Unhover();
 
 private:
-    //class UCUserWidget_ActionList* GetActionList();
+    class UCUserWidget_ActionList* GetActionList();
 };

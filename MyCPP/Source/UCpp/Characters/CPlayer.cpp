@@ -77,7 +77,7 @@ ACPlayer::ACPlayer()
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
 
-
+	
 }
 
 void ACPlayer::BeginPlay()
@@ -115,6 +115,13 @@ void ACPlayer::BeginPlay()
 
 
 	Status->RefreshStatus.AddDynamic(this, &ACPlayer::ResfreshStatus);
+
+	Action->GetActionList()->GetData(0).OnUserWidget_ActionItem_Clicked.AddDynamic(this, &ACPlayer::OnFist);
+	Action->GetActionList()->GetData(1).OnUserWidget_ActionItem_Clicked.AddDynamic(this, &ACPlayer::OnOneHand);
+	Action->GetActionList()->GetData(2).OnUserWidget_ActionItem_Clicked.AddDynamic(this, &ACPlayer::OnTwoHand);
+	Action->GetActionList()->GetData(3).OnUserWidget_ActionItem_Clicked.AddDynamic(this, &ACPlayer::OnWarp);
+	Action->GetActionList()->GetData(4).OnUserWidget_ActionItem_Clicked.AddDynamic(this, &ACPlayer::OnFireStorm);
+	Action->GetActionList()->GetData(5).OnUserWidget_ActionItem_Clicked.AddDynamic(this, &ACPlayer::OnThrow);
 	
 }
 
@@ -229,6 +236,7 @@ void ACPlayer::SetNewItem(const FItemData NewItem)
 
 void ACPlayer::SetNewAction( UCActionData* NewItemAction, EActionType NewItemActionType)
 {
+	CheckFalse(State->IsIdleMode());
 	CheckNull(NewItemAction);
 	Action->SetNewAction(NewItemAction, NewItemActionType);
 

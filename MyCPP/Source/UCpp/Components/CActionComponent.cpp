@@ -101,6 +101,8 @@ void UCActionComponent::SetItemTypeMode()
 {
 	if (!!ItemTypeData)
 	{
+		CLog::Print((int32)ItemActionType);
+		CLog::Print(Datas[(int32)ItemActionType]->GetName());
 		SetMode(ItemActionType);
 	}
 	else
@@ -132,16 +134,17 @@ void UCActionComponent::SetNewAction(class UCActionData* NewItemAction, EActionT
 {
 	if (this->ItemTypeData == NewItemAction && this->ItemActionType == NewItemActionType)
 	{
-		this->ItemTypeData   = Datas[(int32)EActionType::Unarmed];
-		this->ItemActionType = EActionType::Unarmed;
+		CLog::Print("SameThing");
+		this->ItemTypeData = nullptr;
+		this->ItemActionType = EActionType::Max;
 	}
 	else
 	{
 		this->ItemTypeData = NewItemAction;
 		this->ItemActionType = NewItemActionType;
+		Datas[(int32)NewItemActionType] = NewItemAction;
 	}
 	
-	Datas[(int32)NewItemActionType] = NewItemAction;
 
 }
 

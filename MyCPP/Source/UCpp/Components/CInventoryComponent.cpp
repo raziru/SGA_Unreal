@@ -18,9 +18,10 @@ void UCInventoryComponent::OnSelected(const FItemData NewItem)
 	{
 	case EItemType::Weapon:
 		CLog::Print("Check");
-		WeaponItem = Cast<ACItem_Weapon>(GetWorld()->SpawnActor(NewItem.ItemClass));
+		WeaponItem = Cast<ACItem_Weapon>(GetOwner()->GetWorld()->SpawnActor(NewItem.ItemClass));
 		CheckNull(WeaponItem);
 		CLog::Print("Weapon Success");
+		CLog::Print(GetOwner()->GetName());
 		CLog::Print((int32)WeaponItem->GetType());
 		if (SetNewAction.IsBound())
 		{
@@ -30,7 +31,7 @@ void UCInventoryComponent::OnSelected(const FItemData NewItem)
 		break;
 	case EItemType::Armor:
 		CLog::Print("Check");
-		ArmorItem = Cast<ACItem_Armor>(GetWorld()->SpawnActor(NewItem.ItemClass));
+		ArmorItem = Cast<ACItem_Armor>(GetOwner()->GetWorld()->SpawnActor(NewItem.ItemClass));
 		CheckNull(ArmorItem);
 		CLog::Print("Armor Success");
 		if (SetNewArmor.IsBound())
