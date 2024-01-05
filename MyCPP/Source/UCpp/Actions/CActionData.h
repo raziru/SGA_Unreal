@@ -83,16 +83,14 @@ public:
     UPROPERTY(BlueprintReadOnly, EditAnywhere)
         TArray<FDoActionData> DoActionDatas;//TArray: vector, Unreal이 제공하는 컨테이너이다.
 
-
-
 public:
     void BeginPlay(class ACharacter* InOwnerCharacter);
-
+    void DataDestroy();
 
 private:
     FString GetLabelName(class ACharacter* InOwnerCharacter, FString InName);
 private:
-    class ACEquipment* Equipment;
+    class ACEquipment*  Equipment;
     class ACAttachment* Attachment;
-    class ACDoAction* DoAction;
+    class ACDoAction*   DoAction;
 };

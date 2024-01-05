@@ -80,6 +80,7 @@ public:
 
 	virtual void PickUp(class ACItem* InItem) override;
 
+	virtual void OnDefaultMode() override;
 //Moving
 private:
 	void OnMoveForward(float InAxis);
@@ -132,6 +133,9 @@ private:
 	void OnWarp();
 	void OnFireStorm();
 	void OnThrow();*/
+
+	UFUNCTION()
+		void OnUnarmed();
 	UFUNCTION()
 		void OnFist();
 	UFUNCTION()

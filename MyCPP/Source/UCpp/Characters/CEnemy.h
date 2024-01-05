@@ -52,6 +52,8 @@ public:
 
 	virtual void Interact(AActor* InOther) override;
 
+	virtual void OnDefaultMode() override;
+
 
 private:
 	UFUNCTION()
@@ -59,6 +61,9 @@ private:
 
 	UFUNCTION()
 		void RestoreColor();
+
+	UFUNCTION()
+		void OnUnarmed();
 private:
 	void Hitted();
 	void Dead();

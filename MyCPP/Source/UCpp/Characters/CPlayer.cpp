@@ -95,7 +95,7 @@ void ACPlayer::BeginPlay()
 	GetMesh()->SetMaterial(1, LogoMaterial);
 
 	Super::BeginPlay();
-	Action->SetUnarmedMode();
+	//Action->SetUnarmedMode();
 	GetCharacterMovement()->MaxWalkSpeed = Status->GetWalkSpeed();
 	//State에서 선언한 OnstatetypeChanged가 broadcast로 호출되면 
 	//묶여있는 함수가 같이 연계된다. --  delegate는 함수포인터를 사용한것과 비슷하다.
@@ -123,6 +123,7 @@ void ACPlayer::BeginPlay()
 	Action->GetActionList()->GetData(4).OnUserWidget_ActionItem_Clicked.AddDynamic(this, &ACPlayer::OnFireStorm);
 	Action->GetActionList()->GetData(5).OnUserWidget_ActionItem_Clicked.AddDynamic(this, &ACPlayer::OnThrow);
 	
+	//OnUnarmed();
 }
 
 void ACPlayer::Tick(float DeltaTime)
@@ -148,9 +149,6 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Warp", EInputEvent::IE_Pressed, this, &ACPlayer::OnWarp);
 	PlayerInputComponent->BindAction("FireStorm", EInputEvent::IE_Pressed, this, &ACPlayer::OnFireStorm);
 	PlayerInputComponent->BindAction("ItemType", EInputEvent::IE_Pressed, this, &ACPlayer::OnItemType);
-
-	//PlayerInputComponent->BindAction("RightAction", EInputEvent::IE_Pressed, this, &ACPlayer::OnAim);
-	//PlayerInputComponent->BindAction("RightAction", EInputEvent::IE_Released, this, &ACPlayer::OffAim);
 
 	PlayerInputComponent->BindAction("RightAction", EInputEvent::IE_Pressed, this, &ACPlayer::OnDoSecondAction);
 	PlayerInputComponent->BindAction("RightAction", EInputEvent::IE_Released, this, &ACPlayer::OnDoSecondActionRelease);
@@ -325,6 +323,11 @@ void ACPlayer::PickUp(class ACItem* InItem)
 	Inventory->PickUp(InItem);
 }
 
+void ACPlayer::OnDefaultMode()
+{
+	OnUnarmed();
+}
+
 void ACPlayer::OpenInventory()
 {
 	Inventory->OpenInventory();
@@ -373,6 +376,12 @@ void ACPlayer::End_Backstep()
 	}
 
 	State->SetIdleMode();
+}
+
+void ACPlayer::OnUnarmed()
+{
+	CheckFalse(State->IsIdleMode());
+	Action->SetUnarmedMode();
 }
 
 void ACPlayer::OnFist()

@@ -74,6 +74,8 @@ public:
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE bool IsThrowMode() { return Type == EActionType::Throw; }
 
+
+
 public:	
 	// Sets default values for this component's properties
 	UCActionComponent();
@@ -86,11 +88,15 @@ public:
 	void SetThrowMode();
 	void SetItemTypeMode();
 	void SetSecondItemTypeMode();
+	void SetToolMode();
+
 
 	void OffAllCollision();
 	
 	void SetNewAction(class UCActionData* NewItemAction, EActionType NewItemActionType);
 	void SetNewSecondAction(class UCActionData* NewItemAction, EActionType NewItemActionType);
+
+	void SetToolAction(class UCActionData* NewItemAction, EActionType NewItemActionType);
 
 	void SetOnShield(bool OnNewShield) { OnShield = OnNewShield; }
 
@@ -130,7 +136,7 @@ private:
 private:
 	void SetMode(EActionType InType);
 	void ChangeType(EActionType InNewType);
-
+	void ActionBeginPlay(class UCActionData* NewAction);
 public:
 	UPROPERTY(BlueprintAssignable)
 		FActionTypeChanged OnActionTypeChanged;
@@ -144,6 +150,8 @@ public:
 
 private:
 	EActionType Type;
+
+	ACharacter* Owner;
 	
 	bool IsAiming = false;
 	bool OnShield = false;

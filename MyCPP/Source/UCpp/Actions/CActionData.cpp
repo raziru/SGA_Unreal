@@ -62,6 +62,8 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter)
 		}
 	}
 }
+
+
 FString UCActionData::GetLabelName(class ACharacter* InOwnerCharacter, FString InName)
 {
 	FString str;
@@ -72,4 +74,11 @@ FString UCActionData::GetLabelName(class ACharacter* InOwnerCharacter, FString I
 	str.Append(GetName().Replace(L"DA_", L""));
 
 	return str;
+}
+
+void UCActionData::DataDestroy()
+{
+	Equipment->Destroy();
+	Attachment->Destroy();
+	DoAction->Destroy();
 }

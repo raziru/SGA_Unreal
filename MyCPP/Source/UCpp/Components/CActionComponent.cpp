@@ -23,18 +23,14 @@ void UCActionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ACharacter* Owner = Cast<ACharacter>(GetOwner());
+	Owner = Cast<ACharacter>(GetOwner());
 
 	//ACharacter* Owner = Cast<ACharacter>(GetOwner());
 	for (int32 i = 0; i < (int32)EActionType::Max; i++)
 	{
 		if (!!Datas[i])
 		{
-			Datas[i]->BeginPlay(Owner);
-			Datas[i]->GetDoAction()->ActionPress.AddDynamic(this, &UCActionComponent::ActionPress);
-			Datas[i]->GetEquipment()->OnEquipmentDelegate.AddDynamic(this, &UCActionComponent::OnSecondEquip);
-			Datas[i]->GetEquipment()->OnUnequipmentDelegate.AddDynamic(this, &UCActionComponent::OffSecondEquip);
-
+			ActionBeginPlay(Datas[i]);
 		}
 	}
 
@@ -46,6 +42,9 @@ void UCActionComponent::BeginPlay()
 		ActionList->SetVisibility(ESlateVisibility::Hidden);
 	}
 	
+
+	IICharacter* Character = Cast<IICharacter>(GetOwner());
+	Character->OnDefaultMode();
 	
 }
 void UCActionComponent::SetUnarmedMode()
@@ -116,6 +115,11 @@ void UCActionComponent::SetSecondItemTypeMode()
 {
 }
 
+void UCActionComponent::SetToolMode()
+{
+	//SetMode(EActionType::Tool);
+}
+
 void UCActionComponent::OffAllCollision()
 {
 	for (UCActionData* data : Datas)
@@ -140,7 +144,12 @@ void UCActionComponent::SetNewAction(class UCActionData* NewItemAction, EActionT
 	}
 	else
 	{
+		//SetUnarmedMode();
+		Datas[(int32)NewItemActionType]->DataDestroy();
+		//Datas[(int32)NewItemActionType] = nullptr;
 		this->ItemTypeData = NewItemAction;
+
+		ActionBeginPlay(NewItemAction);
 		this->ItemActionType = NewItemActionType;
 		Datas[(int32)NewItemActionType] = NewItemAction;
 	}
@@ -150,6 +159,11 @@ void UCActionComponent::SetNewAction(class UCActionData* NewItemAction, EActionT
 
 void UCActionComponent::SetNewSecondAction(UCActionData* NewItemAction, EActionType NewItemActionType)
 {
+}
+
+void UCActionComponent::SetToolAction(UCActionData* NewItemAction, EActionType NewItemActionType)
+{
+
 }
 
 void UCActionComponent::DoAction()
@@ -331,6 +345,14 @@ void UCActionComponent::ChangeType(EActionType InNewType)
 	if (OnActionTypeChanged.IsBound())
 		OnActionTypeChanged.Broadcast(prevType, InNewType);
 	//delegate에 AddDynamic으로 저장된 모든 함수를 한번에 실행한다.
+}
+
+void UCActionComponent::ActionBeginPlay(UCActionData* NewAction)
+{
+	NewAction->BeginPlay(Owner);
+	NewAction->GetDoAction()->ActionPress.AddDynamic(this, &UCActionComponent::ActionPress);
+	NewAction->GetEquipment()->OnEquipmentDelegate.AddDynamic(this, &UCActionComponent::OnSecondEquip);
+	NewAction->GetEquipment()->OnUnequipmentDelegate.AddDynamic(this, &UCActionComponent::OffSecondEquip);
 }
 
 

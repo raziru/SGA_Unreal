@@ -23,6 +23,8 @@ public:
 	virtual void Begin_Dead() {}
 	virtual void End_Dead() {}
 
+	virtual void OnDefaultMode() {}
+
 	virtual void PickUp(class ACItem* InItem) {}
 
 };

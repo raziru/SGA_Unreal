@@ -85,7 +85,8 @@ void ACEnemy::BeginPlay()
 	HealthWidget->InitWidget();
 	Cast<UCUserWidget_Health>(HealthWidget->GetUserWidgetObject())->Update(Status->GetHealth(), Status->GetMaxHealth());
 
-	Action->SetUnarmedMode();
+	//Action->SetUnarmedMode();
+	//OnUnarmed();
 }
 
 // Called every frame
@@ -107,6 +108,11 @@ void ACEnemy::Interact(AActor* InOther)
 	Destroy();
 }
 
+void ACEnemy::OnDefaultMode()
+{
+	OnUnarmed();
+}
+
 
 
 float ACEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -126,6 +132,12 @@ void ACEnemy::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
 	case EStateType::Hitted: Hitted(); break;
 	case EStateType::Dead: Dead(); break;
 	}
+}
+
+void ACEnemy::OnUnarmed()
+{
+	CheckFalse(State->IsIdleMode());
+	Action->SetUnarmedMode();
 }
 
 void ACEnemy::Hitted()
@@ -177,6 +189,5 @@ void ACEnemy::End_Dead()
 void ACEnemy::RestoreColor()
 {
 	FLinearColor color = Action->GetCurrent()->GetEquipmentColor();
-
 	ChangeColor(color);
 }
