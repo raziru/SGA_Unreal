@@ -18,7 +18,7 @@ public:
 	FORCEINLINE UCActionData* GetData() { return ActionData; }
 	FORCEINLINE EActionType   GetType() { return ActionType; }
 
-public:
+protected:
 	UPROPERTY(EditAnywhere)
 		EActionType ActionType;
 

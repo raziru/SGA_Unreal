@@ -9,7 +9,7 @@
 UENUM(BlueprintType)
 enum class EActionType : uint8
 {
-	Unarmed, Fist, OneHand, TwoHand, Warp, FireStorm, Throw, Bow, Max,
+	Unarmed, Fist, OneHand, TwoHand, Warp, FireStorm, Throw, Bow, Tool, Max,
 };
 
 //delegate는 무조건 public으로 열어줘야 다른쪽에서 사용할 수 있다.
@@ -32,15 +32,18 @@ private:
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
-		class UCActionData* ItemTypeData;
+		class UCActionData* MainWeaponData;
 
-	EActionType ItemActionType;
+	EActionType MainWeaponType;
 
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
-		class UCActionData* SecondItemTypeData;
+		class UCActionData* SecondWeaponData;
 
-	EActionType SecondItemActionType;
+	EActionType SecondWeaponType;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Item")
+		class UCActionData* ToolAction;
 
 	class ACPlayer* Player; 
 
@@ -49,7 +52,6 @@ public:
 		FORCEINLINE class UCActionData* GetCurrent() { return Datas[(int32)Type]; }
 
 public:
-
 	UFUNCTION()
 		FORCEINLINE class UCUserWidget_ActionList* GetActionList() { return ActionList; }
 
@@ -74,6 +76,8 @@ public:
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE bool IsThrowMode() { return Type == EActionType::Throw; }
 
+	UFUNCTION(BlueprintPure)
+		FORCEINLINE bool IsToolMode() { return Type == EActionType::Tool; }
 
 
 public:	
@@ -86,17 +90,18 @@ public:
 	void SetWarpMode();
 	void SetFireStormMode();
 	void SetThrowMode();
-	void SetItemTypeMode();
-	void SetSecondItemTypeMode();
+	void SetMainWeaponMode();
+	void SetSecondWeaponMode();
 	void SetToolMode();
 
 
 	void OffAllCollision();
 	
-	void SetNewAction(class UCActionData* NewItemAction, EActionType NewItemActionType);
-	void SetNewSecondAction(class UCActionData* NewItemAction, EActionType NewItemActionType);
+	void SetNewMainWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
 
-	void SetToolAction(class UCActionData* NewItemAction, EActionType NewItemActionType);
+	void SetNewSecondWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
+
+	void SetNewToolAction(class UCActionData* NewToolAction);
 
 	void SetOnShield(bool OnNewShield) { OnShield = OnNewShield; }
 
@@ -133,6 +138,8 @@ private:
 	UFUNCTION()
 		void OffSecondEquip();
 
+	UFUNCTION()
+		void EndToolAction();
 private:
 	void SetMode(EActionType InType);
 	void ChangeType(EActionType InNewType);
@@ -150,6 +157,8 @@ public:
 
 private:
 	EActionType Type;
+
+	EActionType PrevType;
 
 	ACharacter* Owner;
 	

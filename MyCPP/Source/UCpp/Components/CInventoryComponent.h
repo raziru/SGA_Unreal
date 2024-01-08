@@ -6,13 +6,17 @@
 #include "Inventory/CItem.h"
 #include "Inventory/CItem_Weapon.h"
 #include "Inventory/CItem_Armor.h"
+#include "Inventory/CItem_Consumable.h"
 #include "CInventoryComponent.generated.h"
 
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewItem, FItemData, NewItem);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSetNewAction, UCActionData*, NewItemAction, EActionType, NewItemActionType);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSetNewMainWeapon, UCActionData*, NewItemAction, EActionType, NewItemActionType);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewConsumable, UCActionData*, NewItemAction);
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewArmor, TSubclassOf<ACArmor>, armor);
 
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewItem, FItemData, NewItem);
@@ -68,8 +72,11 @@ public:
 		FSetNewItem SetNewItem;
 
 	UPROPERTY(BlueprintAssignable)
-		FSetNewAction SetNewAction;
+		FSetNewMainWeapon SetNewMainWeapon;
 
 	UPROPERTY(BlueprintAssignable)
 		FSetNewArmor SetNewArmor;
+
+	UPROPERTY(BlueprintAssignable)
+		FSetNewConsumable SetNewConsumable;
 };

@@ -103,12 +103,11 @@ void ACPlayer::BeginPlay()
 
 	Action->EquipSecond.AddDynamic(this, &ACPlayer::EquipSecond);
 	Action->UnequipSecond.AddDynamic(this, &ACPlayer::UnequipSecond);
-
 	
 	State->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
-	Inventory->SetNewAction.AddDynamic(this, &ACPlayer::SetNewAction);
+	Inventory->SetNewMainWeapon.AddDynamic(this, &ACPlayer::SetNewMainWeapon);
 	Inventory->SetNewArmor.AddDynamic(this, &ACPlayer::SetNewArmor);
-	
+	Inventory->SetNewConsumable.AddDynamic(this, &ACPlayer::SetNewConsumable);
 	
 	Equipment->SetNewStatus.AddDynamic(this, &ACPlayer::SetNewStatus);
 	Equipment->OnShield.AddDynamic(this, &ACPlayer::SetOnShield);
@@ -148,7 +147,7 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("TwoHand", EInputEvent::IE_Pressed, this, &ACPlayer::OnTwoHand);
 	PlayerInputComponent->BindAction("Warp", EInputEvent::IE_Pressed, this, &ACPlayer::OnWarp);
 	PlayerInputComponent->BindAction("FireStorm", EInputEvent::IE_Pressed, this, &ACPlayer::OnFireStorm);
-	PlayerInputComponent->BindAction("ItemType", EInputEvent::IE_Pressed, this, &ACPlayer::OnItemType);
+	PlayerInputComponent->BindAction("ItemType", EInputEvent::IE_Pressed, this, &ACPlayer::OnMainWeapon);
 
 	PlayerInputComponent->BindAction("RightAction", EInputEvent::IE_Pressed, this, &ACPlayer::OnDoSecondAction);
 	PlayerInputComponent->BindAction("RightAction", EInputEvent::IE_Released, this, &ACPlayer::OnDoSecondActionRelease);
@@ -162,6 +161,7 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Interact", EInputEvent::IE_Pressed, this, &ACPlayer::Interact);
 	PlayerInputComponent->BindAction("Inventory", EInputEvent::IE_Pressed, this, &ACPlayer::OpenInventory);
+	PlayerInputComponent->BindAction("UseTool", EInputEvent::IE_Pressed, this, &ACPlayer::OnTool);
 
 
 	PlayerInputComponent->BindAction("QuickSlot", EInputEvent::IE_Pressed, this, &ACPlayer::OnViewActionList);
@@ -232,11 +232,11 @@ void ACPlayer::SetNewItem(const FItemData NewItem)
 
 }
 
-void ACPlayer::SetNewAction( UCActionData* NewItemAction, EActionType NewItemActionType)
+void ACPlayer::SetNewMainWeapon( UCActionData* NewItemAction, EActionType NewItemActionType)
 {
 	CheckFalse(State->IsIdleMode());
 	CheckNull(NewItemAction);
-	Action->SetNewAction(NewItemAction, NewItemActionType);
+	Action->SetNewMainWeapon(NewItemAction, NewItemActionType);
 
 }
 
@@ -305,6 +305,11 @@ void ACPlayer::SetNewStatus(const FStatusData NewStatus)
 void ACPlayer::ResfreshStatus(const FStatusData NewStatus)
 {
 	GetCharacterMovement()->MaxWalkSpeed = NewStatus.WalkSpeed;
+}
+
+void ACPlayer::SetNewConsumable(UCActionData* NewConsumableAction)
+{
+	Action->SetNewToolAction(NewConsumableAction);
 }
 
 void ACPlayer::SetNewArmor(TSubclassOf<class ACArmor> NewArmor)
@@ -423,12 +428,20 @@ void ACPlayer::OnThrow()
 
 	Action->SetThrowMode();
 }
-void ACPlayer::OnItemType()
+void ACPlayer::OnMainWeapon()
 {
 	CheckFalse(State->IsIdleMode());
 
-	Action->SetItemTypeMode();
+	Action->SetMainWeaponMode();
 }
+
+
+void ACPlayer::OnTool()
+{
+	CheckFalse(State->IsIdleMode());
+	Action->SetToolMode();
+}
+
 void ACPlayer::OnDoAction()
 {
 	Action->DoAction();

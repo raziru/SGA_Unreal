@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+//#include ""
 #include "CConsumable.generated.h"
 
 UCLASS()
@@ -14,6 +15,7 @@ class UCPP_API ACConsumable : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ACConsumable();
+
 
 protected:
 	// Called when the game starts or when spawned

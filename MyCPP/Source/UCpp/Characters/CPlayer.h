@@ -98,7 +98,7 @@ private:
 	UFUNCTION()
 		void SetNewItem(const FItemData NewItem);
 	UFUNCTION()
-		void SetNewAction(class UCActionData* NewItemAction, EActionType NewItemActionType);
+		void SetNewMainWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
 	UFUNCTION()
 		void SetOnShield(bool IsShield);
 	UFUNCTION()
@@ -115,7 +115,9 @@ private:
 
 	UFUNCTION()
 		void ResfreshStatus(const FStatusData NewStatus);
-
+//Use Consumalbe
+	UFUNCTION()
+		void SetNewConsumable(class UCActionData* NewConsumableAction);
 private:
 	void OpenInventory();
 
@@ -151,7 +153,7 @@ private:
 
 
 	
-	void OnItemType();
+	void OnMainWeapon();
 
 	void OnDoAction();
 	void OnDoActionRelease();
@@ -169,6 +171,8 @@ private:
 
 	void OnViewActionList();
 	void OffViewActionList();
+
+	void OnTool();
 
 public:
 	virtual void ChangeColor(FLinearColor InColor) override;

@@ -14,6 +14,7 @@ void UCInventoryComponent::OnSelected(const FItemData NewItem)
 {
 	ACItem_Weapon* WeaponItem;
 	ACItem_Armor* ArmorItem;
+	ACItem_Consumable* Consumable;
 	switch (NewItem.ItemType)
 	{
 	case EItemType::Weapon:
@@ -23,9 +24,9 @@ void UCInventoryComponent::OnSelected(const FItemData NewItem)
 		CLog::Print("Weapon Success");
 		CLog::Print(GetOwner()->GetName());
 		CLog::Print((int32)WeaponItem->GetType());
-		if (SetNewAction.IsBound())
+		if (SetNewMainWeapon.IsBound())
 		{
-			SetNewAction.Broadcast(WeaponItem->GetData(), WeaponItem->GetType());
+			SetNewMainWeapon.Broadcast(WeaponItem->GetData(), WeaponItem->GetType());
 		}
 		WeaponItem->Destroy();
 		break;
@@ -42,6 +43,14 @@ void UCInventoryComponent::OnSelected(const FItemData NewItem)
 		break;
 	case EItemType::Consumable:
 		CLog::Print("Check");
+		Consumable = Cast<ACItem_Consumable>(GetOwner()->GetWorld()->SpawnActor(NewItem.ItemClass));
+		CheckNull(Consumable);
+		CLog::Print("Consumable Success");
+		if (SetNewConsumable.IsBound())
+		{
+			SetNewConsumable.Broadcast(Consumable->GetData());
+		}
+		Consumable->Destroy();
 		break;
 	}
 	if (SetNewItem.IsBound())

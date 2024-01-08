@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Inventory/CItem.h"
-#include "Consumables/CConsumable.h"
+#include "Components/CActionComponent.h"
 #include "CItem_Consumable.generated.h"
 
 UCLASS()
@@ -12,11 +12,20 @@ class UCPP_API ACItem_Consumable : public ACItem
 {
 	GENERATED_BODY()
 
+//public:
+//    FORCEINLINE TSubclassOf<ACConsumable> GetArmorClass() { return Consumable; }
+//private:
+//
+//    UPROPERTY(EditAnywhere)
+//        TSubclassOf<ACConsumable> Consumable;
 public:
-    FORCEINLINE TSubclassOf<ACConsumable> GetArmorClass() { return Consumable; }
-private:
+	FORCEINLINE UCActionData* GetData() { return ActionData; }
+	FORCEINLINE EActionType   GetType() { return ActionType; }
 
-    UPROPERTY(EditAnywhere)
-        TSubclassOf<ACConsumable> Consumable;
+protected:
+	UPROPERTY(EditAnywhere)
+		EActionType ActionType;
 
+	UPROPERTY(EditAnywhere, BluePrintReadWrite)
+		UCActionData* ActionData;
 };

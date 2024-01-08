@@ -9,6 +9,7 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActionPress, bool, InPressAction, bool, InPressSecondAction);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEndAction);
 UCLASS()
 class UCPP_API ACDoAction : public AActor
 {
@@ -64,6 +65,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 		FActionPress ActionPress;
+
+	UPROPERTY(BlueprintAssignable)
+		FEndAction EndAction;
 protected:
 	UPROPERTY(BlueprintReadOnly)
 		class ACharacter* OwnerCharacter;

@@ -96,13 +96,13 @@ void UCActionComponent::SetThrowMode()
 	SetMode(EActionType::Throw);
 }
 
-void UCActionComponent::SetItemTypeMode()
+void UCActionComponent::SetMainWeaponMode()
 {
-	if (!!ItemTypeData)
+	if (!!MainWeaponData)
 	{
-		CLog::Print((int32)ItemActionType);
-		CLog::Print(Datas[(int32)ItemActionType]->GetName());
-		SetMode(ItemActionType);
+		CLog::Print((int32)MainWeaponType);
+		CLog::Print(Datas[(int32)MainWeaponType]->GetName());
+		SetMode(MainWeaponType);
 	}
 	else
 	{
@@ -111,13 +111,19 @@ void UCActionComponent::SetItemTypeMode()
 
 }
 
-void UCActionComponent::SetSecondItemTypeMode()
+void UCActionComponent::SetSecondWeaponMode()
 {
 }
 
 void UCActionComponent::SetToolMode()
 {
 	//SetMode(EActionType::Tool);
+	if (!!Datas[(int32)EActionType::Tool])
+	{
+		PrevType = Type;
+		SetMode(EActionType::Tool);		
+		DoAction();
+	}
 }
 
 void UCActionComponent::OffAllCollision()
@@ -134,36 +140,52 @@ void UCActionComponent::OffAllCollision()
 	}
 }
 
-void UCActionComponent::SetNewAction(class UCActionData* NewItemAction, EActionType NewItemActionType)
+void UCActionComponent::SetNewMainWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType)
 {
-	if (this->ItemTypeData == NewItemAction && this->ItemActionType == NewItemActionType)
+	if (this->MainWeaponData == NewItemAction && this->MainWeaponType == NewItemActionType)
 	{
 		CLog::Print("SameThing");
-		this->ItemTypeData = nullptr;
-		this->ItemActionType = EActionType::Max;
+		this->MainWeaponData->DataDestroy();
+		this->MainWeaponData = nullptr;
+		this->MainWeaponType = EActionType::Max;
 	}
 	else
 	{
 		//SetUnarmedMode();
 		Datas[(int32)NewItemActionType]->DataDestroy();
 		//Datas[(int32)NewItemActionType] = nullptr;
-		this->ItemTypeData = NewItemAction;
+		this->MainWeaponData = NewItemAction;
 
 		ActionBeginPlay(NewItemAction);
-		this->ItemActionType = NewItemActionType;
+		this->MainWeaponType = NewItemActionType;
 		Datas[(int32)NewItemActionType] = NewItemAction;
 	}
 	
 
 }
 
-void UCActionComponent::SetNewSecondAction(UCActionData* NewItemAction, EActionType NewItemActionType)
+void UCActionComponent::SetNewSecondWeapon(UCActionData* NewItemAction, EActionType NewItemActionType)
 {
 }
 
-void UCActionComponent::SetToolAction(UCActionData* NewItemAction, EActionType NewItemActionType)
+void UCActionComponent::SetNewToolAction(UCActionData* NewToolAction)
 {
-
+	if (Datas[(int32)EActionType::Tool] == NewToolAction)
+	{
+		CLog::Print("SameThing");
+		Datas[(int32)EActionType::Tool]->DataDestroy();
+		Datas[(int32)EActionType::Tool] = nullptr;
+	}
+	else
+	{
+		if (!!ToolAction)
+		{
+			Datas[(int32)EActionType::Tool]->DataDestroy();
+		}
+		Datas[(int32)EActionType::Tool] = NewToolAction;
+		ActionBeginPlay(Datas[(int32)EActionType::Tool]);
+		Datas[(int32)EActionType::Tool]->GetDoAction()->EndAction.AddDynamic(this, &UCActionComponent::EndToolAction);
+	}
 }
 
 void UCActionComponent::DoAction()
@@ -311,6 +333,11 @@ void UCActionComponent::OffSecondEquip()
 }
 
 
+void UCActionComponent::EndToolAction()
+{
+	SetMode(PrevType);
+}
+
 void UCActionComponent::SetMode(EActionType InType)
 {
 	if (Type == InType)//같은 무기 일때 해제
@@ -331,6 +358,7 @@ void UCActionComponent::SetMode(EActionType InType)
 	CheckNull(equipment);
 
 	equipment->Equip();
+	CLog::Print("CheckEquip");
 
 	ChangeType(InType);
 
@@ -351,6 +379,7 @@ void UCActionComponent::ActionBeginPlay(UCActionData* NewAction)
 {
 	NewAction->BeginPlay(Owner);
 	NewAction->GetDoAction()->ActionPress.AddDynamic(this, &UCActionComponent::ActionPress);
+	//NewAction->GetDoAction()->EndAction.AddDynamic(this, )
 	NewAction->GetEquipment()->OnEquipmentDelegate.AddDynamic(this, &UCActionComponent::OnSecondEquip);
 	NewAction->GetEquipment()->OnUnequipmentDelegate.AddDynamic(this, &UCActionComponent::OffSecondEquip);
 }
