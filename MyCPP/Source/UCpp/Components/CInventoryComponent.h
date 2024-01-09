@@ -15,7 +15,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewItem, FItemData, NewItem);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSetNewMainWeapon, UCActionData*, NewItemAction, EActionType, NewItemActionType);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewConsumable, UCActionData*, NewItemAction);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSetNewTool, UCActionData*, NewItemAction, bool, IsConsumable);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewArmor, TSubclassOf<ACArmor>, armor);
 
@@ -54,10 +54,10 @@ public:
 
 	void PickUp(ACItem* InItem);
 
-
+	void EndToolAction();
 private:
 	UFUNCTION()
-		void OnSelected(const FItemData NewItem);
+		void OnSelected(FItemData NewItem);
 
 protected:
 	virtual void BeginPlay() override;
@@ -66,6 +66,10 @@ private:
 	TArray<FItemData> Inventory;
 
 	bool IsInventoryOpened;
+
+	bool IsConsumable;
+	
+	FItemData ConsumableData;
 
 public:
 	UPROPERTY(BlueprintAssignable)
@@ -78,5 +82,5 @@ public:
 		FSetNewArmor SetNewArmor;
 
 	UPROPERTY(BlueprintAssignable)
-		FSetNewConsumable SetNewConsumable;
+		FSetNewTool SetNewTool;
 };

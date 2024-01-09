@@ -49,6 +49,10 @@ public:
 public:
 	void ShowData();
 	void SetData(FItemData data);
+
+	void operator =(const FItemData& other);
+	bool operator ==(const FItemData& other);
+	
 	
 };
 

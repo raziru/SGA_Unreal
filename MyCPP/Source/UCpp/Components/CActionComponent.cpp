@@ -14,6 +14,8 @@
 UCActionComponent::UCActionComponent()
 {
 	CHelpers::GetClass<UCUserWidget_ActionList>(&ActionListClass, "WidgetBlueprint'/Game/Widgets/Action/WB_ActionList.WB_ActionList_C'");
+	CHelpers::GetAsset<UCActionData>(&UnarmedData, "CActionData'/Game/Actions/DataAsset/DA_Unarmed.DA_Unarmed'");
+	Datas[(int32)EActionType::Unarmed] = UnarmedData;
 
 }
 
@@ -44,6 +46,7 @@ void UCActionComponent::BeginPlay()
 	
 
 	IICharacter* Character = Cast<IICharacter>(GetOwner());
+	CheckNull(Character);
 	Character->OnDefaultMode();
 	
 }
@@ -57,7 +60,7 @@ void UCActionComponent::SetUnarmedMode()
 		equipment->Unequip();
 	}
 
-
+	CheckNull(Datas[(int32)EActionType::Unarmed]);
 	ACEquipment* equipment = Datas[(int32)EActionType::Unarmed]->GetEquipment();
 	CheckNull(equipment);
 
@@ -142,6 +145,7 @@ void UCActionComponent::OffAllCollision()
 
 void UCActionComponent::SetNewMainWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType)
 {
+	CheckNull(NewItemAction);
 	if (this->MainWeaponData == NewItemAction && this->MainWeaponType == NewItemActionType)
 	{
 		CLog::Print("SameThing");
@@ -168,7 +172,7 @@ void UCActionComponent::SetNewSecondWeapon(UCActionData* NewItemAction, EActionT
 {
 }
 
-void UCActionComponent::SetNewToolAction(UCActionData* NewToolAction)
+void UCActionComponent::SetNewTool(UCActionData* NewToolAction, bool IsConsumable)
 {
 	if (Datas[(int32)EActionType::Tool] == NewToolAction)
 	{
@@ -184,7 +188,8 @@ void UCActionComponent::SetNewToolAction(UCActionData* NewToolAction)
 		}
 		Datas[(int32)EActionType::Tool] = NewToolAction;
 		ActionBeginPlay(Datas[(int32)EActionType::Tool]);
-		Datas[(int32)EActionType::Tool]->GetDoAction()->EndAction.AddDynamic(this, &UCActionComponent::EndToolAction);
+		Datas[(int32)EActionType::Tool]->GetDoAction()->EndAction.AddDynamic(this, &UCActionComponent::EndTool);
+		IsConsumableTool = IsConsumable;
 	}
 }
 
@@ -333,9 +338,13 @@ void UCActionComponent::OffSecondEquip()
 }
 
 
-void UCActionComponent::EndToolAction()
+void UCActionComponent::EndTool()
 {
 	SetMode(PrevType);
+	if (EndToolAction.IsBound())
+	{
+		EndToolAction.Broadcast();
+	}
 }
 
 void UCActionComponent::SetMode(EActionType InType)

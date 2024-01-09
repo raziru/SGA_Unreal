@@ -53,3 +53,28 @@ void FItemData::SetData(FItemData data)
 	this->ItemIndex = data.ItemIndex;
 
 }
+
+void FItemData::operator=(const FItemData& other)
+{
+	this->ItemType =        other.ItemType;
+	this->ItemName =        other.ItemName;
+	this->ItemClass =       other.ItemClass;
+	this->ItemDescription = other.ItemDescription;
+	this->ItemImage =       other.ItemImage;
+	this->CurrentStack =    other.CurrentStack;
+	this->MaxStack =        other.MaxStack;
+	this->ItemIndex =       other.ItemIndex;
+}
+bool FItemData::operator==(const FItemData& other)
+{
+	if ((this->ItemType == other.ItemType) &&
+		(this->ItemName == other.ItemName) &&
+		(this->ItemClass == other.ItemClass) &&
+		(this->ItemIndex == other.ItemIndex)) {
+		return true;
+	}
+
+
+	return false;
+
+}

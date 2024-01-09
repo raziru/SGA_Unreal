@@ -10,7 +10,7 @@ UCInventoryComponent::UCInventoryComponent()
 
 }
 
-void UCInventoryComponent::OnSelected(const FItemData NewItem)
+void UCInventoryComponent::OnSelected(FItemData NewItem)
 {
 	ACItem_Weapon* WeaponItem;
 	ACItem_Armor* ArmorItem;
@@ -45,19 +45,22 @@ void UCInventoryComponent::OnSelected(const FItemData NewItem)
 		CLog::Print("Check");
 		Consumable = Cast<ACItem_Consumable>(GetOwner()->GetWorld()->SpawnActor(NewItem.ItemClass));
 		CheckNull(Consumable);
+		
 		CLog::Print("Consumable Success");
-		if (SetNewConsumable.IsBound())
+		if (SetNewTool.IsBound())
 		{
-			SetNewConsumable.Broadcast(Consumable->GetData());
+			SetNewTool.Broadcast(Consumable->GetData(), true);
 		}
+		
+		IsConsumable = true;
+		ConsumableData = NewItem;
 		Consumable->Destroy();
 		break;
 	}
 	if (SetNewItem.IsBound())
 	{
 		SetNewItem.Broadcast(NewItem);
-	}
-	//CLog::Log(Item.);
+	}	
 }
 
 // Called when the game starts
@@ -114,7 +117,7 @@ void UCInventoryComponent::PickUp(ACItem* InItem)
 	InItem->ShowData();
 	
 	FItemData CopyItem;
-	CopyItem.SetData(InItem->GetItemData());
+	CopyItem = InItem->GetItemData();
 	bool IsExist = false;
 	int index = 0;
 	for (FItemData data: Inventory)
@@ -129,7 +132,7 @@ void UCInventoryComponent::PickUp(ACItem* InItem)
 				return;
 			}
 			FItemData TempData;
-			TempData.SetData(data);
+			TempData = data;
 			TempData.CurrentStack += CopyItem.CurrentStack;
 			if (TempData.CurrentStack>=TempData.MaxStack)
 			{
@@ -153,6 +156,30 @@ void UCInventoryComponent::PickUp(ACItem* InItem)
 		InventoryWidget->RefreshInventory(Inventory, MaxInventorySize, ColumnSize);
 	}
 
+}
+
+void UCInventoryComponent::EndToolAction()
+{
+	if (IsConsumable)
+	{
+		for (int i = 0; i < Inventory.Num(); i++)
+		{
+			if (Inventory[i].ItemClass == ConsumableData.ItemClass)
+			{
+				Inventory[i].CurrentStack--;
+				if (Inventory[i].CurrentStack == 0)
+				{
+					Inventory.Remove(Inventory[i]);
+				}
+				if (IsInventoryOpened)
+				{
+					CheckNull(InventoryWidget);
+					InventoryWidget->RefreshInventory(Inventory, MaxInventorySize, ColumnSize);
+				}
+			}
+		}
+	}
+	
 }
 
 

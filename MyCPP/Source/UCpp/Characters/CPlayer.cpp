@@ -103,14 +103,16 @@ void ACPlayer::BeginPlay()
 
 	Action->EquipSecond.AddDynamic(this, &ACPlayer::EquipSecond);
 	Action->UnequipSecond.AddDynamic(this, &ACPlayer::UnequipSecond);
-	
+	Action->EndToolAction.AddDynamic(this, &ACPlayer::EndToolAction);
+
+
 	State->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
 	Inventory->SetNewMainWeapon.AddDynamic(this, &ACPlayer::SetNewMainWeapon);
 	Inventory->SetNewArmor.AddDynamic(this, &ACPlayer::SetNewArmor);
-	Inventory->SetNewConsumable.AddDynamic(this, &ACPlayer::SetNewConsumable);
+	Inventory->SetNewTool.AddDynamic(this, &ACPlayer::SetNewTool);
 	
-	Equipment->SetNewStatus.AddDynamic(this, &ACPlayer::SetNewStatus);
 	Equipment->OnShield.AddDynamic(this, &ACPlayer::SetOnShield);
+	Equipment->SetNewStatus.AddDynamic(this, &ACPlayer::SetNewStatus);
 
 
 	Status->RefreshStatus.AddDynamic(this, &ACPlayer::ResfreshStatus);
@@ -234,16 +236,9 @@ void ACPlayer::SetNewItem(const FItemData NewItem)
 
 void ACPlayer::SetNewMainWeapon( UCActionData* NewItemAction, EActionType NewItemActionType)
 {
-	CheckFalse(State->IsIdleMode());
-	CheckNull(NewItemAction);
 	Action->SetNewMainWeapon(NewItemAction, NewItemActionType);
-
 }
 
-void ACPlayer::SetOnShield(const bool IsShield)
-{
-	Action->SetOnShield(IsShield);
-}
 
 void ACPlayer::EquipSecond(EActionType InActionType)
 {
@@ -307,9 +302,9 @@ void ACPlayer::ResfreshStatus(const FStatusData NewStatus)
 	GetCharacterMovement()->MaxWalkSpeed = NewStatus.WalkSpeed;
 }
 
-void ACPlayer::SetNewConsumable(UCActionData* NewConsumableAction)
+void ACPlayer::SetOnShield(const bool OnShield)
 {
-	Action->SetNewToolAction(NewConsumableAction);
+	Action->SetOnShield(OnShield);
 }
 
 void ACPlayer::SetNewArmor(TSubclassOf<class ACArmor> NewArmor)
@@ -331,6 +326,17 @@ void ACPlayer::PickUp(class ACItem* InItem)
 void ACPlayer::OnDefaultMode()
 {
 	OnUnarmed();
+}
+
+void ACPlayer::SetNewTool(UCActionData* NewConsumableAction, bool IsConsumable)
+{
+	Action->SetNewTool(NewConsumableAction, IsConsumable);
+	OnTool();
+}
+
+void ACPlayer::EndToolAction()
+{
+	Inventory->EndToolAction();
 }
 
 void ACPlayer::OpenInventory()
@@ -497,7 +503,6 @@ void ACPlayer::OnViewActionList()
 void ACPlayer::OffViewActionList()
 {
 	Action->OffViewActionList();
-
 }
 
 

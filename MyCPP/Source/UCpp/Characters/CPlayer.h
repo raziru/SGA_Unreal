@@ -100,8 +100,6 @@ private:
 	UFUNCTION()
 		void SetNewMainWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
 	UFUNCTION()
-		void SetOnShield(bool IsShield);
-	UFUNCTION()
 		void EquipSecond(EActionType InActionType);
 	UFUNCTION()
 		void UnequipSecond(EActionType InActionType);
@@ -115,9 +113,15 @@ private:
 
 	UFUNCTION()
 		void ResfreshStatus(const FStatusData NewStatus);
+
+	UFUNCTION()
+		void SetOnShield(const bool OnShield);
 //Use Consumalbe
 	UFUNCTION()
-		void SetNewConsumable(class UCActionData* NewConsumableAction);
+		void SetNewTool(class UCActionData* NewConsumableAction, bool IsConsumable);
+
+	UFUNCTION()
+		void EndToolAction();
 private:
 	void OpenInventory();
 

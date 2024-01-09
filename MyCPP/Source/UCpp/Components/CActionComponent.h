@@ -17,6 +17,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActionTypeChanged, EActionType, In
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnActionPress, bool, InPressAction, bool, InPressSecondAction, bool, InOnShield);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEquipSecond, EActionType, InActionType);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUnequipSecond, EActionType, InActionType);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEndToolAction);
 
 //Multicast: 함수를 여러개 바인딩해놓을 수 있음 바인딩할 함수는 UFUNCTION이어야 한다.
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
@@ -29,7 +30,8 @@ private:
 private:
 	UPROPERTY(EditDefaultsOnly)
 		TSubclassOf<class UCUserWidget_ActionList> ActionListClass;
-
+	UPROPERTY(EditDefaultsOnly)
+		class UCActionData* UnarmedData;
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
 		class UCActionData* MainWeaponData;
@@ -101,9 +103,11 @@ public:
 
 	void SetNewSecondWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
 
-	void SetNewToolAction(class UCActionData* NewToolAction);
+	void SetNewTool(class UCActionData* NewToolAction, bool IsConsumable);
 
-	void SetOnShield(bool OnNewShield) { OnShield = OnNewShield; }
+
+	UFUNCTION()
+		void SetOnShield(bool OnNewShield) { OnShield = OnNewShield; }
 
 protected:
 	// Called when the game starts
@@ -139,7 +143,7 @@ private:
 		void OffSecondEquip();
 
 	UFUNCTION()
-		void EndToolAction();
+		void EndTool();
 private:
 	void SetMode(EActionType InType);
 	void ChangeType(EActionType InNewType);
@@ -155,16 +159,23 @@ public:
 	UPROPERTY(BlueprintAssignable)
 		FUnequipSecond UnequipSecond;
 
+	UPROPERTY(BlueprintAssignable)
+		FEndToolAction EndToolAction;
+
 private:
 	EActionType Type;
 
 	EActionType PrevType;
 
 	ACharacter* Owner;
+
+
 	
 	bool IsAiming = false;
 	bool OnShield = false;
 	bool OnGuard  = false;
+
+	bool IsConsumableTool = false;
 
 private:
 	class UCUserWidget_ActionList* ActionList;
