@@ -7,9 +7,19 @@
 
 void UCUserWidget_ItemButton::ButtonClicked(const FItemData Item)
 {
-	if (OnSelected.IsBound())
+	if (Clicked.IsBound())
 	{
-		OnSelected.Broadcast(Item);
+		Clicked.Broadcast(Item);
 	}
+	CLog::Print("Left");
 
+}
+
+void UCUserWidget_ItemButton::ButtonRightClicked(const FItemData Item)
+{
+	if (RightClicked.IsBound())
+	{
+		RightClicked.Broadcast(Item);
+	}
+	CLog::Print("Right");
 }

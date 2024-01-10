@@ -8,6 +8,10 @@
 
 void UCUserWidget_Inventory::ClearInventory()
 {
+	if (InventoryPanel->GetAllChildren().Num()<=0)
+	{
+		return;
+	}
 	for (UWidget* widget : InventoryPanel->GetAllChildren())
 	{
 		widget->RemoveFromParent();
@@ -22,13 +26,22 @@ void UCUserWidget_Inventory::RefreshInventory(const TArray<FItemData>& Inventory
 	BuildInventory(Inventory, MaxInventorySize, ColumnSize);
 }
 
-void UCUserWidget_Inventory::OnSelected(FItemData Item)
+void UCUserWidget_Inventory::OnClicked(FItemData Item)
 {
-	if (ItemSelected.IsBound())
+	if (ItemClicked.IsBound())
 	{
-		ItemSelected.Broadcast(Item);
+		ItemClicked.Broadcast(Item);
 	}
 }
+
+void UCUserWidget_Inventory::OnRightClicked(FItemData Item)
+{
+	if (ItemRightClicked.IsBound())
+	{
+		ItemRightClicked.Broadcast(Item);
+	}
+}
+
 
 
 

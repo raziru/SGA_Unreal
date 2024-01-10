@@ -7,7 +7,9 @@
 #include "Inventory/CItem.h"
 #include "CUserWidget_Inventory.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FItemSelected, FItemData, Item);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FItemClicked,FItemData, Item);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FItemRightClicked, FItemData, Item);
+
 
 UCLASS()
 class UCPP_API UCUserWidget_Inventory : public UUserWidget
@@ -38,9 +40,15 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable)
-		void OnSelected(FItemData Item);
+		void OnClicked(FItemData Item);
+
+	UFUNCTION(BlueprintCallable)
+		void OnRightClicked(FItemData Item);
 
 public:
 	UPROPERTY(BlueprintAssignable)
-		FItemSelected ItemSelected;
+		FItemClicked ItemClicked;
+
+	UPROPERTY(BlueprintAssignable)
+		FItemRightClicked ItemRightClicked;
 };

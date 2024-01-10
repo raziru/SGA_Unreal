@@ -55,9 +55,13 @@ public:
 	void PickUp(ACItem* InItem);
 
 	void EndToolAction();
+	void DecreaseCount(FItemData NewItem);
 private:
 	UFUNCTION()
-		void OnSelected(FItemData NewItem);
+		void OnClicked(FItemData NewItem);
+	UFUNCTION()
+		void OnRightClicked(FItemData NewItem);
+
 
 protected:
 	virtual void BeginPlay() override;
@@ -69,7 +73,9 @@ private:
 
 	bool IsConsumable;
 	
-	FItemData ConsumableData;
+	FItemData ChangedItem;
+
+	EItemType SelectedItemType;
 
 public:
 	UPROPERTY(BlueprintAssignable)

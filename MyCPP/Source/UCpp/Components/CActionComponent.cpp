@@ -174,13 +174,7 @@ void UCActionComponent::SetNewSecondWeapon(UCActionData* NewItemAction, EActionT
 
 void UCActionComponent::SetNewTool(UCActionData* NewToolAction, bool IsConsumable)
 {
-	if (Datas[(int32)EActionType::Tool] == NewToolAction)
-	{
-		CLog::Print("SameThing");
-		Datas[(int32)EActionType::Tool]->DataDestroy();
-		Datas[(int32)EActionType::Tool] = nullptr;
-	}
-	else
+	if (IsConsumable)
 	{
 		if (!!ToolAction)
 		{
@@ -191,6 +185,28 @@ void UCActionComponent::SetNewTool(UCActionData* NewToolAction, bool IsConsumabl
 		Datas[(int32)EActionType::Tool]->GetDoAction()->EndAction.AddDynamic(this, &UCActionComponent::EndTool);
 		IsConsumableTool = IsConsumable;
 	}
+	else
+	{
+		if (Datas[(int32)EActionType::Tool] == NewToolAction)
+		{
+			CLog::Print("SameThing");
+			Datas[(int32)EActionType::Tool]->DataDestroy();
+			Datas[(int32)EActionType::Tool] = nullptr;
+		}
+		else
+		{
+			if (!!ToolAction)
+			{
+				Datas[(int32)EActionType::Tool]->DataDestroy();
+			}
+			Datas[(int32)EActionType::Tool] = NewToolAction;
+			ActionBeginPlay(Datas[(int32)EActionType::Tool]);
+			Datas[(int32)EActionType::Tool]->GetDoAction()->EndAction.AddDynamic(this, &UCActionComponent::EndTool);
+			IsConsumableTool = IsConsumable;
+		}
+
+	}
+	
 }
 
 void UCActionComponent::DoAction()

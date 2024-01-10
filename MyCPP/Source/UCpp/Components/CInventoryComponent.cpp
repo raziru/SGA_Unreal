@@ -10,12 +10,13 @@ UCInventoryComponent::UCInventoryComponent()
 
 }
 
-void UCInventoryComponent::OnSelected(FItemData NewItem)
+void UCInventoryComponent::OnClicked(FItemData NewItem)
 {
 	ACItem_Weapon* WeaponItem;
 	ACItem_Armor* ArmorItem;
 	ACItem_Consumable* Consumable;
-	switch (NewItem.ItemType)
+	SelectedItemType = NewItem.ItemType;
+	switch (SelectedItemType)
 	{
 	case EItemType::Weapon:
 		CLog::Print("Check");
@@ -53,7 +54,7 @@ void UCInventoryComponent::OnSelected(FItemData NewItem)
 		}
 		
 		IsConsumable = true;
-		ConsumableData = NewItem;
+		ChangedItem = NewItem;
 		Consumable->Destroy();
 		break;
 	}
@@ -61,6 +62,20 @@ void UCInventoryComponent::OnSelected(FItemData NewItem)
 	{
 		SetNewItem.Broadcast(NewItem);
 	}	
+}
+
+void UCInventoryComponent::OnRightClicked(FItemData NewItem)
+{
+	DecreaseCount(NewItem);
+	FTransform transform;
+	FVector Vector = { (float)(rand() % 10 + 5), (float)(rand() % 10 + 5), 0.0f };
+	transform.SetLocation(GetOwner()->GetActorLocation() + Vector);
+
+	ACItem* item = GetOwner()->GetWorld()->SpawnActorDeferred<ACItem>(NewItem.ItemClass, transform);
+	UGameplayStatics::FinishSpawningActor(item, transform);
+
+	//GetOwner()->GetWorld()->SpawnActor(NewItem.ItemClass,transform.GetRotation(),transform.GetLocation(),GetOwner());
+
 }
 
 // Called when the game starts
@@ -99,7 +114,9 @@ void UCInventoryComponent::OpenInventory()
 
 		CheckNull(InventoryWidget);
 
-		InventoryWidget->ItemSelected.AddDynamic(this, &UCInventoryComponent::OnSelected);
+		InventoryWidget->ItemClicked.AddDynamic(this, &UCInventoryComponent::OnClicked);
+		InventoryWidget->ItemRightClicked.AddDynamic(this, &UCInventoryComponent::OnRightClicked);
+
 		//OnSelected.AddDynamic
 	}
 	else
@@ -107,7 +124,8 @@ void UCInventoryComponent::OpenInventory()
 		CheckNull(InventoryWidget);
 		InventoryWidget->ClearInventory();
 		InventoryWidget->RemoveFromParent();
-		InventoryWidget->ItemSelected.Clear();
+		InventoryWidget->ItemClicked.Clear();
+		InventoryWidget->ItemRightClicked.Clear();
 	}
 	IsInventoryOpened = !IsInventoryOpened;
 }
@@ -160,26 +178,52 @@ void UCInventoryComponent::PickUp(ACItem* InItem)
 
 void UCInventoryComponent::EndToolAction()
 {
-	if (IsConsumable)
+	switch (SelectedItemType)
 	{
-		for (int i = 0; i < Inventory.Num(); i++)
+	case EItemType::Weapon:
+		break;
+	case EItemType::Armor:
+		break;
+	case EItemType::Tool:
+		break;
+	case EItemType::Consumable:
+		DecreaseCount(ChangedItem);
+
+		break;
+	case EItemType::Max:
+		break;
+	default:
+		break;
+	}
+	/*if (IsConsumable)
+	{
+		
+		
+	}*/
+	
+}
+
+void UCInventoryComponent::DecreaseCount(FItemData NewItem)
+{
+	for (int i = 0; i < Inventory.Num(); i++)
+	{
+		if (Inventory[i].ItemClass == NewItem.ItemClass)
 		{
-			if (Inventory[i].ItemClass == ConsumableData.ItemClass)
+			Inventory[i].CurrentStack--;
+			if (Inventory[i].CurrentStack == 0)
 			{
-				Inventory[i].CurrentStack--;
-				if (Inventory[i].CurrentStack == 0)
-				{
-					Inventory.Remove(Inventory[i]);
-				}
-				if (IsInventoryOpened)
-				{
-					CheckNull(InventoryWidget);
-					InventoryWidget->RefreshInventory(Inventory, MaxInventorySize, ColumnSize);
-				}
+				Inventory.RemoveAt(i);//Remove보다 at으로 인덱스로 접근하는 것이 에러가 발생하지않는다.
+				//Inventory.Remove(Inventory[i])//포인터를 없애기 때문에 
+				//RemoveAt indeed would solve this problem (in fact it much faster), also not using pointer is good solution, you could use varable that you copied which would naturally have diffrent memoery address then array.
+			}
+
+			if (IsInventoryOpened)
+			{
+				CheckNull(InventoryWidget);
+				InventoryWidget->RefreshInventory(Inventory, MaxInventorySize, ColumnSize);
 			}
 		}
 	}
-	
 }
 
 
