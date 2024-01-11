@@ -15,4 +15,6 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void Update(float Health, float MaxHealth);
 	
+	UFUNCTION(BlueprintImplementableEvent)
+		void UpdateMana(float Mana, float MaxMana);
 };

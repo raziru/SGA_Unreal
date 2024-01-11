@@ -19,8 +19,10 @@
 #include "Components/CEquipComponent.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "Components/WidgetComponent.h"
 #include "Widgets/CUserWidget_Name.h"
 #include "Widgets/Action/CUserWidget_ActionList.h"
+#include "Widgets/CUserWidget_Health.h"
 
 
 
@@ -31,6 +33,7 @@ ACPlayer::ACPlayer()
 	CHelpers::CreateComponent<USpringArmComponent>(this, &SpringArm, "SpringArm", GetMesh());
 	CHelpers::CreateComponent<UCameraComponent>(this, &Camera, "Camera", SpringArm);
 	CHelpers::CreateComponent<UBoxComponent>(this, &InteractBox, "InteractBox", GetMesh());
+
 
 
 	//기능만 달린 컴포넌트들을 생성하여 player 클래스를 관리하기 쉽게한다.
@@ -77,7 +80,9 @@ ACPlayer::ACPlayer()
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
 
-	
+	TSubclassOf<UCUserWidget_Health> healthClass;
+	CHelpers::GetClass<UCUserWidget_Health>(&healthClass, "WidgetBlueprint'/Game/Widgets/WB_PlayerStatus.WB_PlayerStatus_C'");
+	HealthWidget = Cast<UCUserWidget_Health>(CreateWidget(GetWorld(), healthClass));
 }
 
 void ACPlayer::BeginPlay()
@@ -125,6 +130,12 @@ void ACPlayer::BeginPlay()
 	Action->GetActionList()->GetData(5).OnUserWidget_ActionItem_Clicked.AddDynamic(this, &ACPlayer::OnThrow);
 	
 	//OnUnarmed();
+	//Cast<UCUserWidget_Health>(HealthWidget->GetUserWidgetObject())->Update(Status->GetHealth(), Status->GetMaxHealth());
+	HealthWidget->Update(Status->GetHealth(), Status->GetMaxHealth());
+	HealthWidget->UpdateMana(Status->GetMana(), Status->GetMaxMana());
+
+	HealthWidget->AddToViewport();
+	//HealthWidget->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void ACPlayer::Tick(float DeltaTime)

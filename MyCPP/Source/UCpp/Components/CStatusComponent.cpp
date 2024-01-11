@@ -14,6 +14,7 @@ void UCStatusComponent::BeginPlay()
 	Super::BeginPlay();
 	CurrentStatus += DefaultStatus;
 	Health = CurrentStatus.MaxHealth;
+	Mana = CurrentStatus.MaxMana;
 }
 
 void UCStatusComponent::AddHealth(float InAmount)

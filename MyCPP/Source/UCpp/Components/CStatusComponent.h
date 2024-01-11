@@ -16,6 +16,9 @@ public:
     UPROPERTY(EditDefaultsOnly, Category = "Health")//블프에 표현되는 스탯
         float MaxHealth;
 
+    UPROPERTY(EditDefaultsOnly, Category = "Mana")//블프에 표현되는 스탯
+        float MaxMana;
+
     UPROPERTY(EditDefaultsOnly, Category = "Speed")
         float WalkSpeed;
 
@@ -29,6 +32,7 @@ public:
     void operator +=(const FStatusData& other)
     {
         this->MaxHealth   += other.MaxHealth;
+        this->MaxMana     += other.MaxMana;
         this->WalkSpeed   += other.WalkSpeed;
         this->RunSpeed    += other.RunSpeed;
         this->SprintSpeed += other.SprintSpeed;
@@ -38,6 +42,8 @@ public:
     {
         FStatusData result;
         result.MaxHealth   = this->MaxHealth   + other.MaxHealth;
+        result.MaxMana     = this->MaxMana     + other.MaxMana  ;
+
         result.WalkSpeed   = this->WalkSpeed   + other.WalkSpeed;
         result.RunSpeed    = this->RunSpeed    + other.RunSpeed;
         result.SprintSpeed = this->SprintSpeed + other.SprintSpeed;
@@ -72,6 +78,9 @@ public:
     FORCEINLINE float GetMaxHealth()   { return CurrentStatus.MaxHealth; }
     FORCEINLINE float GetHealth()      { return Health; }
 
+    FORCEINLINE float GetMaxMana() { return CurrentStatus.MaxMana; }
+    FORCEINLINE float GetMana() { return Mana; }
+
     FORCEINLINE float GetWalkSpeed()   { return CurrentStatus.WalkSpeed; }
     FORCEINLINE float GetRunSpeed()    { return CurrentStatus.RunSpeed; }
     FORCEINLINE float GetSprintSpeed() { return CurrentStatus.SprintSpeed; }
@@ -100,6 +109,7 @@ public:
 
 private:
     float Health;
+    float Mana;
 
     bool bCanMove = true;
 };
