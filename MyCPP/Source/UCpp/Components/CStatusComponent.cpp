@@ -13,8 +13,8 @@ void UCStatusComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	CurrentStatus += DefaultStatus;
-	Health = CurrentStatus.MaxHealth;
-	Mana = CurrentStatus.MaxMana;
+	Health = CurrentStatus.MaxHealth-10;
+	Mana = CurrentStatus.MaxMana-10;
 }
 
 void UCStatusComponent::AddHealth(float InAmount)
@@ -30,6 +30,21 @@ void UCStatusComponent::SubHealth(float InAmount)
 
 	Health = FMath::Clamp(Health, 0.0f, CurrentStatus.MaxHealth);
 }
+
+void UCStatusComponent::AddMana(float InAmount)
+{
+	Mana += InAmount;
+
+	Mana = FMath::Clamp(Health, 0.0f, CurrentStatus.MaxMana);
+}
+
+void UCStatusComponent::SubMana(float InAmount)
+{
+	Mana -= InAmount;
+
+	Mana = FMath::Clamp(Health, 0.0f, CurrentStatus.MaxMana);
+}
+
 
 void UCStatusComponent::SetMove()
 {

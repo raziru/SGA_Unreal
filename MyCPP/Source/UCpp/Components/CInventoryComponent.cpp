@@ -34,6 +34,8 @@ void UCInventoryComponent::OnClicked(FItemData NewItem)
 	case EItemType::Armor:
 		CLog::Print("Check");
 		ArmorItem = Cast<ACItem_Armor>(GetOwner()->GetWorld()->SpawnActor(NewItem.ItemClass));
+
+		
 		CheckNull(ArmorItem);
 		CLog::Print("Armor Success");
 		if (SetNewArmor.IsBound())
@@ -44,10 +46,14 @@ void UCInventoryComponent::OnClicked(FItemData NewItem)
 		break;
 	case EItemType::Consumable:
 		CLog::Print("Check");
-		Consumable = Cast<ACItem_Consumable>(GetOwner()->GetWorld()->SpawnActor(NewItem.ItemClass));
+
+		FTransform transform;
+
+		Consumable = GetOwner()->GetWorld()->SpawnActorDeferred<ACItem_Consumable>(NewItem.ItemClass, transform, GetOwner());
+		UGameplayStatics::FinishSpawningActor(Consumable, transform);
 		CheckNull(Consumable);
-		
 		CLog::Print("Consumable Success");
+		Consumable->ConsumableEvent();
 		if (SetNewTool.IsBound())
 		{
 			SetNewTool.Broadcast(Consumable->GetData(), true);

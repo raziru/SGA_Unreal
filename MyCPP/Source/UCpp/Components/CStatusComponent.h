@@ -31,8 +31,10 @@ public:
     //Operator overloading for add operation
     void operator +=(const FStatusData& other)
     {
-        this->MaxHealth   += other.MaxHealth;
+        this->MaxHealth     += other.MaxHealth;
+
         this->MaxMana     += other.MaxMana;
+        
         this->WalkSpeed   += other.WalkSpeed;
         this->RunSpeed    += other.RunSpeed;
         this->SprintSpeed += other.SprintSpeed;
@@ -42,7 +44,9 @@ public:
     {
         FStatusData result;
         result.MaxHealth   = this->MaxHealth   + other.MaxHealth;
+
         result.MaxMana     = this->MaxMana     + other.MaxMana  ;
+
 
         result.WalkSpeed   = this->WalkSpeed   + other.WalkSpeed;
         result.RunSpeed    = this->RunSpeed    + other.RunSpeed;
@@ -81,6 +85,8 @@ public:
     FORCEINLINE float GetMaxMana() { return CurrentStatus.MaxMana; }
     FORCEINLINE float GetMana() { return Mana; }
 
+    FORCEINLINE FStatusData GetStatusData() { return CurrentStatus; }
+
     FORCEINLINE float GetWalkSpeed()   { return CurrentStatus.WalkSpeed; }
     FORCEINLINE float GetRunSpeed()    { return CurrentStatus.RunSpeed; }
     FORCEINLINE float GetSprintSpeed() { return CurrentStatus.SprintSpeed; }
@@ -91,6 +97,9 @@ public:
 
     void AddHealth(float InAmount);
     void SubHealth(float InAmount);
+
+    void AddMana(float InAmount);
+    void SubMana(float InAmount);
 
     void SetMove();
     void SetStop();

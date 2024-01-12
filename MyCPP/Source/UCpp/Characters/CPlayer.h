@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "ICharacter.h"
+#include "Components/CActionComponent.h"
 #include "Components/CStateComponent.h"//enum can't be Forward Declaration
 #include "Components/CInventoryComponent.h"
 #include "CPlayer.generated.h"
@@ -29,10 +30,10 @@ protected:
 		class UWidgetComponent* NameWidget;
 
 	UPROPERTY(VisibleDefaultsOnly)
-		class UCUserWidget_Health* HealthWidget;
+		class UCUserWidget_Health* StatusWidget;
 
 	UPROPERTY(EditAnywhere, Category = "Widget")
-		TSubclassOf<UUserWidget> HealthWidgetClass;
+		TSubclassOf<UUserWidget> StatusWidgetClass;
 
 //Interact
 private:
@@ -91,6 +92,22 @@ public:
 	virtual void PickUp(class ACItem* InItem) override;
 
 	virtual void OnDefaultMode() override;
+
+	UFUNCTION(BlueprintCallable)
+		void BPAddHealth(float InAmount);
+
+	UFUNCTION(BlueprintCallable)
+		void BPSubHealth(float InAmount);
+
+	UFUNCTION(BlueprintCallable)
+		void BPAddMana(float InAmount);
+
+	UFUNCTION(BlueprintCallable)
+		void BPSubMana(float InAmount);
+
+	UFUNCTION(BlueprintCallable)
+		void BPAddStatus(FStatusData InStatusData);
+
 //Moving
 private:
 	void OnMoveForward(float InAxis);
@@ -111,6 +128,7 @@ private:
 		void SetNewMainWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
 	UFUNCTION()
 		void EquipSecond(EActionType InActionType);
+
 	UFUNCTION()
 		void UnequipSecond(EActionType InActionType);
 
@@ -143,13 +161,6 @@ public:
 	void End_Roll();
 	void End_Backstep();
 private:
-	/*void OnFist();
-	void OnOneHand();
-	void OnTwoHand();
-	void OnWarp();
-	void OnFireStorm();
-	void OnThrow();*/
-
 	UFUNCTION()
 		void OnUnarmed();
 	UFUNCTION()
@@ -164,7 +175,8 @@ private:
 		void OnFireStorm();
 	UFUNCTION()
 		void OnThrow();
-
+	UFUNCTION()
+		void OnActionTypeChanged(EActionType InPrevType, EActionType InNewType);
 
 	
 	void OnMainWeapon();
@@ -187,6 +199,8 @@ private:
 	void OffViewActionList();
 
 	void OnTool();
+
+	void UpdateWidget();
 
 public:
 	virtual void ChangeColor(FLinearColor InColor) override;

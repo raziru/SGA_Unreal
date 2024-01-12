@@ -10,7 +10,6 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/InputComponent.h"
-#include "Components/CActionComponent.h"
 #include "Components/CTargetComponent.h"
 #include "Components/COptionComponent.h"
 #include "Components/CInteractComponent.h"
@@ -80,9 +79,9 @@ ACPlayer::ACPlayer()
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
 
-	TSubclassOf<UCUserWidget_Health> healthClass;
-	CHelpers::GetClass<UCUserWidget_Health>(&healthClass, "WidgetBlueprint'/Game/Widgets/WB_PlayerStatus.WB_PlayerStatus_C'");
-	HealthWidget = Cast<UCUserWidget_Health>(CreateWidget(GetWorld(), healthClass));
+	TSubclassOf<UCUserWidget_Health> statusClass;
+	CHelpers::GetClass<UCUserWidget_Health>(&statusClass, "WidgetBlueprint'/Game/Widgets/WB_PlayerStatus.WB_PlayerStatus_C'");
+	StatusWidget = Cast<UCUserWidget_Health>(CreateWidget(GetWorld(), statusClass));
 }
 
 void ACPlayer::BeginPlay()
@@ -106,6 +105,7 @@ void ACPlayer::BeginPlay()
 	//묶여있는 함수가 같이 연계된다. --  delegate는 함수포인터를 사용한것과 비슷하다.
 	//함수포인터는 인자로 받아야하지만 delegate는 필요가없다.
 
+	Action->OnActionTypeChanged.AddDynamic(this, &ACPlayer::OnActionTypeChanged);
 	Action->EquipSecond.AddDynamic(this, &ACPlayer::EquipSecond);
 	Action->UnequipSecond.AddDynamic(this, &ACPlayer::UnequipSecond);
 	Action->EndToolAction.AddDynamic(this, &ACPlayer::EndToolAction);
@@ -131,11 +131,11 @@ void ACPlayer::BeginPlay()
 	
 	//OnUnarmed();
 	//Cast<UCUserWidget_Health>(HealthWidget->GetUserWidgetObject())->Update(Status->GetHealth(), Status->GetMaxHealth());
-	HealthWidget->Update(Status->GetHealth(), Status->GetMaxHealth());
-	HealthWidget->UpdateMana(Status->GetMana(), Status->GetMaxMana());
+	
+	UpdateWidget();
+	StatusWidget->AddToViewport();
+	StatusWidget->SetVisibility(ESlateVisibility::Hidden);
 
-	HealthWidget->AddToViewport();
-	//HealthWidget->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void ACPlayer::Tick(float DeltaTime)
@@ -165,7 +165,6 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("RightAction", EInputEvent::IE_Pressed, this, &ACPlayer::OnDoSecondAction);
 	PlayerInputComponent->BindAction("RightAction", EInputEvent::IE_Released, this, &ACPlayer::OnDoSecondActionRelease);
 
-
 	PlayerInputComponent->BindAction("Throw", EInputEvent::IE_Pressed, this, &ACPlayer::OnThrow);
 	PlayerInputComponent->BindAction("Action", EInputEvent::IE_Pressed, this, &ACPlayer::OnDoAction);
 	PlayerInputComponent->BindAction("Targeting", EInputEvent::IE_Pressed, this, &ACPlayer::OnTarget);
@@ -175,7 +174,6 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Interact", EInputEvent::IE_Pressed, this, &ACPlayer::Interact);
 	PlayerInputComponent->BindAction("Inventory", EInputEvent::IE_Pressed, this, &ACPlayer::OpenInventory);
 	PlayerInputComponent->BindAction("UseTool", EInputEvent::IE_Pressed, this, &ACPlayer::OnTool);
-
 
 	PlayerInputComponent->BindAction("QuickSlot", EInputEvent::IE_Pressed, this, &ACPlayer::OnViewActionList);
 	PlayerInputComponent->BindAction("QuickSlot", EInputEvent::IE_Released, this, &ACPlayer::OffViewActionList);
@@ -245,7 +243,7 @@ void ACPlayer::SetNewItem(const FItemData NewItem)
 
 }
 
-void ACPlayer::SetNewMainWeapon( UCActionData* NewItemAction, EActionType NewItemActionType)
+void ACPlayer::SetNewMainWeapon(UCActionData* NewItemAction, EActionType NewItemActionType)
 {
 	Action->SetNewMainWeapon(NewItemAction, NewItemActionType);
 }
@@ -306,6 +304,8 @@ void ACPlayer::UnequipSecond(EActionType InActionType)
 void ACPlayer::SetNewStatus(const FStatusData NewStatus)
 {
 	Status->SetNewStatus(NewStatus);
+	UpdateWidget();
+
 }
 
 void ACPlayer::ResfreshStatus(const FStatusData NewStatus)
@@ -337,6 +337,39 @@ void ACPlayer::PickUp(class ACItem* InItem)
 void ACPlayer::OnDefaultMode()
 {
 	OnUnarmed();
+}
+
+void ACPlayer::BPAddHealth(float InAmount)
+{
+	Status->AddHealth(InAmount);
+	UpdateWidget();
+
+}
+
+void ACPlayer::BPSubHealth(float InAmount)
+{
+	Status->SubHealth(InAmount);
+	UpdateWidget();
+
+}
+
+void ACPlayer::BPAddMana(float InAmount)
+{
+	Status->AddMana(InAmount);
+	UpdateWidget();
+
+}
+
+void ACPlayer::BPSubMana(float InAmount)
+{
+	Status->SubMana(InAmount);
+	UpdateWidget();
+
+}
+
+void ACPlayer::BPAddStatus(FStatusData InStatusData)
+{
+	SetNewStatus(InStatusData);
 }
 
 void ACPlayer::SetNewTool(UCActionData* NewConsumableAction, bool IsConsumable)
@@ -386,8 +419,6 @@ void ACPlayer::Begin_Backstep()
 	Montages->PlayBackstep();
 	
 }
-
-
 
 void ACPlayer::End_Backstep()
 {
@@ -445,6 +476,18 @@ void ACPlayer::OnThrow()
 
 	Action->SetThrowMode();
 }
+void ACPlayer::OnActionTypeChanged(EActionType InPrevType, EActionType InNewType)
+{
+	if (InNewType == EActionType::Unarmed)
+	{
+		StatusWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else
+	{
+		StatusWidget->SetVisibility(ESlateVisibility::Visible);
+	}
+}
+
 void ACPlayer::OnMainWeapon()
 {
 	CheckFalse(State->IsIdleMode());
@@ -457,6 +500,13 @@ void ACPlayer::OnTool()
 {
 	CheckFalse(State->IsIdleMode());
 	Action->SetToolMode();
+	Inventory->OpenInventory();
+}
+
+void ACPlayer::UpdateWidget()
+{
+	StatusWidget->Update(Status->GetHealth(), Status->GetMaxHealth());
+	StatusWidget->UpdateMana(Status->GetMana(), Status->GetMaxMana());
 }
 
 void ACPlayer::OnDoAction()
