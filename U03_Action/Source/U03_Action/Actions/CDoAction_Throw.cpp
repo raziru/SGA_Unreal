@@ -38,12 +38,16 @@ void ACDoAction_Throw::Begin_DoAction()
 	transform.AddToTranslation(location);
 	transform.SetRotation(FQuat(rotator));
 
-	FActorSpawnParameters params;
-	params.Owner = this;
-	params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	ACThrow* throwObject = OwnerCharacter->GetWorld()->SpawnActorDeferred<ACThrow>(Datas[0].ThrowClass, transform, this,nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+	//FActorSpawnParameters params;
+	//params.Owner = this;
+
+	//ESpawnActorCollisionHandlingMethod::AlwaysSpawn;//무조건 생성
+
+	ACThrow* throwObject = OwnerCharacter->GetWorld()->SpawnActorDeferred<ACThrow>(Datas[0].ThrowClass, transform, OwnerCharacter, NULL, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 	throwObject->OnThrowBeginOverlap.AddDynamic(this, &ACDoAction_Throw::OnThrowBeginOverlap);
 	UGameplayStatics::FinishSpawningActor(throwObject, transform);
+	
+	//지연 생성, beginplay전에 매개변수를 전달하는 방법이다.
 }
 
 void ACDoAction_Throw::End_DoAction()

@@ -41,10 +41,7 @@ void ACDoAction_Throw::Begin_DoAction()
 	transform.AddToTranslation(location);
 	transform.SetRotation(FQuat(rotator));
 
-	FActorSpawnParameters params;
-	params.Owner = this;
-
-	ACThrow* throwObject = OwnerCharacter->GetWorld()->SpawnActorDeferred<ACThrow>(Datas[0].ThrowClass, transform, this, nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+	ACThrow* throwObject = OwnerCharacter->GetWorld()->SpawnActorDeferred<ACThrow>(Datas[0].ThrowClass, transform, OwnerCharacter, NULL, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 	throwObject->OnThrowBeginOverlap.AddDynamic(this, &ACDoAction_Throw::OnThrowBeginOverlap);
 	UGameplayStatics::FinishSpawningActor(throwObject, transform);//지연 생성으로 add dynamic을 할때 null참조하는 것을 막기 위함
 }

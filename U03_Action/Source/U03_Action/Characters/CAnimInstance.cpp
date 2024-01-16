@@ -3,7 +3,6 @@
 
 #include "Characters/CAnimInstance.h"
 #include "Global.h"
-#include "Components/CActionComponent.h"
 #include "GameFramework/Character.h"
 
 void UCAnimInstance::NativeBeginPlay()
@@ -29,6 +28,9 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	Speed = character->GetVelocity().Size2D();
 	Direction = CalculateDirection(character->GetVelocity(), character->GetControlRotation());
 
+	UCFeetComponent* feet = CHelpers::GetComponent<UCFeetComponent>(character);
+	if (!!feet)
+		FeetData = feet->GetData();
 }
 
 void UCAnimInstance::OnActionTypeChanged(EActionType InPrevType, EActionType InNewType)

@@ -12,6 +12,7 @@
 #include "Components/COptionComponent.h"
 #include "Components/CStatusComponent.h"
 #include "Components/CMontagesComponent.h"
+#include "Components/CFeetComponent.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Widgets/CUserWidget_ActionList.h"
@@ -28,6 +29,7 @@ ACPlayer::ACPlayer()
 	CHelpers::CreateActorComponent<UCActionComponent>(this, &Action, "Action");
 	CHelpers::CreateActorComponent<UCTargetComponent>(this, &Target, "Target");
 	CHelpers::CreateActorComponent<UCMontagesComponent>(this, &Montages, "Montages");
+	CHelpers::CreateActorComponent<UCFeetComponent>(this, &Feet, "Feet");
 	CHelpers::CreateActorComponent<UCOptionComponent>(this, &Option, "Option");
 	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
@@ -107,6 +109,7 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("MoveRight", this, &ACPlayer::OnMoveRight);
 	PlayerInputComponent->BindAxis("HorizontalLook", this, &ACPlayer::OnHorizontalLook);
 	PlayerInputComponent->BindAxis("VerticalLook", this, &ACPlayer::OnVerticalLook);
+	PlayerInputComponent->BindAxis("Zoom", this, &ACPlayer::OnZoom);
 
 	PlayerInputComponent->BindAction("Avoid",   EInputEvent::IE_Pressed, this, &ACPlayer::OnAvoid);
 
@@ -160,6 +163,12 @@ void ACPlayer::OnVerticalLook(float InAxis)
 {
 	float rate = Option->GetVerticalLookRate();
 	AddControllerPitchInput(InAxis * rate * GetWorld()->GetDeltaSeconds());
+}
+
+void ACPlayer::OnZoom(float InAxis)
+{
+	SpringArm->TargetArmLength += (1000.0f * InAxis * GetWorld()->GetDeltaSeconds());
+	SpringArm->TargetArmLength = FMath::Clamp(SpringArm->TargetArmLength, 50.0f, 500.0f);
 }
 
 void ACPlayer::OnAvoid()
