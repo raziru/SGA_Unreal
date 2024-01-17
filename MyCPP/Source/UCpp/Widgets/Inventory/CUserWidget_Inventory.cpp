@@ -6,6 +6,30 @@
 #include "Components/UniformGridPanel.h"
 #include "CUserWidget_ItemButton.h"
 
+void UCUserWidget_Inventory::BuildInventory(const TArray<FItemData>& Inventory, int MaxInventorySize, int ColumnSize)
+{
+	for (INT i = 0; i < MaxInventorySize; i++)
+	{
+		int Column = i % ColumnSize;
+		int Row = i / ColumnSize;
+		UCUserWidget_ItemButton* ItemButton = Cast<UCUserWidget_ItemButton>(CreateWidget(GetWorld(),ItemButtonWidgetClass));
+		if (i<Inventory.Num())// && Inventory[i].ItemType == EItemType::Weapon)
+		{
+			
+			ItemButton->MakeItemButton(Inventory[i]);
+			ItemButton->Clicked.AddDynamic(this, &UCUserWidget_Inventory::OnClicked);
+			ItemButton->RightClicked.AddDynamic(this, &UCUserWidget_Inventory::OnRightClicked);
+			
+		}
+		else
+		{
+			ItemButton->MakeEmptyButton();
+
+		}
+		InventoryPanel->AddChildToUniformGrid(ItemButton, Row, Column);
+	}
+}
+
 void UCUserWidget_Inventory::ClearInventory()
 {
 	if (InventoryPanel->GetAllChildren().Num()<=0)
@@ -41,7 +65,6 @@ void UCUserWidget_Inventory::OnRightClicked(FItemData Item)
 		ItemRightClicked.Broadcast(Item);
 	}
 }
-
 
 
 

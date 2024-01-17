@@ -24,6 +24,12 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewArmor, TSubclassOf<ACArmor>, 
 
 //구현중 변경이 필요할수 있으니 multicast로 구현한다.
 
+UENUM(BlueprintType)
+enum class EInventoryType : uint8
+{
+	Main, Weapon, Armor, Tool, Consumable, Max,
+};
+
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
 class UCPP_API UCInventoryComponent : public UActorComponent
 {
@@ -40,7 +46,19 @@ private:
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Widget")
-		TSubclassOf<UUserWidget> InventoryWidgetClass;
+		TSubclassOf<UUserWidget> MainInventoryWidgetClass;
+
+	UPROPERTY(EditAnywhere, Category = "Widget")
+		TSubclassOf<UUserWidget> WeaponInventoryWidgetClass;
+
+	UPROPERTY(EditAnywhere, Category = "Widget")
+		TSubclassOf<UUserWidget> ArmorInventoryWidgetClass;
+
+	UPROPERTY(EditAnywhere, Category = "Widget")
+		TSubclassOf<UUserWidget> ToolInventoryWidgetClass;
+
+	UPROPERTY(EditAnywhere, Category = "Widget")
+		TSubclassOf<UUserWidget> ConsumableInventoryWidgetClass;
 
 	UPROPERTY()
 		class UCUserWidget_Inventory* InventoryWidget;
@@ -49,8 +67,8 @@ protected:
 public:	
 	// Sets default values for this component's properties
 	UCInventoryComponent();
-
 	void OpenInventory();
+	void OpenInventory(TSubclassOf<UUserWidget> InventoryWidgetClass);
 
 	void PickUp(ACItem* InItem);
 
@@ -77,6 +95,7 @@ private:
 
 	EItemType SelectedItemType;
 
+	EInventoryType InventoryType;
 public:
 	UPROPERTY(BlueprintAssignable)
 		FSetNewItem SetNewItem;

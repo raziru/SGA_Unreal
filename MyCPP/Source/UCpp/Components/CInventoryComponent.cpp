@@ -10,6 +10,38 @@ UCInventoryComponent::UCInventoryComponent()
 
 }
 
+void UCInventoryComponent::OpenInventory()
+{
+	switch (InventoryType)
+	{
+	case EInventoryType::Main:
+		OpenInventory(MainInventoryWidgetClass);
+
+		break;
+	case EInventoryType::Weapon:
+
+		OpenInventory(WeaponInventoryWidgetClass);
+
+		break;
+	case EInventoryType::Armor:
+		OpenInventory(ArmorInventoryWidgetClass);
+
+		break;
+	case EInventoryType::Tool:
+		OpenInventory(ToolInventoryWidgetClass);
+
+		break;
+	case EInventoryType::Consumable:
+		OpenInventory(ConsumableInventoryWidgetClass);
+
+		break;
+	case EInventoryType::Max:
+		break;
+	default:
+		break;
+	}
+}
+
 void UCInventoryComponent::OnClicked(FItemData NewItem)
 {
 	ACItem_Weapon* WeaponItem;
@@ -91,7 +123,7 @@ void UCInventoryComponent::BeginPlay()
 }
 
 
-void UCInventoryComponent::OpenInventory()
+void UCInventoryComponent::OpenInventory(TSubclassOf<UUserWidget> InventoryWidgetClass)
 {
 	//AllinOne Inventory
 	for (FItemData Item : Inventory)

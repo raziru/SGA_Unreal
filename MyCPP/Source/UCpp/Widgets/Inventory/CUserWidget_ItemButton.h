@@ -26,6 +26,12 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void MakeItemButton(const FItemData Item);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void MakeEmptyButton();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		void SetItem(const FItemData Item);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
@@ -51,4 +57,7 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 		FRightClicked RightClicked;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		FItemData Data;
 };

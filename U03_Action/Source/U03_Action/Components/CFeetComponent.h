@@ -17,6 +17,15 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 		FVector RightDistance; //X축만 사용
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		FVector PelvisDistance; //Z축만 사용
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		FRotator LeftRotation;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		FRotator RightRotation;
 };
 
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
@@ -57,7 +66,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
-	void Trace(FName InSocket, float& OutDistance);
+	void Trace(FName InSocket, float& OutDistance, FRotator& OutRotation);
 
 private:
 	class ACharacter* OwnerCharacter;

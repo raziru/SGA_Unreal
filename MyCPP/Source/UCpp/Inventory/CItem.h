@@ -53,7 +53,6 @@ public:
 	void operator =(const FItemData& other);
 	bool operator ==(const FItemData& other);
 	
-	
 };
 
 UCLASS()
