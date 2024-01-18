@@ -10,7 +10,6 @@
 #include "CInventoryComponent.generated.h"
 
 
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewItem, FItemData, NewItem);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSetNewMainWeapon, UCActionData*, NewItemAction, EActionType, NewItemActionType);
@@ -23,12 +22,6 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewArmor, TSubclassOf<ACArmor>, 
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewItem, FItemData, NewItem);
 
 //구현중 변경이 필요할수 있으니 multicast로 구현한다.
-
-UENUM(BlueprintType)
-enum class EInventoryType : uint8
-{
-	Main, Weapon, Armor, Tool, Consumable, Max,
-};
 
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
 class UCPP_API UCInventoryComponent : public UActorComponent
@@ -45,6 +38,9 @@ private:
 
 
 protected:
+	UPROPERTY(EditAnywhere, Category = "Widget")
+		TSubclassOf<UUserWidget>InventoryWidgetClass;
+
 	UPROPERTY(EditAnywhere, Category = "Widget")
 		TSubclassOf<UUserWidget> MainInventoryWidgetClass;
 
@@ -68,7 +64,7 @@ public:
 	// Sets default values for this component's properties
 	UCInventoryComponent();
 	void OpenInventory();
-	void OpenInventory(TSubclassOf<UUserWidget> InventoryWidgetClass);
+	void OpenInventory(EInventoryType NewInventoryType);
 
 	void PickUp(ACItem* InItem);
 

@@ -10,10 +10,17 @@
 
 
 UENUM(BlueprintType)
+enum class EInventoryType : uint8
+{
+	Main, Weapon, Armor, Tool, Consumable, Max,
+};
+
+UENUM(BlueprintType)
 enum class EItemType : uint8
 {
 	Weapon, Armor, Tool, Consumable, Max,
 };
+
 
 USTRUCT(BlueprintType)
 struct FItemData

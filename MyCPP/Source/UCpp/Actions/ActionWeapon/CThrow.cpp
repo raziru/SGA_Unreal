@@ -7,7 +7,6 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
-// Sets default values
 ACThrow::ACThrow()
 {
 	CHelpers::CreateActorComponent<UProjectileMovementComponent>(this, &Projectile, "Projectile");
@@ -20,7 +19,6 @@ ACThrow::ACThrow()
 
 }
 
-// Called when the game starts or when spawned
 void ACThrow::BeginPlay()
 {
 	Super::BeginPlay();
@@ -35,7 +33,7 @@ void ACThrow::BeginPlay()
 
 void ACThrow::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (GetOwner()->GetOwner() == OtherActor)
+	if (GetOwner() == OtherActor)
 	{
 		return;
 	}
@@ -52,10 +50,6 @@ void ACThrow::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 	if (OnThrowBeginOverlap.IsBound())
 		OnThrowBeginOverlap.Broadcast(SweepResult);
 
-
-
 	Destroy();
-
-
 }
 

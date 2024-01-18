@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -10,6 +8,8 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FItemClicked,FItemData, Item);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FItemRightClicked, FItemData, Item);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPrevInventory);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FNextInventory);
 
 UCLASS()
 class UCPP_API UCUserWidget_Inventory : public UUserWidget
@@ -22,7 +22,11 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Widget")
 		TSubclassOf<UUserWidget> ItemButtonWidgetClass;
-	
+
+	FORCEINLINE void SetInventoryType(EInventoryType NewInventoryType) { this->InventoryType = NewInventoryType; }
+
+private:
+	EInventoryType InventoryType;
 
 public:
 
@@ -33,6 +37,14 @@ public:
 
 	void RefreshInventory(const TArray<FItemData>& Inventory, int MaxInventorySize, int ColumnSize);
 
+	UFUNCTION(BlueprintCallable)
+		void OnPrevInventory();
+
+	UFUNCTION(BlueprintCallable)
+		void OnNextInventory();
+	
+	UFUNCTION(BlueprintCallable)
+		FString SetInventoryName(FString Name);
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -47,4 +59,10 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 		FItemRightClicked ItemRightClicked;
+
+	UPROPERTY(BlueprintAssignable)
+		FPrevInventory PrevInventory;
+
+	UPROPERTY(BlueprintAssignable)
+		FNextInventory NextInventory;
 };

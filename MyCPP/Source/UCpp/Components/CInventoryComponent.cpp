@@ -12,34 +12,8 @@ UCInventoryComponent::UCInventoryComponent()
 
 void UCInventoryComponent::OpenInventory()
 {
-	switch (InventoryType)
-	{
-	case EInventoryType::Main:
-		OpenInventory(MainInventoryWidgetClass);
-
-		break;
-	case EInventoryType::Weapon:
-
-		OpenInventory(WeaponInventoryWidgetClass);
-
-		break;
-	case EInventoryType::Armor:
-		OpenInventory(ArmorInventoryWidgetClass);
-
-		break;
-	case EInventoryType::Tool:
-		OpenInventory(ToolInventoryWidgetClass);
-
-		break;
-	case EInventoryType::Consumable:
-		OpenInventory(ConsumableInventoryWidgetClass);
-
-		break;
-	case EInventoryType::Max:
-		break;
-	default:
-		break;
-	}
+	InventoryType = EInventoryType::Armor;
+	OpenInventory(InventoryType);
 }
 
 void UCInventoryComponent::OnClicked(FItemData NewItem)
@@ -123,7 +97,7 @@ void UCInventoryComponent::BeginPlay()
 }
 
 
-void UCInventoryComponent::OpenInventory(TSubclassOf<UUserWidget> InventoryWidgetClass)
+void UCInventoryComponent::OpenInventory(EInventoryType NewInventoryType)
 {
 	//AllinOne Inventory
 	for (FItemData Item : Inventory)
@@ -139,11 +113,13 @@ void UCInventoryComponent::OpenInventory(TSubclassOf<UUserWidget> InventoryWidge
 		{
 			InventoryWidget = Cast<UCUserWidget_Inventory>(CreateWidget(GetWorld(), InventoryWidgetClass));
 			CheckNull(InventoryWidget);
+			InventoryWidget->SetInventoryType(NewInventoryType);
 			InventoryWidget->BuildInventory(Inventory, MaxInventorySize, ColumnSize);
 			InventoryWidget->AddToViewport();
 		}		
 		else
 		{
+			InventoryWidget->SetInventoryType(NewInventoryType);
 			InventoryWidget->ClearInventory();
 			InventoryWidget->BuildInventory(Inventory, MaxInventorySize, ColumnSize);
 			InventoryWidget->AddToViewport();

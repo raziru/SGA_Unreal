@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 
 #include "CUserWidget_Inventory.h"
 #include "Global.h"
@@ -13,20 +11,49 @@ void UCUserWidget_Inventory::BuildInventory(const TArray<FItemData>& Inventory, 
 		int Column = i % ColumnSize;
 		int Row = i / ColumnSize;
 		UCUserWidget_ItemButton* ItemButton = Cast<UCUserWidget_ItemButton>(CreateWidget(GetWorld(),ItemButtonWidgetClass));
-		if (i<Inventory.Num())// && Inventory[i].ItemType == EItemType::Weapon)
-		{
-			
-			ItemButton->MakeItemButton(Inventory[i]);
-			ItemButton->Clicked.AddDynamic(this, &UCUserWidget_Inventory::OnClicked);
-			ItemButton->RightClicked.AddDynamic(this, &UCUserWidget_Inventory::OnRightClicked);
-			
-		}
-		else
-		{
-			ItemButton->MakeEmptyButton();
-
-		}
+		ItemButton->MakeEmptyButton();
 		InventoryPanel->AddChildToUniformGrid(ItemButton, Row, Column);
+	}
+	int index = 0;
+
+	for (FItemData item: Inventory)
+	{
+		UCUserWidget_ItemButton* ItemButton = Cast<UCUserWidget_ItemButton>(InventoryPanel->GetAllChildren()[index]);
+		switch (InventoryType)
+		{
+		case EInventoryType::Main:
+			break;
+		case EInventoryType::Weapon:
+			if (item.ItemType != EItemType::Weapon)
+				continue;
+			
+			break;
+		case EInventoryType::Armor:
+			if (item.ItemType != EItemType::Armor)
+				continue;
+			
+			break;
+		case EInventoryType::Tool:
+			if (item.ItemType != EItemType::Tool)
+				continue;
+			
+			break;
+		case EInventoryType::Consumable:
+			if (item.ItemType != EItemType::Consumable)
+				continue;
+			
+			break;
+		case EInventoryType::Max:
+			break;
+		default:
+			break;
+		}
+
+		ItemButton->MakeItemButton(item);
+		ItemButton->Clicked.AddDynamic(this, &UCUserWidget_Inventory::OnClicked);
+		ItemButton->RightClicked.AddDynamic(this, &UCUserWidget_Inventory::OnRightClicked);	
+		
+		index++;
 	}
 }
 
@@ -49,7 +76,6 @@ void UCUserWidget_Inventory::RefreshInventory(const TArray<FItemData>& Inventory
 	ClearInventory();
 	BuildInventory(Inventory, MaxInventorySize, ColumnSize);
 }
-
 void UCUserWidget_Inventory::OnClicked(FItemData Item)
 {
 	if (ItemClicked.IsBound())
@@ -66,6 +92,25 @@ void UCUserWidget_Inventory::OnRightClicked(FItemData Item)
 	}
 }
 
+void UCUserWidget_Inventory::OnPrevInventory()
+{
+	if (PrevInventory.IsBound())
+	{
+		PrevInventory.Broadcast();
+	}
+}
+
+void UCUserWidget_Inventory::OnNextInventory()
+{
+	if (NextInventory.IsBound())
+	{
+		NextInventory.Broadcast();
+	}
+}
 
 
 
+FString UCUserWidget_Inventory::SetInventoryName(FString Name)
+{
+	return Name;
+}
