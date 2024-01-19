@@ -141,6 +141,11 @@ void ACPlayer::BeginPlay()
 
 }
 
+FGenericTeamId ACPlayer::GetGenericTeamId() const
+{
+	return FGenericTeamId(TeamId);
+}
+
 void ACPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

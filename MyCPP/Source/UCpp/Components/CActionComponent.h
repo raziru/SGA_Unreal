@@ -85,10 +85,14 @@ public:
 public:	
 	// Sets default values for this component's properties
 	UCActionComponent();
-	void SetUnarmedMode();
+	UFUNCTION(BlueprintCallable)
+		void SetUnarmedMode();
+	UFUNCTION(BlueprintCallable)
+		void SetOneHandMode();
+	UFUNCTION(BlueprintCallable)
+		void SetTwoHandMode();
+
 	void SetFistMode();
-	void SetOneHandMode();
-	void SetTwoHandMode();
 	void SetWarpMode();
 	void SetFireStormMode();
 	void SetThrowMode();

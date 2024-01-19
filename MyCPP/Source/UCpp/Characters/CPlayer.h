@@ -8,10 +8,11 @@
 #include "Components/CActionComponent.h"
 #include "Components/CStateComponent.h"//enum can't be Forward Declaration
 #include "Components/CInventoryComponent.h"
+#include "GenericTeamAgentInterface.h"
 #include "CPlayer.generated.h"
 
 UCLASS()
-class UCPP_API ACPlayer : public ACharacter, public IICharacter
+class UCPP_API ACPlayer : public ACharacter, public IICharacter, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -24,6 +25,9 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCameraComponent* Camera;
+
+	UPROPERTY(EditDefaultsOnly)
+		uint8 TeamId = 0;
 //Widget
 protected:
 	UPROPERTY(VisibleDefaultsOnly)
@@ -86,6 +90,8 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	virtual FGenericTeamId GetGenericTeamId() const override;
+
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

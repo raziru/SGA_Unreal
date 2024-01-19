@@ -23,12 +23,26 @@ private:
 private:
     UPROPERTY(VisibleDefaultsOnly)
         class UAIPerceptionComponent* Perception;
+
+    UPROPERTY(VisibleDefaultsOnly)
+        class UCBehaviorComponent* Behavior;
+
 public:
     FORCEINLINE float GetMeleeActionRange() { return MeleeActionRange; }
 protected:
     virtual void BeginPlay() override;
+
+    virtual void OnPossess(APawn* InPawn) override;
+    virtual void OnUnPossess() override;
+
+private:
+    UFUNCTION()
+        void OnPerceptionUpdated(const TArray<AActor*>& UpdateActors);
+
 public:
     ACAIController();
+
+    float GetSightRadius();
 
     virtual void Tick(float DeltaTime) override;
 

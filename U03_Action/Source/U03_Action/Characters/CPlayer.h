@@ -5,16 +5,20 @@
 #include "GameFramework/Character.h"
 #include "Characters/ICharacter.h"
 #include "Components/CStateComponent.h"//enum can't be Forward Declaration
+#include "GenericTeamAgentInterface.h"
 #include "CPlayer.generated.h"
 
 UCLASS()
-class U03_ACTION_API ACPlayer : public ACharacter, public IICharacter
+class U03_ACTION_API ACPlayer : public ACharacter, public IICharacter, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
 private:
 	UPROPERTY(EditDefaultsOnly)
 		TSubclassOf<class UCUserWidget_ActionList> ActionListClass;
+
+	UPROPERTY(EditDefaultsOnly)
+		uint8 TeamId = 0;
 
 private:
 	UPROPERTY(VisibleDefaultsOnly)
@@ -61,6 +65,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual FGenericTeamId GetGenericTeamId() const override;
 private:
 	void OnMoveForward(float InAxis);
 	void OnMoveRight(float InAxis);
