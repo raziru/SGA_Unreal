@@ -8,6 +8,7 @@
 #include "Components/ShapeComponent.h"
 #include "Components/CStateComponent.h"
 #include "Components/CStatusComponent.h"
+#include "Components/CActionComponent.h"
 
 
 
@@ -28,8 +29,11 @@ void ACAttachment::BeginPlay()
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
 	State = CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
 	Status = CHelpers::GetComponent<UCStatusComponent>(OwnerCharacter);
+	Action = CHelpers::GetComponent<UCActionComponent>(OwnerCharacter);
 	Super::BeginPlay();
 
+
+	Action->OnActionPress.AddDynamic(this, &ACAttachment::OnPress);
 	GetComponents<UShapeComponent>(ShapeComponents);
 	for (UShapeComponent* component : ShapeComponents)
 	{
@@ -54,6 +58,27 @@ void ACAttachment::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponen
 {
 	if (OnAttachmentEndOverlap.IsBound())
 		OnAttachmentEndOverlap.Broadcast(OwnerCharacter, this, Cast<ACharacter>(OtherActor));
+}
+
+void ACAttachment::OnPress(bool InPressAction, bool InPressSecondAction, bool InOnShield)
+{
+	if (InPressAction)
+	{
+		IsPress = true;
+	}
+	else
+	{
+		IsPress = false;
+	}
+
+	if (InPressSecondAction)
+	{
+		IsRightPress = true;
+	}
+	else
+	{
+		IsRightPress = false;
+	}
 }
 
 void ACAttachment::OnCollision()

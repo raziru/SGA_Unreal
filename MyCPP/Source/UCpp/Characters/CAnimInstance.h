@@ -37,6 +37,9 @@ protected:
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere)
         FFeetData FeetData;
+
+    UPROPERTY(BlueprintReadOnly, EditAnywhere)
+        float Pitch;
 public:
     virtual void NativeBeginPlay() override;
     virtual void NativeUpdateAnimation(float DeltaSeconds) override;

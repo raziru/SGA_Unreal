@@ -76,6 +76,10 @@ private:
 	UFUNCTION()
 		void OnRightClicked(FItemData NewItem);
 
+	UFUNCTION()
+		void NextInventory();
+	UFUNCTION()
+		void PrevInventory();
 
 protected:
 	virtual void BeginPlay() override;

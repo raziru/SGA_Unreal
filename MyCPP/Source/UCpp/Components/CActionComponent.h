@@ -80,7 +80,8 @@ public:
 
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE bool IsToolMode() { return Type == EActionType::Tool; }
-
+	UFUNCTION(BlueprintPure)
+		FORCEINLINE bool IsBowMode() { return Type == EActionType::Bow; }
 
 public:	
 	// Sets default values for this component's properties

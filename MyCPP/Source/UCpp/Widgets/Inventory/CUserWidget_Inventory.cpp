@@ -4,6 +4,34 @@
 #include "Components/UniformGridPanel.h"
 #include "CUserWidget_ItemButton.h"
 
+void UCUserWidget_Inventory::SetInventoryType(EInventoryType NewInventoryType)
+{
+	this->InventoryType = NewInventoryType; 
+
+	switch (InventoryType)
+	{
+	case EInventoryType::Main:
+		UpdateInventoryName("Main");
+		break;
+	case EInventoryType::Weapon:
+		UpdateInventoryName("Weapon");
+		break;
+	case EInventoryType::Armor:
+		UpdateInventoryName("Armor");
+		break;
+	case EInventoryType::Tool:
+		UpdateInventoryName("Tool");
+		break;
+	case EInventoryType::Consumable:
+		UpdateInventoryName("Consumable");
+		break;
+	case EInventoryType::Max:
+		break;
+	default:
+		break;
+	}
+}
+
 void UCUserWidget_Inventory::BuildInventory(const TArray<FItemData>& Inventory, int MaxInventorySize, int ColumnSize)
 {
 	for (INT i = 0; i < MaxInventorySize; i++)
@@ -110,7 +138,4 @@ void UCUserWidget_Inventory::OnNextInventory()
 
 
 
-FString UCUserWidget_Inventory::SetInventoryName(FString Name)
-{
-	return Name;
-}
+

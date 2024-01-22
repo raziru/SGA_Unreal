@@ -23,7 +23,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Widget")
 		TSubclassOf<UUserWidget> ItemButtonWidgetClass;
 
-	FORCEINLINE void SetInventoryType(EInventoryType NewInventoryType) { this->InventoryType = NewInventoryType; }
+	void SetInventoryType(EInventoryType NewInventoryType);
 
 private:
 	EInventoryType InventoryType;
@@ -43,8 +43,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void OnNextInventory();
 	
-	UFUNCTION(BlueprintCallable)
-		FString SetInventoryName(FString Name);
+	UFUNCTION(BlueprintImplementableEvent)
+		void UpdateInventoryName(FName Name);
 
 public:
 	UFUNCTION(BlueprintCallable)

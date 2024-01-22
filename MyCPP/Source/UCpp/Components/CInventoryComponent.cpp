@@ -12,7 +12,6 @@ UCInventoryComponent::UCInventoryComponent()
 
 void UCInventoryComponent::OpenInventory()
 {
-	InventoryType = EInventoryType::Armor;
 	OpenInventory(InventoryType);
 }
 
@@ -90,6 +89,65 @@ void UCInventoryComponent::OnRightClicked(FItemData NewItem)
 
 }
 
+void UCInventoryComponent::NextInventory()
+{
+	switch (InventoryType)
+	{
+	case EInventoryType::Main:
+		InventoryType = EInventoryType::Weapon;
+		break;
+	case EInventoryType::Weapon:
+		InventoryType = EInventoryType::Armor;
+		break;
+	case EInventoryType::Armor:
+		InventoryType = EInventoryType::Tool;
+
+		break;
+	case EInventoryType::Tool:
+		InventoryType = EInventoryType::Consumable;
+		break;
+	case EInventoryType::Consumable:
+		InventoryType = EInventoryType::Main;
+		break;
+	case EInventoryType::Max:
+		break;
+	default:
+		break;
+	}
+	InventoryWidget->SetInventoryType(InventoryType);
+	InventoryWidget->RefreshInventory(Inventory, MaxInventorySize, ColumnSize);
+}
+
+void UCInventoryComponent::PrevInventory()
+{
+	switch (InventoryType)
+	{
+	case EInventoryType::Main:
+		InventoryType = EInventoryType::Consumable;
+		break;
+	case EInventoryType::Weapon:
+		InventoryType = EInventoryType::Main;
+		break;
+	case EInventoryType::Armor:
+		InventoryType = EInventoryType::Weapon;
+
+		break;
+	case EInventoryType::Tool:
+		InventoryType = EInventoryType::Armor;
+		break;
+	case EInventoryType::Consumable:
+		InventoryType = EInventoryType::Tool;
+		break;
+	case EInventoryType::Max:
+		break;
+	default:
+		break;
+	}
+	InventoryWidget->SetInventoryType(InventoryType);
+	InventoryWidget->RefreshInventory(Inventory, MaxInventorySize, ColumnSize);
+
+}
+
 // Called when the game starts
 void UCInventoryComponent::BeginPlay()
 {
@@ -130,6 +188,8 @@ void UCInventoryComponent::OpenInventory(EInventoryType NewInventoryType)
 
 		InventoryWidget->ItemClicked.AddDynamic(this, &UCInventoryComponent::OnClicked);
 		InventoryWidget->ItemRightClicked.AddDynamic(this, &UCInventoryComponent::OnRightClicked);
+		InventoryWidget->NextInventory.AddDynamic(this, &UCInventoryComponent::NextInventory);
+		InventoryWidget->PrevInventory.AddDynamic(this, &UCInventoryComponent::PrevInventory);
 
 		//OnSelected.AddDynamic
 	}
@@ -209,11 +269,6 @@ void UCInventoryComponent::EndToolAction()
 	default:
 		break;
 	}
-	/*if (IsConsumable)
-	{
-		
-		
-	}*/
 	
 }
 

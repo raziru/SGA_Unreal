@@ -23,6 +23,11 @@ protected:
 
 	UFUNCTION(BlueprintCallable)//Can use in blueprint
 		void AttachToCollision(class UShapeComponent* InComponent, FName InSocketName);
+
+public:
+	FORCEINLINE bool GetIsPress() { return IsPress; }
+
+	FORCEINLINE bool GetIsRightPress() { return IsRightPress; }
 public:	
 	ACAttachment();
 
@@ -43,6 +48,9 @@ private:
 
 	UFUNCTION()
 		void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UFUNCTION()
+		void OnPress(bool InPressAction, bool InPressSecondAction, bool InOnShield);
 
 public:
 	UPROPERTY(BlueprintAssignable)
@@ -66,6 +74,12 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 		class UCStatusComponent* Status;
 
+	UPROPERTY(BlueprintReadOnly)
+		class UCActionComponent* Action;
+
 private:
 	TArray<class UShapeComponent*> ShapeComponents;//충돌체 형태를 자유롭게 쓰기위함
+
+	bool IsPress; 
+	bool IsRightPress;
 };
