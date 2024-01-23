@@ -3,6 +3,7 @@
 
 #include "Components/CStatusComponent.h"
 #include "Global.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 UCStatusComponent::UCStatusComponent()
 {
@@ -56,6 +57,14 @@ void UCStatusComponent::SetStop()
 	bCanMove = false;
 }
 
+void UCStatusComponent::SetSpeed(ECharacterSpeed InType)
+{
+	UCharacterMovementComponent* movement = CHelpers::GetComponent<UCharacterMovementComponent>(GetOwner());
+
+	movement->MaxWalkSpeed = CurrentStatus.Speed[(int32)InType];
+	CurrentStatus.CurrentSpeed = InType;
+}
+
 
 void UCStatusComponent::SetNewStatus(const FStatusData NewStatus)
 {
@@ -65,6 +74,7 @@ void UCStatusComponent::SetNewStatus(const FStatusData NewStatus)
 	{
 		RefreshStatus.Broadcast(CurrentStatus);
 	}
+	SetSpeed(CurrentStatus.CurrentSpeed);
 }
 
 

@@ -188,6 +188,9 @@ private:
 	UFUNCTION()
 		void OnActionTypeChanged(EActionType InPrevType, EActionType InNewType);
 
+	void OnWalk();
+	void OffWalk();
+
 	
 	void OnMainWeapon();
 
@@ -196,7 +199,6 @@ private:
 
 	void OnDoSecondAction();
 	void OnDoSecondActionRelease();
-
 
 	void OnTarget();
 	void OnTargetLeft();

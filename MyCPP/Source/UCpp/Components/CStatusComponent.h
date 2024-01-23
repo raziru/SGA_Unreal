@@ -8,6 +8,11 @@
 
 
 
+UENUM(BlueprintType)
+enum class ECharacterSpeed : uint8
+{
+    Walk, Run, Sprint, Max,
+};
 USTRUCT(BlueprintType)
 struct FStatusData
 {
@@ -20,37 +25,34 @@ public:
         float MaxMana;
 
     UPROPERTY(EditDefaultsOnly, Category = "Speed")
-        float WalkSpeed;
+        float Speed[(int32)ECharacterSpeed::Max] = { 200, 400, 600 };
 
     UPROPERTY(EditDefaultsOnly, Category = "Speed")
-        float RunSpeed;
-
-    UPROPERTY(EditDefaultsOnly, Category = "Speed")
-        float SprintSpeed;
+        ECharacterSpeed CurrentSpeed = ECharacterSpeed::Run;
 
     //Operator overloading for add operation
     void operator +=(const FStatusData& other)
     {
         this->MaxHealth     += other.MaxHealth;
-
         this->MaxMana     += other.MaxMana;
         
-        this->WalkSpeed   += other.WalkSpeed;
-        this->RunSpeed    += other.RunSpeed;
-        this->SprintSpeed += other.SprintSpeed;
+        this->Speed[(int32)ECharacterSpeed::Walk]   += other.Speed[(int32)ECharacterSpeed::Walk];
+        this->Speed[(int32)ECharacterSpeed::Run]    += other.Speed[(int32)ECharacterSpeed::Run];
+        this->Speed[(int32)ECharacterSpeed::Sprint] += other.Speed[(int32)ECharacterSpeed::Sprint];
+
     }
 
     FStatusData operator +(const FStatusData& other)
     {
         FStatusData result;
-        result.MaxHealth   = this->MaxHealth   + other.MaxHealth;
 
+        result.MaxHealth   = this->MaxHealth   + other.MaxHealth;
         result.MaxMana     = this->MaxMana     + other.MaxMana  ;
 
+        result.Speed[(int32)ECharacterSpeed::Walk]   = this->Speed[(int32)ECharacterSpeed::Walk] + other.Speed[(int32)ECharacterSpeed::Walk];
+        result.Speed[(int32)ECharacterSpeed::Run]    = this->Speed[(int32)ECharacterSpeed::Run] + other.Speed[(int32)ECharacterSpeed::Run];
+        result.Speed[(int32)ECharacterSpeed::Sprint] = this->Speed[(int32)ECharacterSpeed::Sprint] + other.Speed[(int32)ECharacterSpeed::Sprint];
 
-        result.WalkSpeed   = this->WalkSpeed   + other.WalkSpeed;
-        result.RunSpeed    = this->RunSpeed    + other.RunSpeed;
-        result.SprintSpeed = this->SprintSpeed + other.SprintSpeed;
         return result;
     }
 };
@@ -62,20 +64,10 @@ class UCPP_API UCStatusComponent : public UActorComponent
 {
 	GENERATED_BODY()
 private:
-    //UPROPERTY(EditDefaultsOnly, Category = "Health")//블프에 표현되는 스탯
-    //    float MaxHealth = 100;
-
-    //UPROPERTY(EditDefaultsOnly, Category = "Speed")
-    //    float WalkSpeed = 600.0f;
-
-    //UPROPERTY(EditDefaultsOnly, Category = "Speed")
-    //    float RunSpeed = 800.0f;
-
-    //UPROPERTY(EditDefaultsOnly, Category = "Speed")
-    //    float SprintSpeed = 600.0f;
+    
     UPROPERTY(EditDefaultsOnly, Category = "DefaultStatus")
         FStatusData DefaultStatus;
-    //UPROPERTY(EditDefaultsOnly, Category = "DefaultStatus")
+
     FStatusData CurrentStatus;
 
 public:
@@ -87,9 +79,9 @@ public:
 
     FORCEINLINE FStatusData GetStatusData() { return CurrentStatus; }
 
-    FORCEINLINE float GetWalkSpeed()   { return CurrentStatus.WalkSpeed; }
-    FORCEINLINE float GetRunSpeed()    { return CurrentStatus.RunSpeed; }
-    FORCEINLINE float GetSprintSpeed() { return CurrentStatus.SprintSpeed; }
+    FORCEINLINE float GetWalkSpeed()   { return CurrentStatus.Speed[(int32)ECharacterSpeed::Walk]; }
+    FORCEINLINE float GetRunSpeed()    { return CurrentStatus.Speed[(int32)ECharacterSpeed::Run]; }
+    FORCEINLINE float GetSprintSpeed() { return CurrentStatus.Speed[(int32)ECharacterSpeed::Sprint]; }
 
     FORCEINLINE bool CanMove() { return bCanMove; }
 public:	
@@ -104,7 +96,7 @@ public:
     void SetMove();
     void SetStop();
 
-
+    void SetSpeed(ECharacterSpeed InType);
 
     void SetNewStatus(const FStatusData NewStatus);
 

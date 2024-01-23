@@ -82,7 +82,7 @@ void ACEnemy::BeginPlay()
 	Cast<UCUserWidget_Health>(HealthWidget->GetUserWidgetObject())->Update(Status->GetHealth(), Status->GetMaxHealth());
 	State->OnStateTypeChanged.AddDynamic(this, &ACEnemy::OnStateTypeChanged);//매크로임
 
-	Action->SetUnarmedMode();
+	//Action->SetUnarmedMode();
 }
 
 void ACEnemy::Tick(float DeltaTime)

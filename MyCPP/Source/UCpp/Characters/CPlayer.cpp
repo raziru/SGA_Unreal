@@ -103,7 +103,7 @@ void ACPlayer::BeginPlay()
 
 	Super::BeginPlay();
 	//Action->SetUnarmedMode();
-	GetCharacterMovement()->MaxWalkSpeed = Status->GetWalkSpeed();
+	Status->SetSpeed(ECharacterSpeed::Run);
 	//State에서 선언한 OnstatetypeChanged가 broadcast로 호출되면 
 	//묶여있는 함수가 같이 연계된다. --  delegate는 함수포인터를 사용한것과 비슷하다.
 	//함수포인터는 인자로 받아야하지만 delegate는 필요가없다.
@@ -131,10 +131,7 @@ void ACPlayer::BeginPlay()
 	Action->GetActionList()->GetData(3).OnUserWidget_ActionItem_Clicked.AddDynamic(this, &ACPlayer::OnWarp);
 	Action->GetActionList()->GetData(4).OnUserWidget_ActionItem_Clicked.AddDynamic(this, &ACPlayer::OnFireStorm);
 	Action->GetActionList()->GetData(5).OnUserWidget_ActionItem_Clicked.AddDynamic(this, &ACPlayer::OnThrow);
-	
-	//OnUnarmed();
-	//Cast<UCUserWidget_Health>(HealthWidget->GetUserWidgetObject())->Update(Status->GetHealth(), Status->GetMaxHealth());
-	
+
 	UpdateWidget();
 	StatusWidget->AddToViewport();
 	StatusWidget->SetVisibility(ESlateVisibility::Hidden);
@@ -163,6 +160,10 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("Zoom", this, &ACPlayer::OnZoom);
 
 	PlayerInputComponent->BindAction("Avoid", EInputEvent::IE_Pressed, this, &ACPlayer::OnAvoid);
+
+	PlayerInputComponent->BindAction("Walk", EInputEvent::IE_Pressed, this, &ACPlayer::OnWalk);
+	PlayerInputComponent->BindAction("Walk", EInputEvent::IE_Released, this, &ACPlayer::OffWalk);
+
 	
 	PlayerInputComponent->BindAction("Fist", EInputEvent::IE_Pressed, this, &ACPlayer::OnFist);
 	PlayerInputComponent->BindAction("OneHand", EInputEvent::IE_Pressed, this, &ACPlayer::OnOneHand);
@@ -327,7 +328,7 @@ void ACPlayer::SetNewStatus(const FStatusData NewStatus)
 
 void ACPlayer::ResfreshStatus(const FStatusData NewStatus)
 {
-	GetCharacterMovement()->MaxWalkSpeed = NewStatus.WalkSpeed;
+	//GetCharacterMovement()->MaxWalkSpeed = NewStatus.Speed[(int32)ECharacterSpeed::Run];
 }
 
 void ACPlayer::SetOnShield(const bool OnShield)
@@ -503,6 +504,17 @@ void ACPlayer::OnActionTypeChanged(EActionType InPrevType, EActionType InNewType
 	{
 		StatusWidget->SetVisibility(ESlateVisibility::Visible);
 	}
+}
+
+void ACPlayer::OnWalk()
+{
+	Status->SetSpeed(ECharacterSpeed::Walk);
+}
+
+void ACPlayer::OffWalk()
+{
+	Status->SetSpeed(ECharacterSpeed::Run);
+
 }
 
 void ACPlayer::OnMainWeapon()

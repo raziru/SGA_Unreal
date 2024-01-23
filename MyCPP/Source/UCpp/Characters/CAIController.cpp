@@ -58,7 +58,7 @@ void ACAIController::OnPossess(APawn* InPawn)
 	UseBlackboard(OwnerEnemy->GetBehaviorTree()->BlackboardAsset, Blackboard);
 	Behavior->SetBlackboard(Blackboard);
 
-	//RunBehaviorTree(OwnerEnemy->GetBehaviorTree());
+	RunBehaviorTree(OwnerEnemy->GetBehaviorTree());
 }
 
 void ACAIController::OnUnPossess()
