@@ -26,7 +26,7 @@ class UCPP_API UCActionComponent : public UActorComponent
 	GENERATED_BODY()
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
-		class UCActionData* Datas[(int32)EActionType::Max];
+		class UCActionData* DataAssets[(int32)EActionType::Max];
 private:
 	UPROPERTY(EditDefaultsOnly)
 		TSubclassOf<class UCUserWidget_ActionList> ActionListClass;
@@ -51,7 +51,7 @@ private:
 
 public:
 	UFUNCTION(BlueprintPure)
-		FORCEINLINE class UCActionData* GetCurrent() { return Datas[(int32)Type]; }
+		FORCEINLINE class UCAction* GetCurrent() { return Datas[(int32)Type]; }
 
 public:
 	UFUNCTION()
@@ -152,7 +152,7 @@ private:
 private:
 	void SetMode(EActionType InType);
 	void ChangeType(EActionType InNewType);
-	void ActionBeginPlay(class UCActionData* NewAction);
+	void ActionBeginPlay(class UCActionData* NewAction, EActionType NewActionType);
 public:
 	UPROPERTY(BlueprintAssignable)
 		FActionTypeChanged OnActionTypeChanged;
@@ -184,4 +184,6 @@ private:
 
 private:
 	class UCUserWidget_ActionList* ActionList;
+	class UCAction* Datas[(int32)EActionType::Max];
+
 };

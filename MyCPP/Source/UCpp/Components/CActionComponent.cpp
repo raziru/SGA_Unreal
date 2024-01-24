@@ -3,6 +3,7 @@
 
 #include "Components/CActionComponent.h"
 #include "Global.h"
+#include "Actions/CAction.h"
 #include "Actions/CActionData.h"
 #include "Actions/CAttachment.h"
 #include "Actions/CEquipment.h"
@@ -15,7 +16,7 @@ UCActionComponent::UCActionComponent()
 {
 	CHelpers::GetClass<UCUserWidget_ActionList>(&ActionListClass, "WidgetBlueprint'/Game/Widgets/Action/WB_ActionList.WB_ActionList_C'");
 	CHelpers::GetAsset<UCActionData>(&UnarmedData, "CActionData'/Game/Actions/DataAsset/DA_Unarmed.DA_Unarmed'");
-	Datas[(int32)EActionType::Unarmed] = UnarmedData;
+	DataAssets[(int32)EActionType::Unarmed] = UnarmedData;
 
 }
 
@@ -30,9 +31,13 @@ void UCActionComponent::BeginPlay()
 	//ACharacter* Owner = Cast<ACharacter>(GetOwner());
 	for (int32 i = 0; i < (int32)EActionType::Max; i++)
 	{
-		if (!!Datas[i])
+		if (!!DataAssets[i])
 		{
-			ActionBeginPlay(Datas[i]);
+			//ActionBeginPlay(DataAssets[i]);
+			DataAssets[i]->BeginPlay(Owner,&Datas[i]);
+			Datas[i]->GetDoAction()->ActionPress.AddDynamic(this, &UCActionComponent::ActionPress);
+			Datas[i]->GetEquipment()->OnEquipmentDelegate.AddDynamic(this, &UCActionComponent::OnSecondEquip);
+			Datas[i]->GetEquipment()->OnUnequipmentDelegate.AddDynamic(this, &UCActionComponent::OffSecondEquip);
 		}
 	}
 
@@ -104,7 +109,7 @@ void UCActionComponent::SetMainWeaponMode()
 	if (!!MainWeaponData)
 	{
 		CLog::Print((int32)MainWeaponType);
-		CLog::Print(Datas[(int32)MainWeaponType]->GetName());
+		//CLog::Print(Datas[(int32)MainWeaponType]->GetName());
 		SetMode(MainWeaponType);
 	}
 	else
@@ -131,7 +136,7 @@ void UCActionComponent::SetToolMode()
 
 void UCActionComponent::OffAllCollision()
 {
-	for (UCActionData* data : Datas)
+	for (UCAction* data : Datas)
 	{
 		if (!!data == false)
 			continue;
@@ -160,9 +165,9 @@ void UCActionComponent::SetNewMainWeapon(class UCActionData* NewItemAction, EAct
 		//Datas[(int32)NewItemActionType] = nullptr;
 		this->MainWeaponData = NewItemAction;
 
-		ActionBeginPlay(NewItemAction);
+		ActionBeginPlay(NewItemAction,NewItemActionType);
 		this->MainWeaponType = NewItemActionType;
-		Datas[(int32)NewItemActionType] = NewItemAction;
+		DataAssets[(int32)NewItemActionType] = NewItemAction;
 	}
 	
 
@@ -180,14 +185,14 @@ void UCActionComponent::SetNewTool(UCActionData* NewToolAction, bool IsConsumabl
 		{
 			Datas[(int32)EActionType::Tool]->DataDestroy();
 		}
-		Datas[(int32)EActionType::Tool] = NewToolAction;
-		ActionBeginPlay(Datas[(int32)EActionType::Tool]);
+		DataAssets[(int32)EActionType::Tool] = NewToolAction;
+		ActionBeginPlay(DataAssets[(int32)EActionType::Tool], EActionType::Tool);
 		Datas[(int32)EActionType::Tool]->GetDoAction()->EndAction.AddDynamic(this, &UCActionComponent::EndTool);
 		IsConsumableTool = IsConsumable;
 	}
 	else
 	{
-		if (Datas[(int32)EActionType::Tool] == NewToolAction)
+		if (DataAssets[(int32)EActionType::Tool] == NewToolAction)
 		{
 			CLog::Print("SameThing");
 			Datas[(int32)EActionType::Tool]->DataDestroy();
@@ -199,8 +204,8 @@ void UCActionComponent::SetNewTool(UCActionData* NewToolAction, bool IsConsumabl
 			{
 				Datas[(int32)EActionType::Tool]->DataDestroy();
 			}
-			Datas[(int32)EActionType::Tool] = NewToolAction;
-			ActionBeginPlay(Datas[(int32)EActionType::Tool]);
+			DataAssets[(int32)EActionType::Tool] = NewToolAction;
+			ActionBeginPlay(DataAssets[(int32)EActionType::Tool], EActionType::Tool);
 			Datas[(int32)EActionType::Tool]->GetDoAction()->EndAction.AddDynamic(this, &UCActionComponent::EndTool);
 			IsConsumableTool = IsConsumable;
 		}
@@ -405,13 +410,14 @@ void UCActionComponent::ChangeType(EActionType InNewType)
 	//delegate에 AddDynamic으로 저장된 모든 함수를 한번에 실행한다.
 }
 
-void UCActionComponent::ActionBeginPlay(UCActionData* NewAction)
+void UCActionComponent::ActionBeginPlay(UCActionData* NewAction, EActionType NewActionType)
 {
-	NewAction->BeginPlay(Owner);
-	NewAction->GetDoAction()->ActionPress.AddDynamic(this, &UCActionComponent::ActionPress);
+	NewAction->BeginPlay(Owner, &Datas[(int32)NewActionType]);
+	//Datas[(int32)NewActionType];
+	Datas[(int32)NewActionType]->GetDoAction()->ActionPress.AddDynamic(this, &UCActionComponent::ActionPress);
 	//NewAction->GetDoAction()->EndAction.AddDynamic(this, )
-	NewAction->GetEquipment()->OnEquipmentDelegate.AddDynamic(this, &UCActionComponent::OnSecondEquip);
-	NewAction->GetEquipment()->OnUnequipmentDelegate.AddDynamic(this, &UCActionComponent::OffSecondEquip);
+	Datas[(int32)NewActionType]->GetEquipment()->OnEquipmentDelegate.AddDynamic(this, &UCActionComponent::OnSecondEquip);
+	Datas[(int32)NewActionType]->GetEquipment()->OnUnequipmentDelegate.AddDynamic(this, &UCActionComponent::OffSecondEquip);
 }
 
 

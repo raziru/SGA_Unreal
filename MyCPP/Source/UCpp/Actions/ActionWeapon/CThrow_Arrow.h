@@ -17,4 +17,7 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class USphereComponent* Sphere;
 
+	/*UPROPERTY(VisibleDefaultsOnly)
+		class UStaticmeshComponent* Mesh;*/
+
 };

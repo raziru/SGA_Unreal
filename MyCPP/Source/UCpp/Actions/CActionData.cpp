@@ -9,58 +9,65 @@
 #include "GameFramework/Character.h"
 #include "Components/SkeletalMeshComponent.h"	
 
-void UCActionData::BeginPlay(ACharacter* InOwnerCharacter)
+void UCActionData::BeginPlay(ACharacter* InOwnerCharacter, UCAction** OutAction)
 {
 	FTransform transform;
+	ACAttachment* attachment = NULL;
 	//Attachment
 	if(!!AttachmentClass)
 	{
-		Attachment = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACAttachment>(AttachmentClass, transform, InOwnerCharacter);
-		Attachment->SetActorLabel(GetLabelName(InOwnerCharacter,"_Attachment"));
-		UGameplayStatics::FinishSpawningActor(Attachment, transform);
+		attachment = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACAttachment>(AttachmentClass, transform, InOwnerCharacter);
+		attachment->SetActorLabel(GetLabelName(InOwnerCharacter,"_Attachment"));
+		UGameplayStatics::FinishSpawningActor(attachment, transform);
 	}
 	//Equipment
+	ACEquipment* equipment = NULL;
 	if(!!EquipmentClass)
 	{
-		Equipment = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACEquipment>
+		equipment = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACEquipment>
 			(EquipmentClass, transform, InOwnerCharacter);
-		Equipment->AttachToComponent(InOwnerCharacter->GetMesh(),
+		equipment->AttachToComponent(InOwnerCharacter->GetMesh(),
 			FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
-		Equipment->SetActorLabel(GetLabelName(InOwnerCharacter,"_Equipment"));
-		Equipment->SetData(EquipmentData);
-		Equipment->SetColor(EquipmentColor);
+		equipment->SetActorLabel(GetLabelName(InOwnerCharacter,"_Equipment"));
+		equipment->SetData(EquipmentData);
+		equipment->SetColor(EquipmentColor);
 
-		UGameplayStatics::FinishSpawningActor(Equipment, transform);
+		UGameplayStatics::FinishSpawningActor(equipment, transform);
 		if (!!AttachmentClass)
 		{
-			Equipment->OnEquipmentDelegate.AddDynamic(Attachment, &ACAttachment::OnEquip);
-			Equipment->OnUnequipmentDelegate.AddDynamic(Attachment, &ACAttachment::OnUnequip);
+			equipment->OnEquipmentDelegate.AddDynamic(attachment, &ACAttachment::OnEquip);
+			equipment->OnUnequipmentDelegate.AddDynamic(attachment, &ACAttachment::OnUnequip);
 		}
 		
 	}
-
+	ACDoAction* doAction = NULL;
 	if (!!DoActionClass)
 	{
-		DoAction = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACDoAction>(DoActionClass, transform, InOwnerCharacter);
-		DoAction->AttachToComponent(InOwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
-		DoAction->SetActorLabel(GetLabelName(InOwnerCharacter,"_DoAction"));
-		DoAction->SetDatas(DoActionDatas);
-		UGameplayStatics::FinishSpawningActor(DoAction, transform);
+		doAction = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACDoAction>(DoActionClass, transform, InOwnerCharacter);
+		doAction->AttachToComponent(InOwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
+		doAction->SetActorLabel(GetLabelName(InOwnerCharacter,"_DoAction"));
+		doAction->SetDatas(DoActionDatas);
+		UGameplayStatics::FinishSpawningActor(doAction, transform);
 
-		if (!!Equipment)
+		if (!!equipment)
 		{
-			DoAction->SetEquipped(Equipment->GetEquipped());
+			doAction->SetEquipped(equipment->GetEquipped());
 		}
 
-		if (!!Attachment)
+		if (!!attachment)
 		{
-			Attachment->OnAttachmentBeginOverlap.AddDynamic(DoAction, &ACDoAction::OnAttachmentBeginOverlap);
-			Attachment->OnAttachmentEndOverlap.AddDynamic(DoAction, &ACDoAction::OnAttachmentEndOverlap);
+			attachment->OnAttachmentBeginOverlap.AddDynamic(doAction, &ACDoAction::OnAttachmentBeginOverlap);
+			attachment->OnAttachmentEndOverlap.AddDynamic(doAction, &ACDoAction::OnAttachmentEndOverlap);
 
-			Attachment->OnAttachmentCollision.AddDynamic(DoAction, &ACDoAction::OnAttachmentCollision);
-			Attachment->OffAttachmentCollision.AddDynamic(DoAction, &ACDoAction::OffAttachmentCollision);
+			attachment->OnAttachmentCollision.AddDynamic(doAction, &ACDoAction::OnAttachmentCollision);
+			attachment->OffAttachmentCollision.AddDynamic(doAction, &ACDoAction::OffAttachmentCollision);
 		}
 	}
+	*OutAction = NewObject<UCAction>();
+	(*OutAction)->Attachment = attachment;
+	(*OutAction)->Equipment = equipment;
+	(*OutAction)->DoAction = doAction;
+	(*OutAction)->EquipmentColor = EquipmentColor;
 }
 
 
@@ -78,7 +85,7 @@ FString UCActionData::GetLabelName(class ACharacter* InOwnerCharacter, FString I
 
 void UCActionData::DataDestroy()
 {
-	Equipment->Destroy();
+	/*Equipment->Destroy();
 	Attachment->Destroy();
-	DoAction->Destroy();
+	DoAction->Destroy();*/
 }
