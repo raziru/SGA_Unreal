@@ -18,10 +18,10 @@ class U03_ACTION_API UCActionComponent : public UActorComponent
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapons")//Can Edit->상속받은 블루프린트에서 편집가능하다.
-		class UCActionData* Datas[(int32)EActionType::Max];
+		class UCActionData* DataAssets[(int32)EActionType::Max];
 public:
 	UFUNCTION(BlueprintPure)//like pure in blueprint
-		FORCEINLINE class UCActionData* GetCurrent() { return Datas[(int32)Type]; }
+		FORCEINLINE class UCAction* GetCurrent() { return Datas[(int32)Type]; }
 
 
 public:
@@ -86,4 +86,5 @@ public:
 
 private:
 	EActionType Type;
+	class UCAction* Datas[(int32)EActionType::Max];
 };

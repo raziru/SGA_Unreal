@@ -3,6 +3,7 @@
 
 #include "Components/CActionComponent.h"
 #include "Global.h"
+#include "Actions/CAction.h"
 #include "Actions/CActionData.h"
 #include "Actions/CAttachment.h"
 #include "Actions/CEquipment.h"
@@ -24,8 +25,8 @@ void UCActionComponent::BeginPlay()
 	for (int32 i = 0; i < (int32)EActionType::Max; i++)
 	{
 		//execute beginplay at data asset
-		if (!!Datas[i])//== is valid
-			Datas[i]->BeginPlay(character);
+		if (!!DataAssets[i])//== is valid
+			DataAssets[i]->BeginPlay(character,&Datas[i]);
 	}
 	Super::BeginPlay();
 }
@@ -82,7 +83,7 @@ void UCActionComponent::SetIceBallMode()
 
 void UCActionComponent::OffAllCollision()
 {
-	for (UCActionData* data : Datas)
+	for (UCAction* data : Datas)
 	{
 		if (!!data == false)
 			continue;
