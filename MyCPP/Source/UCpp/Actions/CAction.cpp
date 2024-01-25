@@ -7,9 +7,9 @@
 
 
 
-void UCAction::DataDestroy()
+void UCAction::DestroyActor()
 {
 	Equipment->Destroy();
 	Attachment->Destroy();
-	DoAction->Destroy();
+	DoAction->DestroyAll();
 }

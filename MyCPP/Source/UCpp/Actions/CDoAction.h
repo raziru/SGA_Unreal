@@ -26,11 +26,9 @@ public:
 	virtual void Begin_DoAction() {}
 	virtual void End_DoAction() {}
 
-
 	virtual void DoActionRelease() {}
 	virtual void Begin_DoActionRelease() {}
 	virtual void End_DoActionRelease() {}
-
 
 	virtual void DoSecondAction() {}
 	virtual void Begin_DoSecondAction() {}
@@ -63,11 +61,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(BlueprintAssignable)
-		FActionPress ActionPress;
-
-	UPROPERTY(BlueprintAssignable)
-		FEndAction EndAction;
+	virtual void DestroyAll();
 protected:
 	UPROPERTY(BlueprintReadOnly)
 		class ACharacter* OwnerCharacter;
@@ -77,6 +71,13 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 		class UCStatusComponent* Status;
+
+public:
+	UPROPERTY(BlueprintAssignable)
+		FActionPress ActionPress;
+
+	UPROPERTY(BlueprintAssignable)
+		FEndAction EndAction;
 
 protected:
 	bool PressDoAction;

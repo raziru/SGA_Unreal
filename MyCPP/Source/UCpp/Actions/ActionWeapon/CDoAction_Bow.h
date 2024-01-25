@@ -30,10 +30,13 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void DestroyAll() override;
+
 private:
 	UFUNCTION()
 		void OnThrowBeginOverlap(FHitResult InHitResult);
 
 private:
-	class UCAim* Aim;
+	class UCAim*   Aim;
+	class ACThrow* ViewObject;
 };

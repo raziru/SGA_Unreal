@@ -65,12 +65,6 @@ void UCActionComponent::SetUnarmedMode()
 		equipment->Unequip();
 	}
 
-	/*CheckNull(Datas[(int32)EActionType::Unarmed]);
-	ACEquipment* equipment = Datas[(int32)EActionType::Unarmed]->GetEquipment();
-	CheckNull(equipment);
-
-	equipment->Equip();*/
-
 	ChangeType(EActionType::Unarmed);
 }
 void UCActionComponent::SetFistMode()
@@ -109,7 +103,6 @@ void UCActionComponent::SetMainWeaponMode()
 	if (!!MainWeaponData)
 	{
 		CLog::Print((int32)MainWeaponType);
-		//CLog::Print(Datas[(int32)MainWeaponType]->GetName());
 		SetMode(MainWeaponType);
 	}
 	else
@@ -154,15 +147,17 @@ void UCActionComponent::SetNewMainWeapon(class UCActionData* NewItemAction, EAct
 	if (this->MainWeaponData == NewItemAction && this->MainWeaponType == NewItemActionType)
 	{
 		CLog::Print("SameThing");
-		this->MainWeaponData->DataDestroy();
+		this->Datas[(int32)NewItemActionType]->DestroyActor();
 		this->MainWeaponData = nullptr;
-		this->MainWeaponType = EActionType::Max;
+		//this->MainWeaponType = EActionType::Fist;
+		SetUnarmedMode();
 	}
 	else
 	{
-		//SetUnarmedMode();
-		Datas[(int32)NewItemActionType]->DataDestroy();
-		//Datas[(int32)NewItemActionType] = nullptr;
+		if (!!Datas[(int32)NewItemActionType])
+		{
+			Datas[(int32)NewItemActionType]->DestroyActor();
+		}
 		this->MainWeaponData = NewItemAction;
 
 		ActionBeginPlay(NewItemAction,NewItemActionType);
@@ -183,7 +178,7 @@ void UCActionComponent::SetNewTool(UCActionData* NewToolAction, bool IsConsumabl
 	{
 		if (!!ToolAction)
 		{
-			Datas[(int32)EActionType::Tool]->DataDestroy();
+			Datas[(int32)EActionType::Tool]->DestroyActor();
 		}
 		DataAssets[(int32)EActionType::Tool] = NewToolAction;
 		ActionBeginPlay(DataAssets[(int32)EActionType::Tool], EActionType::Tool);
@@ -195,14 +190,14 @@ void UCActionComponent::SetNewTool(UCActionData* NewToolAction, bool IsConsumabl
 		if (DataAssets[(int32)EActionType::Tool] == NewToolAction)
 		{
 			CLog::Print("SameThing");
-			Datas[(int32)EActionType::Tool]->DataDestroy();
+			Datas[(int32)EActionType::Tool]->DestroyActor();
 			Datas[(int32)EActionType::Tool] = nullptr;
 		}
 		else
 		{
 			if (!!ToolAction)
 			{
-				Datas[(int32)EActionType::Tool]->DataDestroy();
+				Datas[(int32)EActionType::Tool]->DestroyActor();
 			}
 			DataAssets[(int32)EActionType::Tool] = NewToolAction;
 			ActionBeginPlay(DataAssets[(int32)EActionType::Tool], EActionType::Tool);

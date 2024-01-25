@@ -67,7 +67,7 @@ public:
     FORCEINLINE FLinearColor GetEquipmentColor() { return EquipmentColor; }
 
 public:
-     void DataDestroy();
+     void DestroyActor();
 
 private:
     class ACEquipment* Equipment;

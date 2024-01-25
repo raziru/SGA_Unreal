@@ -7,6 +7,20 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
+void ACThrow::OffProjectile()
+{
+	Projectile->Deactivate();
+	InitialLifeSpan = 0.0f;
+	CanCollision = false;
+}
+
+void ACThrow::OnProjectile()
+{
+	Projectile->Activate();
+	InitialLifeSpan = 3.0f;
+
+}
+
 ACThrow::ACThrow()
 {
 	CHelpers::CreateActorComponent<UProjectileMovementComponent>(this, &Projectile, "Projectile");
@@ -28,12 +42,18 @@ void ACThrow::BeginPlay()
 
 	for (UShapeComponent* shape : components)
 		shape->OnComponentBeginOverlap.AddDynamic(this, &ACThrow::OnComponentBeginOverlap);
+	
 
 }
 
 void ACThrow::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (GetOwner() == OtherActor)
+	CLog::Print(OtherActor->GetName());
+	if (CanCollision == false)
+	{
+		return;
+	}
+	if (GetOwner() == OtherActor || OtherActor->GetClass()==this->GetClass())
 	{
 		return;
 	}

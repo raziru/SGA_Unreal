@@ -12,6 +12,9 @@ class UCPP_API ACThrow : public AActor
 {
 	GENERATED_BODY()
 	
+public:
+	void OnProjectile();
+	void OffProjectile();
 private:
 	UPROPERTY(EditDefaultsOnly)
 		class UParticleSystem* Explosion;
@@ -37,5 +40,6 @@ public:
 	UPROPERTY(BlueprintAssignable)
 		FThrowBeginOverlap OnThrowBeginOverlap;
 
-
+private:
+	bool CanCollision = true;
 };
