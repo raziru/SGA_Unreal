@@ -18,6 +18,12 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSetNewTool, UCActionData*, NewItem
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewArmor, TSubclassOf<ACArmor>, armor);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDropMainWeapon, UCActionData*, NewItemAction, EActionType, NewItemActionType);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDropTool, UCActionData*, NewItemAction, bool, IsConsumable);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDropArmor, TSubclassOf<ACArmor>, armor);
+
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewItem, FItemData, NewItem);
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewItem, FItemData, NewItem);
 
@@ -108,4 +114,13 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 		FSetNewTool SetNewTool;
+
+	UPROPERTY(BlueprintAssignable)
+		FDropMainWeapon DropMainWeapon;
+
+	UPROPERTY(BlueprintAssignable)
+		FDropArmor DropArmor;
+
+	UPROPERTY(BlueprintAssignable)
+		FDropTool DropTool;
 };

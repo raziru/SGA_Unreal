@@ -64,6 +64,8 @@ public:
     FORCEINLINE class ACEquipment* GetEquipment() { return Equipment; }
     FORCEINLINE class ACDoAction* GetDoAction() { return DoAction; }
     FORCEINLINE class ACAttachment* GetAttachment() { return Attachment; }
+    FORCEINLINE class ACAttachment* GetSecondAttachment() { return SecondAttachment; }
+
     FORCEINLINE FLinearColor GetEquipmentColor() { return EquipmentColor; }
 
 public:
@@ -72,6 +74,8 @@ public:
 private:
     class ACEquipment* Equipment;
     class ACAttachment* Attachment;
+    class ACAttachment* SecondAttachment;
+
     class ACDoAction* DoAction;
     FLinearColor EquipmentColor;
 

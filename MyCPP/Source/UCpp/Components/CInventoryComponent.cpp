@@ -39,8 +39,6 @@ void UCInventoryComponent::OnClicked(FItemData NewItem)
 	case EItemType::Armor:
 		CLog::Print("Check");
 		ArmorItem = Cast<ACItem_Armor>(GetOwner()->GetWorld()->SpawnActor(NewItem.ItemClass));
-
-		
 		CheckNull(ArmorItem);
 		CLog::Print("Armor Success");
 		if (SetNewArmor.IsBound())
@@ -51,9 +49,7 @@ void UCInventoryComponent::OnClicked(FItemData NewItem)
 		break;
 	case EItemType::Consumable:
 		CLog::Print("Check");
-
 		FTransform transform;
-
 		Consumable = GetOwner()->GetWorld()->SpawnActorDeferred<ACItem_Consumable>(NewItem.ItemClass, transform, GetOwner());
 		UGameplayStatics::FinishSpawningActor(Consumable, transform);
 		CheckNull(Consumable);
@@ -84,9 +80,6 @@ void UCInventoryComponent::OnRightClicked(FItemData NewItem)
 
 	ACItem* item = GetOwner()->GetWorld()->SpawnActorDeferred<ACItem>(NewItem.ItemClass, transform);
 	UGameplayStatics::FinishSpawningActor(item, transform);
-
-	//GetOwner()->GetWorld()->SpawnActor(NewItem.ItemClass,transform.GetRotation(),transform.GetLocation(),GetOwner());
-
 }
 
 void UCInventoryComponent::NextInventory()
@@ -281,9 +274,14 @@ void UCInventoryComponent::DecreaseCount(FItemData NewItem)
 			Inventory[i].CurrentStack--;
 			if (Inventory[i].CurrentStack == 0)
 			{
+				{
+
+				}
 				Inventory.RemoveAt(i);//Remove보다 at으로 인덱스로 접근하는 것이 에러가 발생하지않는다.
 				//Inventory.Remove(Inventory[i])//포인터를 없애기 때문에 
 				//RemoveAt indeed would solve this problem (in fact it much faster), also not using pointer is good solution, you could use varable that you copied which would naturally have diffrent memoery address then array.
+				//if (Inventory[i].ItemType == )
+				
 			}
 
 			if (IsInventoryOpened)
@@ -291,6 +289,7 @@ void UCInventoryComponent::DecreaseCount(FItemData NewItem)
 				CheckNull(InventoryWidget);
 				InventoryWidget->RefreshInventory(Inventory, MaxInventorySize, ColumnSize);
 			}
+			break;
 		}
 	}
 }

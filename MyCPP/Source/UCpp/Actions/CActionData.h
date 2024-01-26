@@ -20,6 +20,9 @@ public:
         TSubclassOf<class ACAttachment> AttachmentClass;
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere)
+        TSubclassOf<class ACAttachment> SecondAttachmentClass;
+
+    UPROPERTY(BlueprintReadOnly, EditAnywhere)
         TSubclassOf<class ACEquipment> EquipmentClass;
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere)

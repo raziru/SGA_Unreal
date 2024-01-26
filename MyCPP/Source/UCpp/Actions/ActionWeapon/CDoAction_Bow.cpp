@@ -22,6 +22,7 @@ void ACDoAction_Bow::BeginPlay()
 	ViewObject->OffProjectile();
 	ViewObject->AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), "Hand_Throw_Arrow");
 	UGameplayStatics::FinishSpawningActor(ViewObject, transform);
+	ViewObject->SetActorHiddenInGame(true);
 
 }
 
@@ -33,6 +34,8 @@ void ACDoAction_Bow::DoAction()
 	{
 		ActionPress.Broadcast(PressDoAction, PressDoSecondAction);
 	}
+	ViewObject->SetActorHiddenInGame(false);
+
 }
 
 void ACDoAction_Bow::Begin_DoAction()
@@ -72,9 +75,7 @@ void ACDoAction_Bow::DoActionRelease()
 	}
 
 	OwnerCharacter->PlayAnimMontage(Datas[0].AnimMontage, Datas[0].PlayRatio, Datas[0].StartSection);
-	Datas[0].bCanMove ? Status->SetMove() : Status->SetStop();
-
-	
+	Datas[0].bCanMove ? Status->SetMove() : Status->SetStop();	
 }
 
 void ACDoAction_Bow::Begin_DoActionRelease()

@@ -147,13 +147,14 @@ void UCActionComponent::SetNewMainWeapon(class UCActionData* NewItemAction, EAct
 	if (this->MainWeaponData == NewItemAction && this->MainWeaponType == NewItemActionType)
 	{
 		CLog::Print("SameThing");
+		SetUnarmedMode();
 		this->Datas[(int32)NewItemActionType]->DestroyActor();
 		this->MainWeaponData = nullptr;
 		//this->MainWeaponType = EActionType::Fist;
-		SetUnarmedMode();
 	}
 	else
 	{
+		SetUnarmedMode();
 		if (!!Datas[(int32)NewItemActionType])
 		{
 			Datas[(int32)NewItemActionType]->DestroyActor();
@@ -163,6 +164,7 @@ void UCActionComponent::SetNewMainWeapon(class UCActionData* NewItemAction, EAct
 		ActionBeginPlay(NewItemAction,NewItemActionType);
 		this->MainWeaponType = NewItemActionType;
 		DataAssets[(int32)NewItemActionType] = NewItemAction;
+		//SetMode(NewItemActionType);
 	}
 	
 
@@ -170,6 +172,7 @@ void UCActionComponent::SetNewMainWeapon(class UCActionData* NewItemAction, EAct
 
 void UCActionComponent::SetNewSecondWeapon(UCActionData* NewItemAction, EActionType NewItemActionType)
 {
+
 }
 
 void UCActionComponent::SetNewTool(UCActionData* NewToolAction, bool IsConsumable)

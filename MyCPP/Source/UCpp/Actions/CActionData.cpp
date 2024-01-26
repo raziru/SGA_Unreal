@@ -20,6 +20,16 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter, UCAction** OutAction)
 		attachment->SetActorLabel(GetLabelName(InOwnerCharacter,"_Attachment"));
 		UGameplayStatics::FinishSpawningActor(attachment, transform);
 	}
+
+	ACAttachment* secondAttachment = NULL;
+	//Attachment
+	if (!!SecondAttachmentClass)
+	{
+		secondAttachment = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACAttachment>(SecondAttachmentClass, transform, InOwnerCharacter);
+		secondAttachment->SetActorLabel(GetLabelName(InOwnerCharacter, "_Attachment"));
+		UGameplayStatics::FinishSpawningActor(secondAttachment, transform);
+	}
+
 	//Equipment
 	ACEquipment* equipment = NULL;
 	if(!!EquipmentClass)
@@ -33,11 +43,17 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter, UCAction** OutAction)
 		equipment->SetColor(EquipmentColor);
 
 		UGameplayStatics::FinishSpawningActor(equipment, transform);
-		if (!!AttachmentClass)
+		if (!!attachment)
 		{
 			equipment->OnEquipmentDelegate.AddDynamic(attachment, &ACAttachment::OnEquip);
-			equipment->OnUnequipmentDelegate.AddDynamic(attachment, &ACAttachment::OnUnequip);
+			equipment->OnUnequipmentDelegate.AddDynamic(attachment, &ACAttachment::OnUnequip);			
 		}
+		if (!!secondAttachment)
+		{
+			equipment->OnEquipmentDelegate.AddDynamic(secondAttachment, &ACAttachment::OnEquip);
+			equipment->OnUnequipmentDelegate.AddDynamic(secondAttachment, &ACAttachment::OnUnequip);
+		}
+
 		
 	}
 	ACDoAction* doAction = NULL;
@@ -62,9 +78,19 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter, UCAction** OutAction)
 			attachment->OnAttachmentCollision.AddDynamic(doAction, &ACDoAction::OnAttachmentCollision);
 			attachment->OffAttachmentCollision.AddDynamic(doAction, &ACDoAction::OffAttachmentCollision);
 		}
+
+		if (!!secondAttachment)
+		{
+			secondAttachment->OnAttachmentBeginOverlap.AddDynamic(doAction, &ACDoAction::OnAttachmentBeginOverlap);
+			secondAttachment->OnAttachmentEndOverlap.AddDynamic(doAction, &ACDoAction::OnAttachmentEndOverlap);
+
+			secondAttachment->OnAttachmentCollision.AddDynamic(doAction, &ACDoAction::OnAttachmentCollision);
+			secondAttachment->OffAttachmentCollision.AddDynamic(doAction, &ACDoAction::OffAttachmentCollision);
+		}
 	}
 	*OutAction = NewObject<UCAction>();
 	(*OutAction)->Attachment = attachment;
+	(*OutAction)->SecondAttachment = secondAttachment;
 	(*OutAction)->Equipment = equipment;
 	(*OutAction)->DoAction = doAction;
 	(*OutAction)->EquipmentColor = EquipmentColor;
