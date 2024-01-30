@@ -115,11 +115,12 @@ void ACPlayer::BeginPlay()
 
 
 	State->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
-	Inventory->SetNewMainWeapon.AddDynamic(this, &ACPlayer::SetNewMainWeapon);
-	Inventory->SetNewArmor.AddDynamic(this, &ACPlayer::SetNewArmor);
-	Inventory->SetNewTool.AddDynamic(this, &ACPlayer::SetNewTool);
-	
-	Equipment->OnShield.AddDynamic(this, &ACPlayer::SetOnShield);
+	Inventory->SetNewMainWeapon.AddDynamic(Action, &UCActionComponent::SetNewMainWeapon);
+	Inventory->SetNewArmor.AddDynamic(Equipment, &UCEquipComponent::SetNewArmor);
+	Inventory->SetNewTool.AddDynamic(this, &ACPlayer::SetNewTool);	
+
+
+	Equipment->OnShield.AddDynamic(Action, &UCActionComponent::SetOnShield);
 	Equipment->SetNewStatus.AddDynamic(this, &ACPlayer::SetNewStatus);
 
 
@@ -255,16 +256,8 @@ void ACPlayer::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
 	
 }
 
-void ACPlayer::SetNewItem(const FItemData NewItem)
-{
-	CLog::Log(NewItem.ItemName.ToString());
 
-}
 
-void ACPlayer::SetNewMainWeapon(UCActionData* NewItemAction, EActionType NewItemActionType)
-{
-	Action->SetNewMainWeapon(NewItemAction, NewItemActionType);
-}
 
 
 void ACPlayer::EquipSecond(EActionType InActionType)
@@ -329,16 +322,6 @@ void ACPlayer::SetNewStatus(const FStatusData NewStatus)
 void ACPlayer::ResfreshStatus(const FStatusData NewStatus)
 {
 	//GetCharacterMovement()->MaxWalkSpeed = NewStatus.Speed[(int32)ECharacterSpeed::Run];
-}
-
-void ACPlayer::SetOnShield(const bool OnShield)
-{
-	Action->SetOnShield(OnShield);
-}
-
-void ACPlayer::SetNewArmor(TSubclassOf<class ACArmor> NewArmor)
-{
-	Equipment->SetNewArmor(NewArmor);
 }
 
 //Interacting

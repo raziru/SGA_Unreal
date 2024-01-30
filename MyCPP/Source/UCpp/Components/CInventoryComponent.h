@@ -46,22 +46,6 @@ private:
 protected:
 	UPROPERTY(EditAnywhere, Category = "Widget")
 		TSubclassOf<UUserWidget>InventoryWidgetClass;
-
-	UPROPERTY(EditAnywhere, Category = "Widget")
-		TSubclassOf<UUserWidget> MainInventoryWidgetClass;
-
-	UPROPERTY(EditAnywhere, Category = "Widget")
-		TSubclassOf<UUserWidget> WeaponInventoryWidgetClass;
-
-	UPROPERTY(EditAnywhere, Category = "Widget")
-		TSubclassOf<UUserWidget> ArmorInventoryWidgetClass;
-
-	UPROPERTY(EditAnywhere, Category = "Widget")
-		TSubclassOf<UUserWidget> ToolInventoryWidgetClass;
-
-	UPROPERTY(EditAnywhere, Category = "Widget")
-		TSubclassOf<UUserWidget> ConsumableInventoryWidgetClass;
-
 	UPROPERTY()
 		class UCUserWidget_Inventory* InventoryWidget;
 	

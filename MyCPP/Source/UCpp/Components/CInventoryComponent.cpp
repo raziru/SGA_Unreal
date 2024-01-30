@@ -77,8 +77,42 @@ void UCInventoryComponent::OnRightClicked(FItemData NewItem)
 	FTransform transform;
 	FVector Vector = { (float)(rand() % 10 + 5), (float)(rand() % 10 + 5), 0.0f };
 	transform.SetLocation(GetOwner()->GetActorLocation() + Vector);
-
 	ACItem* item = GetOwner()->GetWorld()->SpawnActorDeferred<ACItem>(NewItem.ItemClass, transform);
+	ACItem_Weapon* WeaponItem;
+	ACItem_Armor* ArmorItem;
+	ACItem_Consumable* Consumable;
+	switch (NewItem.ItemType)
+	{
+	case EItemType::Weapon:
+		WeaponItem = Cast<ACItem_Weapon>(item);
+		if (DropMainWeapon.IsBound())
+		{
+			DropMainWeapon.Broadcast(WeaponItem->GetData(),WeaponItem->GetType());
+		}
+		break;
+	case EItemType::Armor:
+		ArmorItem = Cast<ACItem_Armor>(item);
+
+		if (DropArmor.IsBound())
+		{
+			DropArmor.Broadcast(ArmorItem->GetClass());
+		}
+		break;
+	case EItemType::Tool:
+		break;
+	case EItemType::Consumable:
+		Consumable = Cast<ACItem_Consumable>(item);
+		if (DropTool.IsBound())
+		{
+			DropTool.Broadcast(Consumable->GetData(),true);
+		}
+		break;
+	case EItemType::Max:
+		break;
+	default:
+		break;
+	}
+
 	UGameplayStatics::FinishSpawningActor(item, transform);
 }
 
@@ -267,20 +301,19 @@ void UCInventoryComponent::EndToolAction()
 
 void UCInventoryComponent::DecreaseCount(FItemData NewItem)
 {
+
 	for (int i = 0; i < Inventory.Num(); i++)
 	{
 		if (Inventory[i].ItemClass == NewItem.ItemClass)
 		{
+			
 			Inventory[i].CurrentStack--;
 			if (Inventory[i].CurrentStack == 0)
 			{
-				{
-
-				}
+				
 				Inventory.RemoveAt(i);//Remove보다 at으로 인덱스로 접근하는 것이 에러가 발생하지않는다.
 				//Inventory.Remove(Inventory[i])//포인터를 없애기 때문에 
 				//RemoveAt indeed would solve this problem (in fact it much faster), also not using pointer is good solution, you could use varable that you copied which would naturally have diffrent memoery address then array.
-				//if (Inventory[i].ItemType == )
 				
 			}
 

@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "Actions/CAttachment.h"
 #include "CAction.generated.h"
+
 
 USTRUCT(BlueprintType)
 struct FEquipmentData
@@ -63,20 +65,28 @@ public:
 public:
     FORCEINLINE class ACEquipment* GetEquipment() { return Equipment; }
     FORCEINLINE class ACDoAction* GetDoAction() { return DoAction; }
-    FORCEINLINE class ACAttachment* GetAttachment() { return Attachment; }
-    FORCEINLINE class ACAttachment* GetSecondAttachment() { return SecondAttachment; }
-
+    FORCEINLINE class ACAttachment** GetAttachments() { return Attachments; }
     FORCEINLINE FLinearColor GetEquipmentColor() { return EquipmentColor; }
 
+    FORCEINLINE class ACAttachment* GetMainAttachment() { return Attachments[(int32)EAttachment::MainHand]; }
+    FORCEINLINE class ACAttachment* GetSecondAttachment() { return Attachments[(int32)EAttachment::SecondHand]; }
+    FORCEINLINE class ACAttachment* GetProjectileAttachment() { return Attachments[(int32)EAttachment::Projectile]; }
+
+
+
+    void AttachmentOnCollision();
+    void AttachmentOffCollision();
+
+    bool GetAttachment();
 public:
      void DestroyActor();
 
 private:
     class ACEquipment* Equipment;
-    class ACAttachment* Attachment;
-    class ACAttachment* SecondAttachment;
-
+    class ACAttachment* Attachments[(int32)EAttachment::Max];
     class ACDoAction* DoAction;
+
+
     FLinearColor EquipmentColor;
 
 };

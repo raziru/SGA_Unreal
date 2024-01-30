@@ -30,6 +30,7 @@ private:
 private:
 	UPROPERTY(EditDefaultsOnly)
 		TSubclassOf<class UCUserWidget_ActionList> ActionListClass;
+
 	UPROPERTY(EditDefaultsOnly)
 		class UCActionData* UnarmedData;
 private:
@@ -103,12 +104,24 @@ public:
 
 
 	void OffAllCollision();
-	
-	void SetNewMainWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
 
-	void SetNewSecondWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
+	UFUNCTION()
+		void SetNewMainWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
 
-	void SetNewTool(class UCActionData* NewToolAction, bool IsConsumable);
+	UFUNCTION()
+		void SetNewSecondWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
+
+	UFUNCTION()
+		void SetNewTool(class UCActionData* NewToolAction, bool IsConsumable);
+
+	UFUNCTION()
+		void DropWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
+
+	UFUNCTION()
+		void DropSecondWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
+
+	UFUNCTION()
+		void DropTool(class UCActionData* NewToolAction, bool IsConsumable);
 
 
 	UFUNCTION()

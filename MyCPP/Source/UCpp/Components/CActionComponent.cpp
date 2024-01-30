@@ -137,7 +137,7 @@ void UCActionComponent::OffAllCollision()
 		if (!!data->GetAttachment() == false)
 			continue;
 
-		data->GetAttachment()->OffCollision();
+		data->AttachmentOffCollision();
 	}
 }
 
@@ -210,6 +210,22 @@ void UCActionComponent::SetNewTool(UCActionData* NewToolAction, bool IsConsumabl
 
 	}
 	
+}
+
+void UCActionComponent::DropWeapon(UCActionData* NewItemAction, EActionType NewItemActionType)
+{
+	if (this->MainWeaponData == NewItemAction && this->MainWeaponType == NewItemActionType)
+	{
+
+	}
+}
+
+void UCActionComponent::DropSecondWeapon(UCActionData* NewItemAction, EActionType NewItemActionType)
+{
+}
+
+void UCActionComponent::DropTool(UCActionData* NewToolAction, bool IsConsumable)
+{
 }
 
 void UCActionComponent::DoAction()

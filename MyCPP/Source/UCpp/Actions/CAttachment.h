@@ -10,6 +10,13 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FAttachmentBeginOverlap, class AC
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FAttachmentEndOverlap, class ACharacter*, InAttacker, class AActor*, InAttackCauser, class ACharacter*, InOtherCharacter);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAttachmentCollision);
 
+UENUM(BlueprintType)
+enum class EAttachment : uint8
+{
+	MainHand, SecondHand, Projectile, Max,
+};
+
+
 UCLASS()
 class UCPP_API ACAttachment : public AActor
 {

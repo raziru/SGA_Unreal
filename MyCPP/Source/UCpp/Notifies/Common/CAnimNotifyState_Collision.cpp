@@ -21,10 +21,14 @@ void UCAnimNotifyState_Collision::NotifyBegin(USkeletalMeshComponent* MeshComp, 
 	UCActionComponent* action = CHelpers::GetComponent<UCActionComponent>(MeshComp->GetOwner());
 	CheckNull(action);
 
-	ACAttachment* attachment = action->GetCurrent()->GetAttachment();
-	CheckNull(attachment);
+	/*ACAttachment* attachment = action->GetCurrent()->GetAttachment();
+	CheckNull(attachment);*/
 
-	attachment->OnCollision();
+	if (action->GetCurrent()->GetAttachment())
+	{
+		action->GetCurrent()->AttachmentOnCollision();
+
+	}
 }
 
 void UCAnimNotifyState_Collision::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
@@ -36,8 +40,14 @@ void UCAnimNotifyState_Collision::NotifyEnd(USkeletalMeshComponent* MeshComp, UA
 	UCActionComponent* action = CHelpers::GetComponent<UCActionComponent>(MeshComp->GetOwner());
 	CheckNull(action);
 
-	ACAttachment* attachment = action->GetCurrent()->GetAttachment();
+	/*ACAttachment* attachment = action->GetCurrent()->GetAttachment();
 	CheckNull(attachment);
 
-	attachment->OffCollision();
+	attachment->OffCollision();*/
+
+	if (action->GetCurrent()->GetAttachment())
+	{
+		action->GetCurrent()->AttachmentOffCollision();
+
+	}
 }

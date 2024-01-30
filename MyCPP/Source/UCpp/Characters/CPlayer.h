@@ -132,10 +132,7 @@ private:
 //Weapon Equip
 	UFUNCTION()
 		void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
-	UFUNCTION()
-		void SetNewItem(const FItemData NewItem);
-	UFUNCTION()
-		void SetNewMainWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
+
 	UFUNCTION()
 		void EquipSecond(EActionType InActionType);
 
@@ -143,17 +140,12 @@ private:
 		void UnequipSecond(EActionType InActionType);
 
 //Armor Equip
-	UFUNCTION()
-		void SetNewArmor(TSubclassOf<class ACArmor> NewArmor);
 
 	UFUNCTION()
 		void SetNewStatus(const FStatusData NewStatus);
 
 	UFUNCTION()
 		void ResfreshStatus(const FStatusData NewStatus);
-
-	UFUNCTION()
-		void SetOnShield(const bool OnShield);
 //Use Consumalbe
 	UFUNCTION()
 		void SetNewTool(class UCActionData* NewConsumableAction, bool IsConsumable);

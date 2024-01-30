@@ -34,3 +34,4 @@ void ACDoAction::DestroyAll()
 {
 	Destroy();
 }
+

@@ -21,7 +21,8 @@ public:
 	UCEquipComponent();
 
 public:
-	void SetNewArmor(TSubclassOf<class ACArmor> NewArmorClass);
+	UFUNCTION()
+		void SetNewArmor(TSubclassOf<class ACArmor> NewArmorClass);
 
 	void SetStatus();
 
