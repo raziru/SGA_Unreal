@@ -36,7 +36,7 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter, UCAction** OutAction)
 	ACAttachment* attachments[(int32)EAttachment::Max] = {};
 
 	//Attachment
-	if (!!AttachmentClasses[(int32)EAttachment::MainHand])
+	/*if (!!AttachmentClasses[(int32)EAttachment::MainHand])
 	{
 		attachments[(int32)EAttachment::MainHand] = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACAttachment>(AttachmentClasses[(int32)EAttachment::MainHand], transform, InOwnerCharacter);
 		attachments[(int32)EAttachment::MainHand]->SetActorLabel(GetLabelName(InOwnerCharacter, "_Attachment_MainHand"));
@@ -55,8 +55,19 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter, UCAction** OutAction)
 		attachments[(int32)EAttachment::Projectile] = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACAttachment>(AttachmentClasses[(int32)EAttachment::Projectile], transform, InOwnerCharacter);
 		attachments[(int32)EAttachment::Projectile]->SetActorLabel(GetLabelName(InOwnerCharacter, "_Attachment_Projectile"));
 		UGameplayStatics::FinishSpawningActor(attachments[(int32)EAttachment::Projectile], transform);
-	}
+	}*/
 
+
+	for (int32 i = 0; i < (int32)EAttachment::Max; i++)
+	{
+		if (!!AttachmentClasses[i])
+		{
+			FString index = FString::FromInt(i);
+			attachments[i] = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACAttachment>(AttachmentClasses[i], transform, InOwnerCharacter);
+			attachments[i]->SetActorLabel(GetLabelName(InOwnerCharacter, "_Attachment_" + index));
+			UGameplayStatics::FinishSpawningActor(attachments[i], transform);
+		}
+	}
 
 
 	//Equipment

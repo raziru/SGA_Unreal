@@ -26,7 +26,7 @@ protected:
 		class USceneComponent* Scene;
 protected:
 	UFUNCTION(BlueprintCallable)//Can use in blueprint
-		void AttachTo(FName InSocketName);
+		virtual void AttachTo(FName InSocketName);
 
 	UFUNCTION(BlueprintCallable)//Can use in blueprint
 		void AttachToCollision(class UShapeComponent* InComponent, FName InSocketName);

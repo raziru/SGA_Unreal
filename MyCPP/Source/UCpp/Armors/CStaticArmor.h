@@ -19,8 +19,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Armor")
 		class UStaticMeshComponent* Mesh;
 
-
-	virtual void AttachTo(FName InSocket) override;
+	virtual void MoveTo(FName InSocket) override;
 
 public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)

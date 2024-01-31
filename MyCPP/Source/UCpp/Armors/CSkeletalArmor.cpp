@@ -16,7 +16,6 @@ void ACSkeletalArmor::Attachment()
 	FName Empty = "";
 	AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), Empty);
 	Mesh->SetMasterPoseComponent(OwnerCharacter->GetMesh());
-
 	if (OnAttachmentDelegate.IsBound())
 	{
 		OnAttachmentDelegate.Broadcast(StatusData);

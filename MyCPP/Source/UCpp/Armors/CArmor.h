@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Actions/CAttachment.h"
 #include "Components/CStatusComponent.h"
 #include "CArmor.generated.h"
 
@@ -15,7 +16,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FArmorAttachmentDelegate, FStatusDat
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FArmorDetachmentDelegate, FStatusData, ArmorStatus);
 
 UCLASS()
-class UCPP_API ACArmor : public AActor
+class UCPP_API ACArmor : public ACAttachment
 {
 	GENERATED_BODY()
 
@@ -45,17 +46,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual void Detachment() {}
 	UFUNCTION(BlueprintCallable)
-		virtual void AttachTo(FName InSocket) {}
-public:
-	UFUNCTION(BlueprintImplementableEvent)
-		void Equip();
-	UFUNCTION(BlueprintImplementableEvent)
-		void UnEquip();
+		virtual void MoveTo(FName InSocket) {}
+
+
 
 protected: 
-	ACharacter* OwnerCharacter;
-	
-	
+	ACharacter* OwnerCharacter;	
 	
 protected:
 	virtual void BeginPlay() override;

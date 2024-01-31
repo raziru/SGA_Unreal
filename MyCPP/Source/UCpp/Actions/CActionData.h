@@ -17,6 +17,7 @@ class UCPP_API UCActionData : public UDataAsset
 
 // For Blueprint// 블루 프린트로 내용 수정을 마음대로 할 수 있기 하기위함
 public:
+
 	UPROPERTY(EditAnywhere)
         TSubclassOf<class ACAttachment> AttachmentClasses[(int32)EAttachment::Max];
 

@@ -32,7 +32,7 @@ void ACStaticArmor::Detachment()
 	Destroy();
 }
 
-void ACStaticArmor::AttachTo(FName InSocket)
+void ACStaticArmor::MoveTo(FName InSocket)
 {
 	if (OnSocket == false)
 	{
