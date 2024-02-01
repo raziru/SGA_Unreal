@@ -6,6 +6,26 @@
 
 
 
+void UCAction::OnSecondAttachment(ACAttachment* NewSecondAttachment)
+{
+	if (!!NewSecondAttachment)
+	{
+		Attachments[(int32)EAttachment::SecondHand] = NewSecondAttachment;
+		Equipment->OnEquipmentDelegate.AddDynamic(NewSecondAttachment, &ACAttachment::OnEquip);
+		Equipment->OnUnequipmentDelegate.AddDynamic(NewSecondAttachment, &ACAttachment::OnUnequip);
+
+	}
+}
+
+void UCAction::OffSecondAttachment(ACAttachment* NewSecondAttachment)
+{
+	if (!!NewSecondAttachment)
+	{
+		Attachments[(int32)EAttachment::SecondHand] = NULL;
+
+	}
+}
+
 void UCAction::AttachmentOnCollision()
 {
 	for (ACAttachment* attachment : Attachments)

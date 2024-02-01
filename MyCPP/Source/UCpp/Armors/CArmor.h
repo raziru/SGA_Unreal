@@ -12,8 +12,8 @@ enum class EArmorType : uint8
 	Weapon, Helmet, Top, Bottom, Shoes, Hands, Shield, Max,
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FArmorAttachmentDelegate, FStatusData, ArmorStatus);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FArmorDetachmentDelegate, FStatusData, ArmorStatus);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FArmorAttach, FStatusData, ArmorStatus);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FArmorDetach, FStatusData, ArmorStatus);
 
 UCLASS()
 class UCPP_API ACArmor : public ACAttachment
@@ -42,9 +42,9 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable)
-		virtual void Attachment() {}
+		virtual void Attach() {}
 	UFUNCTION(BlueprintCallable)
-		virtual void Detachment() {}
+		virtual void Detach() {}
 	UFUNCTION(BlueprintCallable)
 		virtual void MoveTo(FName InSocket) {}
 
@@ -58,9 +58,9 @@ protected:
 
 public:
 	UPROPERTY(BlueprintAssignable)
-		FArmorAttachmentDelegate OnAttachmentDelegate;
+		FArmorAttach OnAttach;
 
 	UPROPERTY(BlueprintAssignable)
-		FArmorDetachmentDelegate OnDetachmentDelegate;
+		FArmorDetach OnDetach;
 
 };

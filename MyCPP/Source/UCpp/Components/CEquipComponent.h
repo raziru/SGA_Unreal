@@ -9,7 +9,9 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewStatus, FStatusData, NewStatus);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShield, bool, IsShield);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShield, class ACAttachment* , Shield);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOffShield, class ACAttachment*, Shield);
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHandShield);
 
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
@@ -50,6 +52,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 		FOnShield OnShield;
+
+	UPROPERTY(BlueprintAssignable)
+		FOffShield OffShield;
 
 	UPROPERTY(BlueprintAssignable)
 		FOnHandShield OnHandShield;

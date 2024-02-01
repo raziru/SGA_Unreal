@@ -26,8 +26,8 @@ public:
 		FName SocketName;
 
 protected:
-	virtual void Attachment() override;
-	virtual void Detachment() override;
+	virtual void Attach() override;
+	virtual void Detach() override;
 
 private:
 	bool OnSocket;

@@ -14,7 +14,8 @@ enum class EActionType : uint8
 
 //delegate는 무조건 public으로 열어줘야 다른쪽에서 사용할 수 있다.
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActionTypeChanged, EActionType, InPrevType, EActionType, InNewType);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnActionPress, bool, InPressAction, bool, InPressSecondAction, bool, InOnShield);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnActionPress, bool, InPressAction, bool, InPressSecondAction);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSecondHand, bool, InOnSecondtHand);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEquipSecond, EActionType, InActionType);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUnequipSecond, EActionType, InActionType);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEndToolAction);
@@ -84,6 +85,7 @@ public:
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE bool IsBowMode() { return Type == EActionType::Bow; }
 
+
 public:	
 	// Sets default values for this component's properties
 	UCActionComponent();
@@ -122,11 +124,12 @@ public:
 
 	UFUNCTION()
 		void DropTool(class UCActionData* NewToolAction, bool IsConsumable);
-
+	
+	UFUNCTION()
+		void OnAdditionalAttachment(class ACAttachment* NewAttachment);
 
 	UFUNCTION()
-		void SetOnShield(bool OnNewShield) { OnShield = OnNewShield; }
-
+		void OffAdditionalAttachment(class ACAttachment* NewAttachment);
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -169,8 +172,13 @@ private:
 public:
 	UPROPERTY(BlueprintAssignable)
 		FActionTypeChanged OnActionTypeChanged;
+	
 	UPROPERTY(BlueprintAssignable)
 		FOnActionPress OnActionPress;
+
+	UPROPERTY(BlueprintAssignable)
+		FOnSecondHand OnSecondHand;
+
 	UPROPERTY(BlueprintAssignable)
 		FEquipSecond EquipSecond;
 
@@ -192,6 +200,7 @@ private:
 	bool IsAiming = false;
 	bool OnShield = false;
 	bool OnGuard  = false;
+
 
 	bool IsConsumableTool = false;
 

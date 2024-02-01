@@ -32,7 +32,6 @@ void ACAttachment::BeginPlay()
 	Action = CHelpers::GetComponent<UCActionComponent>(OwnerCharacter);
 	Super::BeginPlay();
 
-
 	Action->OnActionPress.AddDynamic(this, &ACAttachment::OnPress);
 	GetComponents<UShapeComponent>(ShapeComponents);
 	for (UShapeComponent* component : ShapeComponents)
@@ -60,7 +59,7 @@ void ACAttachment::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponen
 		OnAttachmentEndOverlap.Broadcast(OwnerCharacter, this, Cast<ACharacter>(OtherActor));
 }
 
-void ACAttachment::OnPress(bool InPressAction, bool InPressSecondAction, bool InOnShield)
+void ACAttachment::OnPress(bool InPressAction, bool InPressSecondAction)
 {
 	if (InPressAction)
 	{

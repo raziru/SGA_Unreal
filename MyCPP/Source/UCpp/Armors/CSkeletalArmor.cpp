@@ -11,25 +11,25 @@ ACSkeletalArmor::ACSkeletalArmor()
 	CHelpers::CreateComponent<USkeletalMeshComponent>(this, &Mesh, "Mesh");
 
 }
-void ACSkeletalArmor::Attachment()
+void ACSkeletalArmor::Attach()
 {
 	FName Empty = "";
 	AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), Empty);
 	Mesh->SetMasterPoseComponent(OwnerCharacter->GetMesh());
-	if (OnAttachmentDelegate.IsBound())
+	if (OnAttach.IsBound())
 	{
-		OnAttachmentDelegate.Broadcast(StatusData);
+		OnAttach.Broadcast(StatusData);
 	}
 }
 
-void ACSkeletalArmor::Detachment()
+void ACSkeletalArmor::Detach()
 {
 
 	Mesh->UnbindClothFromMasterPoseComponent();
 	DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepRelative, true));
-	if (OnDetachmentDelegate.IsBound())
+	if (OnDetach.IsBound())
 	{
-		OnDetachmentDelegate.Broadcast(StatusData);
+		OnDetach.Broadcast(StatusData);
 	}
 	Destroy();
 }

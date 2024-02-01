@@ -120,7 +120,9 @@ void ACPlayer::BeginPlay()
 	Inventory->SetNewTool.AddDynamic(this, &ACPlayer::SetNewTool);	
 
 
-	Equipment->OnShield.AddDynamic(Action, &UCActionComponent::SetOnShield);
+	Equipment->OnShield.AddDynamic(Action, &UCActionComponent::OnAdditionalAttachment);
+	Equipment->OffShield.AddDynamic(Action, &UCActionComponent::OffAdditionalAttachment);
+
 	Equipment->SetNewStatus.AddDynamic(this, &ACPlayer::SetNewStatus);
 
 

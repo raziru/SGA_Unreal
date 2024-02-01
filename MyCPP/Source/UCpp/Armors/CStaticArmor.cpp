@@ -12,29 +12,29 @@ ACStaticArmor::ACStaticArmor()
 
 }
 
-void ACStaticArmor::Attachment()
+void ACStaticArmor::Attach()
 {
 	AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), SocketName);
 
-	if (OnAttachmentDelegate.IsBound())
+	if (OnAttach.IsBound())
 	{
-		OnAttachmentDelegate.Broadcast(StatusData);
+		OnAttach.Broadcast(StatusData);
 	}
 }
 
-void ACStaticArmor::Detachment()
+void ACStaticArmor::Detach()
 {
 	DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepRelative, true));
-	if (OnDetachmentDelegate.IsBound())
+	if (OnDetach.IsBound())
 	{
-		OnDetachmentDelegate.Broadcast(StatusData);
+		OnDetach.Broadcast(StatusData);
 	}
 	Destroy();
 }
 
 void ACStaticArmor::MoveTo(FName InSocket)
 {
-	if (OnSocket == false)
+	/*if (OnSocket == false)
 	{
 		AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), InSocket);
 		OnSocket = true;
@@ -44,6 +44,9 @@ void ACStaticArmor::MoveTo(FName InSocket)
 		AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), SocketName);
 		OnSocket = false;
 
-	}
+	}*/
+
+	AttachToComponent(OwnerCharacter->GetMesh(), FAttachmentTransformRules(EAttachmentRule::KeepRelative, true), InSocket);
+
 }
 

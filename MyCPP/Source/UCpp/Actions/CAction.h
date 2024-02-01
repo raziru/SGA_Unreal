@@ -72,6 +72,10 @@ public:
     FORCEINLINE class ACAttachment* GetSecondAttachment() { return Attachments[(int32)EAttachment::SecondHand]; }
     FORCEINLINE class ACAttachment* GetProjectileAttachment() { return Attachments[(int32)EAttachment::Projectile]; }
 
+    void OnSecondAttachment(class ACAttachment* NewSecondAttachment);
+    void OffSecondAttachment(class ACAttachment* NewSecondAttachment);
+
+
 
 
     void AttachmentOnCollision();

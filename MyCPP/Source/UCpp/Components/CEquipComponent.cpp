@@ -39,7 +39,14 @@ void UCEquipComponent::SetNewArmor(TSubclassOf<class ACArmor> NewArmorClass)
 	{
 		if (Armor.Value->GetClass() == NewArmorClass)
 		{
-			Armor.Value->OnUnequip();
+			Armor.Value->Detach();
+			if (Armor.Value->GetArmorType() == EArmorType::Shield)
+			{
+				if (OffShield.IsBound())
+				{
+					OffShield.Broadcast(Armor.Value);
+				}
+			}
 			Armors.Remove(NewArmor->GetArmorType());
 			NewArmor->Destroy();
 			SetStatus();
@@ -47,15 +54,29 @@ void UCEquipComponent::SetNewArmor(TSubclassOf<class ACArmor> NewArmorClass)
 		}
 		else if (NewArmor->GetArmorType() == Armor.Key)
 		{
-			Armor.Value->OnUnequip();
+			Armor.Value->Detach();
+			if (Armor.Value->GetArmorType() == EArmorType::Shield)
+			{
+				if (OffShield.IsBound())
+				{
+					OffShield.Broadcast(Armor.Value);
+				}
+			}
 			Armors.Add(NewArmor->GetArmorType(), NewArmor);
-			NewArmor->OnEquip();
+			NewArmor->Attach();
 			SetStatus();
 			return;
 		}
 	}
 	Armors.Add(NewArmor->GetArmorType(), NewArmor);
-	NewArmor->OnEquip();
+	if (NewArmor->GetArmorType() == EArmorType::Shield)
+	{
+		if (OnShield.IsBound())
+		{
+			OnShield.Broadcast(NewArmor);
+		}
+	}
+	NewArmor->Attach();
 	SetStatus();
 	
 }
@@ -79,21 +100,6 @@ void UCEquipComponent::SetStatus()
 		SetNewStatus.Broadcast(EquipStatus);
 	}
 
-
-	if (!Armors.Find(EArmorType::Shield) || !!!Armors[EArmorType::Shield])
-	{
-		if (OnShield.IsBound())
-		{
-			OnShield.Broadcast(false);
-		}
-	}
-	else
-	{
-		if (OnShield.IsBound())
-		{
-			OnShield.Broadcast(true);
-		}
-	}
 }
 
 void UCEquipComponent::OnSecondEquip(EArmorType InArmorType)

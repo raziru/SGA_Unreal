@@ -57,7 +57,7 @@ private:
 		void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	UFUNCTION()
-		void OnPress(bool InPressAction, bool InPressSecondAction, bool InOnShield);
+		void OnPress(bool InPressAction, bool InPressSecondAction);
 
 public:
 	UPROPERTY(BlueprintAssignable)

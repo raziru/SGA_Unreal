@@ -27,6 +27,7 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	action->OnActionTypeChanged.AddDynamic(this, &UCAnimInstance::OnActionTypeChanged);
 	action->OnActionPress.AddDynamic(this, &UCAnimInstance::OnActionPress);
+	action->OnSecondHand.AddDynamic(this, &UCAnimInstance::OnSecondHand);
 
 	UCFeetComponent* feet = CHelpers::GetComponent<UCFeetComponent>(character);
 	if (!!feet)
@@ -39,11 +40,15 @@ void UCAnimInstance::OnActionTypeChanged(EActionType InPrevType, EActionType InN
 	ActionType = InNewType;
 }
 
-void UCAnimInstance::OnActionPress(bool InPressAction, bool InPressSecondAction, bool InOnShield)
+void UCAnimInstance::OnActionPress(bool InPressAction, bool InPressSecondAction)
 {
 	PressAction = InPressAction;
 	PressSecondAction = InPressSecondAction;
-	OnShield = InOnShield;
+}
+
+void UCAnimInstance::OnSecondHand(bool InSecondHand)
+{
+	SecondHand = InSecondHand;
 }
 
 

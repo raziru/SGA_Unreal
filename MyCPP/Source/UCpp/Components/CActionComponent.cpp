@@ -228,6 +228,31 @@ void UCActionComponent::DropTool(UCActionData* NewToolAction, bool IsConsumable)
 {
 }
 
+void UCActionComponent::OnAdditionalAttachment(ACAttachment* NewAttachment)
+{
+	if (IsOneHandMode())
+	{
+		CLog::Print("Hello");
+		NewAttachment->OnEquip();
+	}
+	Datas[(int32)EActionType::OneHand]->OnSecondAttachment(NewAttachment);
+	if (OnSecondHand.IsBound())
+	{
+		OnSecondHand.Broadcast(true);
+	}
+	
+}
+
+void UCActionComponent::OffAdditionalAttachment(ACAttachment* NewAttachment)
+{
+	Datas[(int32)EActionType::OneHand]->OffSecondAttachment(NewAttachment);
+	NewAttachment->OnUnequip();
+	if (OnSecondHand.IsBound())
+	{
+		OnSecondHand.Broadcast(false);
+	}
+}
+
 void UCActionComponent::DoAction()
 {
 	CheckTrue(IsUnarmedMode());
@@ -265,7 +290,6 @@ void UCActionComponent::DoSecondAction()
 		if (!!action)
 			action->DoSecondAction();
 	}
-	CLog::Print(OnShield);
 }
 
 void UCActionComponent::DoSecondActionRelease()
@@ -314,8 +338,6 @@ void UCActionComponent::OnViewActionList()
 
 		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.000100f);//시간 배율 변경
 	}
-	
-	
 
 }
 
@@ -350,7 +372,7 @@ void UCActionComponent::ActionPress(bool InPressAction, bool InPressSecondAction
 {
 	if (OnActionPress.IsBound())
 	{
-		OnActionPress.Broadcast(InPressAction, InPressSecondAction, OnShield);
+		OnActionPress.Broadcast(InPressAction, InPressSecondAction);
 	}
 }
 
