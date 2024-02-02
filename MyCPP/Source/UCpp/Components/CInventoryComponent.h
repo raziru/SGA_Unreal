@@ -14,13 +14,19 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewItem, FItemData, NewItem);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSetNewMainWeapon, UCActionData*, NewItemAction, EActionType, NewItemActionType);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSetNewTool, UCActionData*, NewItemAction, bool, IsConsumable);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewTool, UCActionData*, NewItemAction);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewConsumable, UCActionData*, NewItemAction);
+
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetNewArmor, TSubclassOf<ACArmor>, armor);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDropMainWeapon, UCActionData*, NewItemAction, EActionType, NewItemActionType);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDropTool, UCActionData*, NewItemAction, bool, IsConsumable);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDropTool, UCActionData*, NewItemAction);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDropConsumable, UCActionData*, NewItemAction);
+
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDropArmor, TSubclassOf<ACArmor>, armor);
 
@@ -58,8 +64,15 @@ public:
 
 	void PickUp(ACItem* InItem);
 
-	void EndToolAction();
+	UFUNCTION()
+		void EndToolAction();
+
+	UFUNCTION()
+		void EndConsumableAction();
+
 	void DecreaseCount(FItemData NewItem);
+
+	FORCEINLINE void SetCanChange(bool NewCanChange) { CanChange = NewCanChange; }
 private:
 	UFUNCTION()
 		void OnClicked(FItemData NewItem);
@@ -80,6 +93,8 @@ private:
 	bool IsInventoryOpened;
 
 	bool IsConsumable;
+
+	bool CanChange;
 	
 	FItemData ChangedItem;
 
@@ -100,6 +115,9 @@ public:
 		FSetNewTool SetNewTool;
 
 	UPROPERTY(BlueprintAssignable)
+		FSetNewConsumable SetNewConsumable;
+
+	UPROPERTY(BlueprintAssignable)
 		FDropMainWeapon DropMainWeapon;
 
 	UPROPERTY(BlueprintAssignable)
@@ -107,4 +125,7 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 		FDropTool DropTool;
+
+	UPROPERTY(BlueprintAssignable)
+		FDropConsumable DropConsumable;
 };

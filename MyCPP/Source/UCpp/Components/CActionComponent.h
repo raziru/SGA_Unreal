@@ -19,6 +19,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSecondHand, bool, InOnSecondtHand
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEquipSecond, EActionType, InActionType);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUnequipSecond, EActionType, InActionType);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEndToolAction);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEndConsumableAction);
+
 
 //Multicast: 함수를 여러개 바인딩해놓을 수 있음 바인딩할 함수는 UFUNCTION이어야 한다.
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
@@ -114,7 +116,10 @@ public:
 		void SetNewSecondWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
 
 	UFUNCTION()
-		void SetNewTool(class UCActionData* NewToolAction, bool IsConsumable);
+		void SetNewTool(class UCActionData* NewToolAction);
+
+	UFUNCTION()
+		void SetNewConsumable(class UCActionData* NewToolAction);
 
 	UFUNCTION()
 		void DropWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
@@ -123,7 +128,7 @@ public:
 		void DropSecondWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
 
 	UFUNCTION()
-		void DropTool(class UCActionData* NewToolAction, bool IsConsumable);
+		void DropTool(class UCActionData* NewToolAction);
 	
 	UFUNCTION()
 		void OnAdditionalAttachment(class ACAttachment* NewAttachment);
@@ -165,6 +170,9 @@ private:
 
 	UFUNCTION()
 		void EndTool();
+
+	UFUNCTION()
+		void EndConsumable();
 private:
 	void SetMode(EActionType InType);
 	void ChangeType(EActionType InNewType);
@@ -187,6 +195,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 		FEndToolAction EndToolAction;
+
+	UPROPERTY(BlueprintAssignable)
+		FEndConsumableAction EndConsumableAction;
 
 private:
 	EActionType Type;

@@ -17,6 +17,7 @@ void UCInventoryComponent::OpenInventory()
 
 void UCInventoryComponent::OnClicked(FItemData NewItem)
 {
+	CheckFalse(CanChange);
 	ACItem_Weapon* WeaponItem;
 	ACItem_Armor* ArmorItem;
 	ACItem_Consumable* Consumable;
@@ -55,11 +56,10 @@ void UCInventoryComponent::OnClicked(FItemData NewItem)
 		CheckNull(Consumable);
 		CLog::Print("Consumable Success");
 		Consumable->ConsumableEvent();
-		if (SetNewTool.IsBound())
+		if (SetNewConsumable.IsBound())
 		{
-			SetNewTool.Broadcast(Consumable->GetData(), true);
+			SetNewConsumable.Broadcast(Consumable->GetData());
 		}
-		
 		IsConsumable = true;
 		ChangedItem = NewItem;
 		Consumable->Destroy();
@@ -92,7 +92,6 @@ void UCInventoryComponent::OnRightClicked(FItemData NewItem)
 		break;
 	case EItemType::Armor:
 		ArmorItem = Cast<ACItem_Armor>(item);
-
 		if (DropArmor.IsBound())
 		{
 			DropArmor.Broadcast(ArmorItem->GetClass());
@@ -102,9 +101,9 @@ void UCInventoryComponent::OnRightClicked(FItemData NewItem)
 		break;
 	case EItemType::Consumable:
 		Consumable = Cast<ACItem_Consumable>(item);
-		if (DropTool.IsBound())
+		if (DropConsumable.IsBound())
 		{
-			DropTool.Broadcast(Consumable->GetData(),true);
+			DropConsumable.Broadcast(Consumable->GetData());
 		}
 		break;
 	case EItemType::Max:
@@ -128,7 +127,6 @@ void UCInventoryComponent::NextInventory()
 		break;
 	case EInventoryType::Armor:
 		InventoryType = EInventoryType::Tool;
-
 		break;
 	case EInventoryType::Tool:
 		InventoryType = EInventoryType::Consumable;
@@ -157,7 +155,6 @@ void UCInventoryComponent::PrevInventory()
 		break;
 	case EInventoryType::Armor:
 		InventoryType = EInventoryType::Weapon;
-
 		break;
 	case EInventoryType::Tool:
 		InventoryType = EInventoryType::Armor;
@@ -288,7 +285,6 @@ void UCInventoryComponent::EndToolAction()
 	case EItemType::Tool:
 		break;
 	case EItemType::Consumable:
-		DecreaseCount(ChangedItem);
 
 		break;
 	case EItemType::Max:
@@ -297,6 +293,11 @@ void UCInventoryComponent::EndToolAction()
 		break;
 	}
 	
+}
+
+void UCInventoryComponent::EndConsumableAction()
+{
+	DecreaseCount(ChangedItem);
 }
 
 void UCInventoryComponent::DecreaseCount(FItemData NewItem)
@@ -314,9 +315,7 @@ void UCInventoryComponent::DecreaseCount(FItemData NewItem)
 				Inventory.RemoveAt(i);//Remove보다 at으로 인덱스로 접근하는 것이 에러가 발생하지않는다.
 				//Inventory.Remove(Inventory[i])//포인터를 없애기 때문에 
 				//RemoveAt indeed would solve this problem (in fact it much faster), also not using pointer is good solution, you could use varable that you copied which would naturally have diffrent memoery address then array.
-				
 			}
-
 			if (IsInventoryOpened)
 			{
 				CheckNull(InventoryWidget);

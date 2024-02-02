@@ -146,12 +146,7 @@ private:
 
 	UFUNCTION()
 		void ResfreshStatus(const FStatusData NewStatus);
-//Use Consumalbe
-	UFUNCTION()
-		void SetNewTool(class UCActionData* NewConsumableAction, bool IsConsumable);
 
-	UFUNCTION()
-		void EndToolAction();
 private:
 	void OpenInventory();
 

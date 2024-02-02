@@ -104,6 +104,7 @@ void ACPlayer::BeginPlay()
 	Super::BeginPlay();
 	//Action->SetUnarmedMode();
 	Status->SetSpeed(ECharacterSpeed::Run);
+	Inventory->SetCanChange(true);
 	//State에서 선언한 OnstatetypeChanged가 broadcast로 호출되면 
 	//묶여있는 함수가 같이 연계된다. --  delegate는 함수포인터를 사용한것과 비슷하다.
 	//함수포인터는 인자로 받아야하지만 delegate는 필요가없다.
@@ -111,14 +112,15 @@ void ACPlayer::BeginPlay()
 	Action->OnActionTypeChanged.AddDynamic(this, &ACPlayer::OnActionTypeChanged);
 	Action->EquipSecond.AddDynamic(this, &ACPlayer::EquipSecond);
 	Action->UnequipSecond.AddDynamic(this, &ACPlayer::UnequipSecond);
-	Action->EndToolAction.AddDynamic(this, &ACPlayer::EndToolAction);
+	Action->EndConsumableAction.AddDynamic(Inventory, &UCInventoryComponent::EndConsumableAction);
+
 
 
 	State->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
-	Inventory->SetNewMainWeapon.AddDynamic(Action, &UCActionComponent::SetNewMainWeapon);
-	Inventory->SetNewArmor.AddDynamic(Equipment, &UCEquipComponent::SetNewArmor);
-	Inventory->SetNewTool.AddDynamic(this, &ACPlayer::SetNewTool);	
-
+	Inventory->SetNewMainWeapon.AddDynamic(Action,&UCActionComponent::SetNewMainWeapon);
+	Inventory->SetNewArmor.AddDynamic(Equipment,&UCEquipComponent::SetNewArmor);
+	Inventory->SetNewTool.AddDynamic(Action,&UCActionComponent::SetNewTool);
+	Inventory->SetNewConsumable.AddDynamic(Action,&UCActionComponent::SetNewConsumable);
 
 	Equipment->OnShield.AddDynamic(Action, &UCActionComponent::OnAdditionalAttachment);
 	Equipment->OffShield.AddDynamic(Action, &UCActionComponent::OffAdditionalAttachment);
@@ -255,7 +257,14 @@ void ACPlayer::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
 		case EStateType::Roll:  Begin_Roll(); break;
 		case EStateType::Backstep: Begin_Backstep(); break;
 	}
-	
+	if (InNewType == EStateType::Idle)
+	{
+		Inventory->SetCanChange(true);
+	}
+	else
+	{
+		Inventory->SetCanChange(false);
+	}
 }
 
 
@@ -375,16 +384,7 @@ void ACPlayer::BPAddStatus(FStatusData InStatusData)
 	SetNewStatus(InStatusData);
 }
 
-void ACPlayer::SetNewTool(UCActionData* NewConsumableAction, bool IsConsumable)
-{
-	Action->SetNewTool(NewConsumableAction, IsConsumable);
-	OnTool();
-}
 
-void ACPlayer::EndToolAction()
-{
-	Inventory->EndToolAction();
-}
 
 void ACPlayer::OpenInventory()
 {

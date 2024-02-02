@@ -144,6 +144,7 @@ void UCActionComponent::OffAllCollision()
 void UCActionComponent::SetNewMainWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType)
 {
 	CheckNull(NewItemAction);
+
 	if (this->MainWeaponData == NewItemAction && this->MainWeaponType == NewItemActionType)
 	{
 		CLog::Print("SameThing");
@@ -175,9 +176,17 @@ void UCActionComponent::SetNewSecondWeapon(UCActionData* NewItemAction, EActionT
 
 }
 
-void UCActionComponent::SetNewTool(UCActionData* NewToolAction, bool IsConsumable)
+void UCActionComponent::SetNewTool(UCActionData* NewToolAction)
 {
-	if (IsConsumable)
+	
+	
+	if (DataAssets[(int32)EActionType::Tool] == NewToolAction)
+	{
+		CLog::Print("SameThing");
+		Datas[(int32)EActionType::Tool]->DestroyActor();
+		Datas[(int32)EActionType::Tool] = nullptr;
+	}
+	else
 	{
 		if (!!ToolAction)
 		{
@@ -186,30 +195,22 @@ void UCActionComponent::SetNewTool(UCActionData* NewToolAction, bool IsConsumabl
 		DataAssets[(int32)EActionType::Tool] = NewToolAction;
 		ActionBeginPlay(DataAssets[(int32)EActionType::Tool], EActionType::Tool);
 		Datas[(int32)EActionType::Tool]->GetDoAction()->EndAction.AddDynamic(this, &UCActionComponent::EndTool);
-		IsConsumableTool = IsConsumable;
 	}
-	else
-	{
-		if (DataAssets[(int32)EActionType::Tool] == NewToolAction)
-		{
-			CLog::Print("SameThing");
-			Datas[(int32)EActionType::Tool]->DestroyActor();
-			Datas[(int32)EActionType::Tool] = nullptr;
-		}
-		else
-		{
-			if (!!ToolAction)
-			{
-				Datas[(int32)EActionType::Tool]->DestroyActor();
-			}
-			DataAssets[(int32)EActionType::Tool] = NewToolAction;
-			ActionBeginPlay(DataAssets[(int32)EActionType::Tool], EActionType::Tool);
-			Datas[(int32)EActionType::Tool]->GetDoAction()->EndAction.AddDynamic(this, &UCActionComponent::EndTool);
-			IsConsumableTool = IsConsumable;
-		}
 
-	}
 	
+	
+}
+
+void UCActionComponent::SetNewConsumable(UCActionData* NewToolAction)
+{
+	if (!!ToolAction)
+	{
+		Datas[(int32)EActionType::Tool]->DestroyActor();
+	}
+	DataAssets[(int32)EActionType::Tool] = NewToolAction;
+	ActionBeginPlay(DataAssets[(int32)EActionType::Tool], EActionType::Tool);
+	Datas[(int32)EActionType::Tool]->GetDoAction()->EndAction.AddDynamic(this, &UCActionComponent::EndConsumable);
+	SetToolMode();
 }
 
 void UCActionComponent::DropWeapon(UCActionData* NewItemAction, EActionType NewItemActionType)
@@ -224,7 +225,7 @@ void UCActionComponent::DropSecondWeapon(UCActionData* NewItemAction, EActionTyp
 {
 }
 
-void UCActionComponent::DropTool(UCActionData* NewToolAction, bool IsConsumable)
+void UCActionComponent::DropTool(UCActionData* NewToolAction)
 {
 }
 
@@ -401,6 +402,15 @@ void UCActionComponent::EndTool()
 	if (EndToolAction.IsBound())
 	{
 		EndToolAction.Broadcast();
+	}
+}
+
+void UCActionComponent::EndConsumable()
+{
+	SetMode(PrevType);
+	if (EndConsumableAction.IsBound())
+	{
+		EndConsumableAction.Broadcast();
 	}
 }
 
