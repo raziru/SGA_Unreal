@@ -52,9 +52,16 @@ private:
 protected:
 	UPROPERTY(EditAnywhere, Category = "Widget")
 		TSubclassOf<UUserWidget>InventoryWidgetClass;
+
+	UPROPERTY(EditAnywhere, Category = "Widget")
+		TSubclassOf<UUserWidget>MagicInventoryWidgetClass;
+
+
 	UPROPERTY()
 		class UCUserWidget_Inventory* InventoryWidget;
 	
+	UPROPERTY()
+		class UCUserWidget_Inventory* MagicInventoryWidget;
 
 public:	
 	// Sets default values for this component's properties
@@ -62,8 +69,13 @@ public:
 	void OpenInventory();
 	void OpenInventory(EInventoryType NewInventoryType);
 
+
 	void PickUp(ACItem* InItem);
 
+	void OpenMagicInventory();
+	void OpenMagicInventory(EInventoryType NewInventoryType);
+
+	void PickUpMagic(ACItem* InItem);
 	UFUNCTION()
 		void EndToolAction();
 
@@ -90,7 +102,12 @@ protected:
 private:
 	TArray<FItemData> Inventory;
 
+	TArray<FItemData> MagicInventory;
+
+
 	bool IsInventoryOpened;
+
+	bool IsMagicInventoryOpened;
 
 	bool IsConsumable;
 
@@ -101,6 +118,7 @@ private:
 	EItemType SelectedItemType;
 
 	EInventoryType InventoryType;
+
 public:
 	UPROPERTY(BlueprintAssignable)
 		FSetNewItem SetNewItem;

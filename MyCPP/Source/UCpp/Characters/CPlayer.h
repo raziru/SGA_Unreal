@@ -117,6 +117,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void BPAddStatus(FStatusData InStatusData);
 
+	UFUNCTION(BlueprintCallable)
+		void PickupMagic(class ACItem* InItem);
+
 //Moving
 private:
 	void OnMoveForward(float InAxis);
@@ -149,6 +152,8 @@ private:
 
 private:
 	void OpenInventory();
+
+	void OpenMagicInventory();
 
 private:
 	void Begin_Roll();

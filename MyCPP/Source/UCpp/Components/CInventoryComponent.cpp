@@ -12,9 +12,37 @@ UCInventoryComponent::UCInventoryComponent()
 
 void UCInventoryComponent::OpenInventory()
 {
-	OpenInventory(InventoryType);
+	if (!IsInventoryOpened)
+	{
+		if (IsMagicInventoryOpened)
+		{
+			OpenMagicInventory(EInventoryType::Weapon);
+		}
+		OpenInventory(InventoryType);
+	}
+	else
+	{
+		OpenInventory(InventoryType);
+	}
 }
 
+void UCInventoryComponent::OpenMagicInventory()
+{
+	if (!IsMagicInventoryOpened)
+	{
+		if (IsInventoryOpened)
+		{
+			OpenInventory(InventoryType);
+		}
+		OpenMagicInventory(EInventoryType::Weapon);
+
+	}
+	else
+	{
+		OpenMagicInventory(EInventoryType::Weapon);
+
+	}
+}
 void UCInventoryComponent::OnClicked(FItemData NewItem)
 {
 	CheckFalse(CanChange);
@@ -56,12 +84,20 @@ void UCInventoryComponent::OnClicked(FItemData NewItem)
 		CheckNull(Consumable);
 		CLog::Print("Consumable Success");
 		Consumable->ConsumableEvent();
-		if (SetNewConsumable.IsBound())
-		{
-			SetNewConsumable.Broadcast(Consumable->GetData());
-		}
 		IsConsumable = true;
 		ChangedItem = NewItem;
+		if (!!Consumable->GetData())
+		{
+			if (SetNewConsumable.IsBound())
+			{
+				SetNewConsumable.Broadcast(Consumable->GetData());
+			}
+		}	
+		else
+		{
+			DecreaseCount(ChangedItem);
+		}
+		
 		Consumable->Destroy();
 		break;
 	}
@@ -216,6 +252,7 @@ void UCInventoryComponent::OpenInventory(EInventoryType NewInventoryType)
 		InventoryWidget->PrevInventory.AddDynamic(this, &UCInventoryComponent::PrevInventory);
 
 		//OnSelected.AddDynamic
+
 	}
 	else
 	{
@@ -228,6 +265,59 @@ void UCInventoryComponent::OpenInventory(EInventoryType NewInventoryType)
 	IsInventoryOpened = !IsInventoryOpened;
 }
 
+
+
+
+void UCInventoryComponent::OpenMagicInventory(EInventoryType NewInventoryType)
+{
+	//AllinOne Inventory
+	for (FItemData Item : MagicInventory)
+	{
+		Item.ShowData();
+	}
+
+
+	if (!IsMagicInventoryOpened)
+	{
+		CheckNull(MagicInventoryWidgetClass);
+		if (!!!MagicInventoryWidget)
+		{
+			MagicInventoryWidget = Cast<UCUserWidget_Inventory>(CreateWidget(GetWorld(), MagicInventoryWidgetClass));
+			CheckNull(MagicInventoryWidget);
+			MagicInventoryWidget->SetInventoryType( NewInventoryType);
+			MagicInventoryWidget->BuildInventory(MagicInventory, MaxInventorySize, ColumnSize);
+			MagicInventoryWidget->AddToViewport();
+		}
+		else
+		{
+			MagicInventoryWidget->SetInventoryType(NewInventoryType);
+			MagicInventoryWidget->ClearInventory();
+			MagicInventoryWidget->BuildInventory(MagicInventory, MaxInventorySize, ColumnSize);
+			MagicInventoryWidget->AddToViewport();
+		}
+		//CLog::Print(Inventory.Num());
+
+		CheckNull(MagicInventoryWidget);
+
+		MagicInventoryWidget->ItemClicked.AddDynamic(this, &UCInventoryComponent::OnClicked);
+		//MagicInventoryWidget->ItemRightClicked.AddDynamic(this, &UCInventoryComponent::OnRightClicked);
+		//MagicInventoryWidget->NextInventory.AddDynamic(this, &UCInventoryComponent::NextInventory);
+		//MagicInventoryWidget->PrevInventory.AddDynamic(this, &UCInventoryComponent::PrevInventory);
+
+		//OnSelected.AddDynamic
+
+		
+	}
+	else
+	{
+		CheckNull(MagicInventoryWidget);
+		MagicInventoryWidget->ClearInventory();
+		MagicInventoryWidget->RemoveFromParent();
+		MagicInventoryWidget->ItemClicked.Clear();
+		MagicInventoryWidget->ItemRightClicked.Clear();
+	}
+	IsMagicInventoryOpened = !IsMagicInventoryOpened;
+}
 void UCInventoryComponent::PickUp(ACItem* InItem)
 {
 	InItem->ShowData();
@@ -270,6 +360,38 @@ void UCInventoryComponent::PickUp(ACItem* InItem)
 	{
 		CheckNull(InventoryWidget);
 		InventoryWidget->RefreshInventory(Inventory, MaxInventorySize, ColumnSize);
+	}
+
+}
+
+void UCInventoryComponent::PickUpMagic(ACItem* InItem)
+{
+	InItem->ShowData();
+
+	FItemData CopyItem;
+	CopyItem = InItem->GetItemData();
+	bool IsExist = false;
+	int index = 0;
+	for (FItemData data : MagicInventory)
+	{
+		if (data.ItemName == CopyItem.ItemName)
+		{
+			CLog::Log("Same Item");
+
+			return;
+		}
+		index++;
+	}
+
+	if (!IsExist)
+	{
+		CopyItem.ItemIndex = MagicInventory.Num();
+		MagicInventory.Add(CopyItem);
+	}
+	if (IsMagicInventoryOpened)
+	{
+		CheckNull(InventoryWidget);
+		InventoryWidget->RefreshInventory(MagicInventory, MaxInventorySize, ColumnSize);
 	}
 
 }

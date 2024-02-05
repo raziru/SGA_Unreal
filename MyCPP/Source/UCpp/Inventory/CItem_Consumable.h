@@ -6,6 +6,7 @@
 #include "Inventory/CItem.h"
 #include "Components/CActionComponent.h"
 #include "Components/CStatusComponent.h"
+#include "Inventory/CItem_Weapon.h"
 #include "CItem_Consumable.generated.h"
 
 UCLASS()
@@ -21,14 +22,17 @@ public:
 		void ConsumableEvent();
 
 public:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Potion")
 		FStatusData ItemStatus;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Potion")
 		float Health;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Potion")
 		float Mana;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Magic")
+		TSubclassOf<ACItem_Weapon> Weapon;
 
 protected:
 	UPROPERTY(EditAnywhere)

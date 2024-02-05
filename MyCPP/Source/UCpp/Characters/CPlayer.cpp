@@ -190,6 +190,8 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Interact", EInputEvent::IE_Pressed, this, &ACPlayer::Interact);
 	PlayerInputComponent->BindAction("Inventory", EInputEvent::IE_Pressed, this, &ACPlayer::OpenInventory);
+	PlayerInputComponent->BindAction("MagicInventory", EInputEvent::IE_Pressed, this, &ACPlayer::OpenMagicInventory);
+
 	PlayerInputComponent->BindAction("UseTool", EInputEvent::IE_Pressed, this, &ACPlayer::OnTool);
 
 	PlayerInputComponent->BindAction("QuickSlot", EInputEvent::IE_Pressed, this, &ACPlayer::OnViewActionList);
@@ -384,11 +386,23 @@ void ACPlayer::BPAddStatus(FStatusData InStatusData)
 	SetNewStatus(InStatusData);
 }
 
+void ACPlayer::PickupMagic(ACItem* InItem)
+{
+	Inventory->PickUpMagic(InItem);
+}
+
+
+
 
 
 void ACPlayer::OpenInventory()
 {
 	Inventory->OpenInventory();
+}
+
+void ACPlayer::OpenMagicInventory()
+{
+	Inventory->OpenMagicInventory();
 }
 
 void ACPlayer::Begin_Roll()
