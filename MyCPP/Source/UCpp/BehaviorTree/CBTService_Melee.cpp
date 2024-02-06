@@ -8,6 +8,9 @@
 #include "Characters/CEnemy_AI.h"
 #include "Components/CBehaviorComponent.h"
 #include "Components/CStateComponent.h"
+#include "Components/CPatrolComponent.h"
+
+
 
 
 UCBTService_Melee::UCBTService_Melee()
@@ -24,6 +27,12 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 
     ACEnemy_AI* ai = Cast<ACEnemy_AI>(controller->GetPawn());
     UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(ai);
+    
+
+    UCPatrolComponent* patrol = CHelpers::GetComponent<UCPatrolComponent>(ai);
+
+
+
     if (state->IsHittedMode())
     {
         behavior->SetHittedMode();
@@ -35,8 +44,14 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
     if (target == NULL)
     {
         //TODO: 패트롤 모드
+        FVector Location;
+        float AcceptanceRadius;
+        patrol->GetMoveTo(Location, AcceptanceRadius);
+    
 
-        behavior->SetWaitMode();
+
+
+        behavior->SetPatrolMode();
         return;
     }
     else

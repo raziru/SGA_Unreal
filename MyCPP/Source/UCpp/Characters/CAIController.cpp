@@ -53,7 +53,7 @@ void ACAIController::OnPossess(APawn* InPawn)
 	SetGenericTeamId(OwnerEnemy->GetTeamID());
 
 	Perception->OnPerceptionUpdated.AddDynamic(this, &ACAIController::OnPerceptionUpdated);
-	//구분하기 쉽게 같은
+	//구분하기 쉽게 같은 함수명과 delegate명
 
 	UseBlackboard(OwnerEnemy->GetBehaviorTree()->BlackboardAsset, Blackboard);
 	Behavior->SetBlackboard(Blackboard);
