@@ -156,7 +156,6 @@ void ACEnemy::Hitted()
 
 	Status->SetStop();
 
-	Montages->PlayHitted();
 
 	FVector start = GetActorLocation();
 	FVector target = DamageInstigator->GetPawn()->GetActorLocation();
@@ -170,6 +169,7 @@ void ACEnemy::Hitted()
 	ChangeColor(FLinearColor(1, 0, 0, 1));
 
 	UKismetSystemLibrary::K2_SetTimer(this, "RestoreColor", 0.1f, false);//delay
+	Montages->PlayHitted();
 }
 
 void ACEnemy::Dead()
@@ -185,6 +185,7 @@ void ACEnemy::Begin_Dead()
 }
 void ACEnemy::End_Dead()
 {
+	Action->DestoryAction();
 	Destroy();
 }
 void ACEnemy::RestoreColor()

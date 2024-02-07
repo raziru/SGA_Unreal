@@ -27,10 +27,10 @@ protected:
 protected:
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
 		class UCActionComponent* Action;
-
-private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCMontagesComponent* Montages;
+private:
+	
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCStatusComponent* Status;
@@ -50,7 +50,6 @@ public:
 
 	virtual void ChangeColor(FLinearColor InColor);
 
-
 	virtual void Interact(AActor* InOther) override;
 
 	virtual void OnDefaultMode() override;
@@ -65,8 +64,9 @@ private:
 
 	UFUNCTION()
 		void OnUnarmed();
-private:
+protected:
 	void Hitted();
+
 	void Dead();
 
 private:

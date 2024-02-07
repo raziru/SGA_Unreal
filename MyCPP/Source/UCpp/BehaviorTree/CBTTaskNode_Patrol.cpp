@@ -25,24 +25,16 @@ EBTNodeResult::Type UCBTTaskNode_Patrol::ExecuteTask(UBehaviorTreeComponent& Own
 
 	FVector Location;
 	float AcceptanceRadius;
-	//EPathFollowingRequestResult::Type result;
-	if (patrol->GetMoveTo(Location,AcceptanceRadius))
+
+	patrol->GetMoveTo(Location, AcceptanceRadius);
+
+	if (controller->MoveToLocation(Location, AcceptanceRadius)==EPathFollowingRequestResult::AlreadyAtGoal)
 	{
-		if (controller->MoveToLocation(Location, AcceptanceRadius)==EPathFollowingRequestResult::RequestSuccessful|| controller->MoveToLocation(Location, AcceptanceRadius) == EPathFollowingRequestResult::Failed)
-		{
-			//patrol->UpdateNextIndex();
-			//controller->OnMoveCompleted(,result)
-		}
-		//controller->MoveToLocation(Location, AcceptanceRadius) == EPathFollowingRequestResult::RequestSuccessful || controller->MoveToLocation(Location, AcceptanceRadius) == EPathFollowingRequestResult::Failed
-		return EBTNodeResult::Succeeded;
-
+		patrol->UpdateNextIndex();
 	}
-	else
-	{
-		return EBTNodeResult::Failed;
-
-	}
-
+	
+	return EBTNodeResult::Succeeded;
+	
 }
 
 

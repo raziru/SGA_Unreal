@@ -44,13 +44,6 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
     if (target == NULL)
     {
         //TODO: 패트롤 모드
-        FVector Location;
-        float AcceptanceRadius;
-        patrol->GetMoveTo(Location, AcceptanceRadius);
-    
-
-
-
         behavior->SetPatrolMode();
         return;
     }
@@ -64,7 +57,6 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
             return;
         }
     }
-
 
     float distance = ai->GetDistanceTo(target);
     if (distance < controller->GetMeleeActionRange())

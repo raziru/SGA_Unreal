@@ -141,6 +141,18 @@ void UCActionComponent::OffAllCollision()
 	}
 }
 
+void UCActionComponent::DestoryAction()
+{
+	for (UCAction* action : Datas)
+	{
+		if (!!action)
+		{
+			action->DestroyActor();
+
+		}
+	}
+}
+
 void UCActionComponent::SetNewMainWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType)
 {
 	CheckNull(NewItemAction);

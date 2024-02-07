@@ -106,8 +106,8 @@ public:
 	void SetSecondWeaponMode();
 	void SetToolMode();
 
-
 	void OffAllCollision();
+	void DestoryAction();
 
 	UFUNCTION()
 		void SetNewMainWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
