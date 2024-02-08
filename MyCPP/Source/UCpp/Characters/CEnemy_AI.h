@@ -24,7 +24,6 @@ public:
     FORCEINLINE class UBehaviorTree* GetBehaviorTree() { return BehaviorTree; }
     FORCEINLINE uint8 GetTeamID() { return TeamID; }
 
-    void PlayHitted();
 public:
     ACEnemy_AI();
 };

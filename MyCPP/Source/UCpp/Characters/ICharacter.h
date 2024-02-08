@@ -22,6 +22,7 @@ public:
 	virtual void Interact() {}
 	virtual void Begin_Dead() {}
 	virtual void End_Dead() {}
+	virtual void End_Backstep() {}
 
 	virtual void OnDefaultMode() {}
 

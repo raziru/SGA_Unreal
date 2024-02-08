@@ -161,7 +161,7 @@ private:
 
 public:
 	void End_Roll();
-	void End_Backstep();
+	virtual void End_Backstep();
 private:
 	UFUNCTION()
 		void OnUnarmed();

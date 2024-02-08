@@ -2,8 +2,8 @@
 
 
 #include "CAnimNotify_EndBackstep.h"
-
 #include "Global.h"
+#include "Characters/ICharacter.h"
 #include "Characters/CPlayer.h"
 
 FString UCAnimNotify_EndBackstep::GetNotifyName_Implementation() const
@@ -17,8 +17,8 @@ void UCAnimNotify_EndBackstep::Notify(USkeletalMeshComponent* MeshComp, UAnimSeq
 	CheckNull(MeshComp);
 	CheckNull(MeshComp->GetOwner());
 
-	ACPlayer* player = Cast<ACPlayer>(MeshComp->GetOwner());
-	CheckNull(player);
+	IICharacter* character = Cast<IICharacter>(MeshComp->GetOwner());
+	CheckNull(character);
 
-	player->End_Backstep();
+	character->End_Backstep();
 }

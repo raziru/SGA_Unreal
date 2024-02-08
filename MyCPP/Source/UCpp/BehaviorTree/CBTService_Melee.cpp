@@ -31,12 +31,24 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 
     UCPatrolComponent* patrol = CHelpers::GetComponent<UCPatrolComponent>(ai);
 
-
+    if (CanAvoid)
+    {
+        CanAvoid = false;
+        AvoidCount = 0;
+        AvoidTime = 0.0f;
+        behavior->SetAvoidMode();
+        return;
+    }
 
     if (state->IsHittedMode())
     {
         behavior->SetHittedMode();
+        AvoidCount++;
+        if (AvoidCount>=(FMath::RandRange(4, 7)))
+        {
+            CanAvoid = true;
 
+        }
         return;
     }
 
@@ -62,7 +74,12 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
     if (distance < controller->GetMeleeActionRange())
     {
         behavior->SetActionMode();
-
+        AvoidTime += DeltaSeconds;
+        if (AvoidTime>= FMath::RandRange(3.0f, 4.0f))
+        {
+            CLog::Print(AvoidTime);
+            CanAvoid = true;
+        }
         return;
     }
 

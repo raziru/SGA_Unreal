@@ -66,12 +66,16 @@ private:
 		void OnUnarmed();
 protected:
 	void Hitted();
-
 	void Dead();
 
 private:
 	virtual void Begin_Dead() override;
 	virtual void End_Dead()   override;
+
+	void Begin_Backstep();
+	virtual void End_Backstep();
+
+
 
 private:
 	class UMaterialInstanceDynamic* BodyMaterial;

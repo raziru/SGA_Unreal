@@ -131,6 +131,7 @@ void ACEnemy::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
 	switch (InNewType)
 	{
 	case EStateType::Hitted: Hitted(); break;
+	case EStateType::Backstep: Begin_Backstep(); break;
 	case EStateType::Dead: Dead(); break;
 	}
 }
@@ -177,6 +178,17 @@ void ACEnemy::Dead()
 	CheckFalse(State->IsDeadMode());
 
 	Montages->PlayDead();
+}
+void ACEnemy::Begin_Backstep()
+{
+	//CheckFalse(State->IsIdleMode());
+	Montages->PlayBackstep();
+
+}
+
+void ACEnemy::End_Backstep()
+{
+	State->SetIdleMode();
 }
 void ACEnemy::Begin_Dead()
 {
