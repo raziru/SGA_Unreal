@@ -1,6 +1,6 @@
 #include "Inventory/CItem.h"
 #include "Global.h"
-#include "Characters/CPlayer.h"
+#include "Components/CInventoryComponent.h"
 
 ACItem::ACItem()
 {
@@ -14,9 +14,15 @@ void ACItem::BeginPlay()
 
 void ACItem::Interact(AActor* InOther)
 {
-	ACPlayer* Player = Cast<ACPlayer>(InOther);
+	/*ACPlayer* Player = Cast<ACPlayer>(InOther);
 	CheckNull(Player);
-	Player->PickUp(this);
+	Player->PickUp(this);*/
+
+	UCInventoryComponent* Inventory = CHelpers::GetComponent<UCInventoryComponent>(InOther);
+	CheckNull(Inventory);
+	
+	Inventory->Pickup(this);
+	
 	CLog::Print(InOther->GetName());
 	Destroy();//강한 복사 약한 복사 문제
 

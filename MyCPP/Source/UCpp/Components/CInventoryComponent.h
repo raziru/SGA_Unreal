@@ -70,12 +70,12 @@ public:
 	void OpenInventory(EInventoryType NewInventoryType);
 
 
-	void PickUp(ACItem* InItem);
+	void Pickup(ACItem* InItem);
 
 	void OpenMagicInventory();
 	void OpenMagicInventory(EInventoryType NewInventoryType);
 
-	void PickUpMagic(ACItem* InItem);
+	void PickupMagic(ACItem* InItem);
 	UFUNCTION()
 		void EndToolAction();
 

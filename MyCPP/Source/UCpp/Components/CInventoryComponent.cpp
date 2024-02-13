@@ -318,7 +318,7 @@ void UCInventoryComponent::OpenMagicInventory(EInventoryType NewInventoryType)
 	}
 	IsMagicInventoryOpened = !IsMagicInventoryOpened;
 }
-void UCInventoryComponent::PickUp(ACItem* InItem)
+void UCInventoryComponent::Pickup(ACItem* InItem)
 {
 	InItem->ShowData();
 	
@@ -364,7 +364,7 @@ void UCInventoryComponent::PickUp(ACItem* InItem)
 
 }
 
-void UCInventoryComponent::PickUpMagic(ACItem* InItem)
+void UCInventoryComponent::PickupMagic(ACItem* InItem)
 {
 	InItem->ShowData();
 

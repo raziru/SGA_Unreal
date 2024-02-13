@@ -98,8 +98,6 @@ public:
 
 	virtual void Interact() override;
 
-	virtual void PickUp(class ACItem* InItem) override;
-
 	virtual void OnDefaultMode() override;
 
 	UFUNCTION(BlueprintCallable)

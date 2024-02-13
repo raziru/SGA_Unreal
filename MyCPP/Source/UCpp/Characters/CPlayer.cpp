@@ -343,10 +343,6 @@ void ACPlayer::Interact()
 	Interaction->Interact();
 }
 
-void ACPlayer::PickUp(class ACItem* InItem)
-{
-	Inventory->PickUp(InItem);
-}
 
 void ACPlayer::OnDefaultMode()
 {
@@ -388,7 +384,7 @@ void ACPlayer::BPAddStatus(FStatusData InStatusData)
 
 void ACPlayer::PickupMagic(ACItem* InItem)
 {
-	Inventory->PickUpMagic(InItem);
+	Inventory->PickupMagic(InItem);
 }
 
 
