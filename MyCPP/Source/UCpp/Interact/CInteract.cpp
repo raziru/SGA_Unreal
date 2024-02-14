@@ -12,7 +12,10 @@ ACInteract::ACInteract()
 
 void ACInteract::Interact(AActor* InOther)
 {
-	
+	if (EndInteract.IsBound())
+	{
+		EndInteract.Broadcast();
+	}
 }
 
 void ACInteract::BeginPlay()

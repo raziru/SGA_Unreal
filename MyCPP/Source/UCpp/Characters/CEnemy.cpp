@@ -11,6 +11,7 @@
 #include "Components/CActionComponent.h"
 #include "Components/CStatusComponent.h"
 #include "Components/CMontagesComponent.h"
+#include "Components/CDialogueComponent.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Components/WidgetComponent.h"
@@ -29,6 +30,7 @@ ACEnemy::ACEnemy()
 
 	CHelpers::CreateActorComponent<UCActionComponent>(this, &Action, "Action");
 	CHelpers::CreateActorComponent<UCMontagesComponent>(this, &Montages, "Montages");
+	CHelpers::CreateActorComponent<UCDialogueComponent>(this, &Dialogue, "Dialogue");
 	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
 
@@ -106,7 +108,10 @@ void ACEnemy::ChangeColor(FLinearColor InColor)
 void ACEnemy::Interact(AActor* InOther)
 {
 	CLog::Print(InOther->GetName());
-	Destroy();
+	Dialogue->ShowDialogue();
+
+
+	//Destroy();
 }
 
 void ACEnemy::OnDefaultMode()

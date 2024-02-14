@@ -15,7 +15,7 @@ void ACHUD::DrawHUD()
 {
 	Super::DrawHUD();
 	CheckFalse(bDraw);
-
+	
 	CheckNull(Texture);
 
 	FVector2D center(Canvas->ClipX * 0.5f, Canvas->ClipY * 0.5f);

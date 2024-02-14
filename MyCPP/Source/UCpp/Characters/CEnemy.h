@@ -29,6 +29,9 @@ protected:
 		class UCActionComponent* Action;
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCMontagesComponent* Montages;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCDialogueComponent* Dialogue;
 private:
 	
 

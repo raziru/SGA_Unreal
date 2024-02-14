@@ -12,4 +12,5 @@ ACInteract_Chest::ACInteract_Chest()
 void ACInteract_Chest::Interact(AActor* InOther)
 {
 	Pickup->Pickup(InOther);
+	Super::Interact(InOther);
 }

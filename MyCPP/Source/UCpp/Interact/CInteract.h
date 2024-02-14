@@ -6,6 +6,9 @@
 #include "IInteract.h"
 #include "CInteract.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEndInteract);
+
 UCLASS()
 class UCPP_API ACInteract : public AActor, public IIInteract
 {
@@ -15,6 +18,9 @@ public:
 	ACInteract();
 
 	virtual void Interact(AActor* InOther) override;
+
+	UPROPERTY(BlueprintAssignable)
+		FEndInteract EndInteract;
 protected:
 	virtual void BeginPlay() override;
 

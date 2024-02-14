@@ -13,14 +13,14 @@ class UCPP_API ACHUD : public AHUD
 private:
 	UPROPERTY(EditDefaultsOnly)
 		class UTexture2D* Texture;
-
+	
 public:
 	FORCEINLINE void SetDrawMode() { bDraw = true; }
 	FORCEINLINE void SetUndrawMode() { bDraw = false; }
 
 public:
 	ACHUD();
-
+	
 	virtual void DrawHUD() override;
 
 private:
