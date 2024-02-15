@@ -16,6 +16,7 @@ void ACHUD::DrawHUD()
 	Super::DrawHUD();
 	CheckFalse(bDraw);
 	
+	
 	CheckNull(Texture);
 
 	FVector2D center(Canvas->ClipX * 0.5f, Canvas->ClipY * 0.5f);
@@ -25,5 +26,6 @@ void ACHUD::DrawHUD()
 	FCanvasTileItem item(position, Texture->Resource, FLinearColor::White);//타일처럼 위치에 까는 것
 	item.BlendMode = SE_BLEND_Translucent;//일정 투명값이하는 제거하여 blend하는 것
 
+	
 	Canvas->DrawItem(item);
 }

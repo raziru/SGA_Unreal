@@ -30,17 +30,18 @@ ACEnemy::ACEnemy()
 
 	CHelpers::CreateActorComponent<UCActionComponent>(this, &Action, "Action");
 	CHelpers::CreateActorComponent<UCMontagesComponent>(this, &Montages, "Montages");
-	CHelpers::CreateActorComponent<UCDialogueComponent>(this, &Dialogue, "Dialogue");
 	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
+	CHelpers::CreateActorComponent<UCDialogueComponent>(this, &Dialogue, "Dialogue");
+
 
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
-
+	
 	USkeletalMesh* mesh;
 	CHelpers::GetAsset<USkeletalMesh>(&mesh, "SkeletalMesh'/Game/Character/Mesh/SK_Mannequin.SK_Mannequin'");
 	GetMesh()->SetSkeletalMesh(mesh);
-
+	
 	GetCharacterMovement()->RotationRate = FRotator(0, 720, 0);
 
 	TSubclassOf<UCUserWidget_Name> nameClass;
@@ -108,9 +109,10 @@ void ACEnemy::ChangeColor(FLinearColor InColor)
 void ACEnemy::Interact(AActor* InOther)
 {
 	CLog::Print(InOther->GetName());
-	Dialogue->ShowDialogue();
-
-
+	//Dialogue->ShowDialogue();
+	//CHelpers::GetComponent(&Dialogue);
+	Dialogue->SpeakTo(InOther);
+	
 	//Destroy();
 }
 

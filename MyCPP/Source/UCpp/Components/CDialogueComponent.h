@@ -6,6 +6,8 @@
 #include "CDialogueComponent.generated.h"
 
 
+
+
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
 class UCPP_API UCDialogueComponent : public UActorComponent
 {
@@ -17,14 +19,26 @@ private:
 
 	UPROPERTY()
 		class UCUserWidget_Dialogue* DialogueWidget;
-	
+
+	UPROPERTY(EditAnywhere)
+		TArray<FString> Speak;
+
+	UPROPERTY(EditAnywhere)
+		FName Name;
 public:	
 	UCDialogueComponent();
 
-	void ShowDialogue();
+	void ShowDialogue(FString name, FString Text);
 
+	void QuitDialogue();
+
+	FString GetText();
+
+	void SpeakTo(AActor* InOther);
 protected:
 	virtual void BeginPlay() override;
 
-
+private:
+	bool OnDialogue;
+	int Index;
 };

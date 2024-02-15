@@ -76,6 +76,8 @@ private:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCEquipComponent* Equipment;
 
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCDialogueComponent* Dialogue;
 public:
 	FORCEINLINE class UCUserWidget_ActionList* GetActionList() { return Action->GetActionList(); }
 

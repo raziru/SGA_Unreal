@@ -17,6 +17,8 @@
 #include "Components/CFeetComponent.h"
 #include "Components/CStatusComponent.h"
 #include "Components/CEquipComponent.h"
+#include "Components/CDialogueComponent.h"
+
 #include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Components/WidgetComponent.h"
@@ -52,6 +54,7 @@ ACPlayer::ACPlayer()
 	CHelpers::CreateActorComponent<UCInteractComponent>(this, &Interaction, "Interact");
 	CHelpers::CreateActorComponent<UCInventoryComponent>(this, &Inventory, "Inventory");
 	CHelpers::CreateActorComponent<UCEquipComponent>(this, &Equipment, "Equipment");
+	CHelpers::CreateActorComponent<UCDialogueComponent>(this, &Dialogue, "Dialogue");
 
 
 

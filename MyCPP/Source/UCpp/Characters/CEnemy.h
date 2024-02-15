@@ -27,11 +27,10 @@ protected:
 protected:
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
 		class UCActionComponent* Action;
+	
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCMontagesComponent* Montages;
 
-	UPROPERTY(VisibleDefaultsOnly)
-		class UCDialogueComponent* Dialogue;
 private:
 	
 
@@ -40,6 +39,9 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCStateComponent* State;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCDialogueComponent* Dialogue;
 public:
 	ACEnemy();
 

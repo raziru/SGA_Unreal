@@ -18,6 +18,7 @@ public:
 	FORCEINLINE void SetDrawMode() { bDraw = true; }
 	FORCEINLINE void SetUndrawMode() { bDraw = false; }
 
+	
 public:
 	ACHUD();
 	
