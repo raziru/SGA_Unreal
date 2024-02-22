@@ -20,7 +20,7 @@ void UCDialogueComponent::ShowDialogue(FString name, FString Text)
 	else
 	{
 		DialogueWidget->Update(name, Text);
-		DialogueWidget->AddToViewport();
+		//DialogueWidget->AddToViewport();
 	}	
 }
 
@@ -50,8 +50,12 @@ FString UCDialogueComponent::GetText()
 void UCDialogueComponent::SpeakTo(AActor* InOther)
 {
 	UCDialogueComponent* dialogue = CHelpers::GetComponent<UCDialogueComponent>(InOther);
+	UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(GetOwner());
+
 	CheckNull(dialogue);
 	FString Text = this->GetText();
+
+
 	if (Text == "")
 	{
 		dialogue->QuitDialogue();

@@ -229,6 +229,8 @@ void UCInventoryComponent::OpenInventory(EInventoryType NewInventoryType)
 		CheckNull(InventoryWidgetClass);
 		if (!!!InventoryWidget)
 		{
+			/*TSubclassOf<UCUserWidget_Inventory>InventoryClass;
+			CHelpers::GetClass<UCUserWidget_Inventory>(&InventoryClass, "WidgetBlueprint'/Game/Widgets/Inventory/WB_Inventory.WB_Inventory_C''");*/
 			InventoryWidget = Cast<UCUserWidget_Inventory>(CreateWidget(GetWorld(), InventoryWidgetClass));
 			CheckNull(InventoryWidget);
 			InventoryWidget->SetInventoryType(NewInventoryType);
@@ -240,7 +242,7 @@ void UCInventoryComponent::OpenInventory(EInventoryType NewInventoryType)
 			InventoryWidget->SetInventoryType(NewInventoryType);
 			InventoryWidget->ClearInventory();
 			InventoryWidget->BuildInventory(Inventory, MaxInventorySize, ColumnSize);
-			InventoryWidget->AddToViewport();
+			InventoryWidget->SetVisibility(ESlateVisibility::Visible);
 		}
 		//CLog::Print(Inventory.Num());
 
@@ -257,8 +259,9 @@ void UCInventoryComponent::OpenInventory(EInventoryType NewInventoryType)
 	else
 	{
 		CheckNull(InventoryWidget);
-		InventoryWidget->ClearInventory();
-		InventoryWidget->RemoveFromParent();
+		//InventoryWidget->ClearInventory();
+		//InventoryWidget->RemoveFromParent();
+		InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
 		InventoryWidget->ItemClicked.Clear();
 		InventoryWidget->ItemRightClicked.Clear();
 	}
@@ -287,13 +290,16 @@ void UCInventoryComponent::OpenMagicInventory(EInventoryType NewInventoryType)
 			MagicInventoryWidget->SetInventoryType( NewInventoryType);
 			MagicInventoryWidget->BuildInventory(MagicInventory, MaxInventorySize, ColumnSize);
 			MagicInventoryWidget->AddToViewport();
+
 		}
 		else
 		{
 			MagicInventoryWidget->SetInventoryType(NewInventoryType);
 			MagicInventoryWidget->ClearInventory();
 			MagicInventoryWidget->BuildInventory(MagicInventory, MaxInventorySize, ColumnSize);
-			MagicInventoryWidget->AddToViewport();
+			//MagicInventoryWidget->AddToViewport();
+			MagicInventoryWidget->SetVisibility(ESlateVisibility::Visible);
+
 		}
 		//CLog::Print(Inventory.Num());
 
@@ -311,8 +317,10 @@ void UCInventoryComponent::OpenMagicInventory(EInventoryType NewInventoryType)
 	else
 	{
 		CheckNull(MagicInventoryWidget);
-		MagicInventoryWidget->ClearInventory();
-		MagicInventoryWidget->RemoveFromParent();
+		//MagicInventoryWidget->ClearInventory();
+//`		MagicInventoryWidget->RemoveFromParent();
+		MagicInventoryWidget->SetVisibility(ESlateVisibility::Hidden);
+		
 		MagicInventoryWidget->ItemClicked.Clear();
 		MagicInventoryWidget->ItemRightClicked.Clear();
 	}
@@ -407,7 +415,6 @@ void UCInventoryComponent::EndToolAction()
 	case EItemType::Tool:
 		break;
 	case EItemType::Consumable:
-
 		break;
 	case EItemType::Max:
 		break;

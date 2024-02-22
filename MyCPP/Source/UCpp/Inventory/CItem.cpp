@@ -1,9 +1,10 @@
-#include "Inventory/CItem.h"
+#include "CItem.h"
 #include "Global.h"
 #include "Components/CInventoryComponent.h"
 
 ACItem::ACItem()
 {
+	InteractType = EInteractType::Pickable;
 
 }
 

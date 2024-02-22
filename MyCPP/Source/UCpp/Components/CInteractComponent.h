@@ -7,12 +7,16 @@
 #include "CInteractComponent.generated.h"
 
 
-
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
 class UCPP_API UCInteractComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
+private:
+	UPROPERTY()
+		class UCUserWidget_Interact* InteractWidget;
+	UPROPERTY()
+		TSubclassOf<UCUserWidget_Interact> InteractClass;
 
 public:	
 	UCInteractComponent();
@@ -28,7 +32,7 @@ private:
 	UFUNCTION()
 		void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-
+	void UpdateWidget();
 protected:
 	virtual void BeginPlay() override;
 

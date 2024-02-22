@@ -5,17 +5,22 @@
 #include "Global.h"
 #include "Interact/IInteract.h"
 #include "Components/ShapeComponent.h"
+#include "Widgets/CUserWidget_Interact.h"
+#include "Components/WidgetComponent.h"
 #include "GameFramework/Character.h"
 
 
 UCInteractComponent::UCInteractComponent()
 {
+	CHelpers::GetClass<UCUserWidget_Interact>(&InteractClass, "WidgetBlueprint'/Game/Widgets/WB_Interact.WB_Interact_C'");
 
 }
 
 void UCInteractComponent::BeginPlay()
 {
 	
+	
+
 	ACharacter* character = Cast<ACharacter>(GetOwner());
 	
 	Super::BeginPlay();
@@ -55,6 +60,8 @@ void UCInteractComponent::OnComponentBeginOverlap(UPrimitiveComponent* Overlappe
 	CLog::Print(OtherActor->GetName());
 
 	InteractArray.AddUnique(Interacted);
+	
+	UpdateWidget();
 }
 
 void UCInteractComponent::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -63,6 +70,50 @@ void UCInteractComponent::OnComponentEndOverlap(UPrimitiveComponent* OverlappedC
 	CheckNull(Interacted);
 
 	InteractArray.Remove(Interacted);
+	UpdateWidget();
+
+}
+
+void UCInteractComponent::UpdateWidget()
+{
+	
+	if (!!!InteractWidget)
+	{
+		InteractWidget = Cast<UCUserWidget_Interact>(CreateWidget(GetWorld(), InteractClass));
+		//CheckNull(InteractWidget);
+		InteractWidget->AddToViewport();
+		InteractWidget->SetVisibility(ESlateVisibility::Hidden);
+	}
+	
+	if (InteractArray.Num()<=0)
+	{
+		InteractWidget->SetVisibility(ESlateVisibility::Hidden);
+
+	}
+	else
+	{
+		FString string;
+		switch (InteractArray[0]->GetInteractType())
+		{
+		case EInteractType::Openable:
+			string = "Open";
+			break;
+
+		case EInteractType::Pickable:
+			string = "PickUp";
+			break;
+
+		case EInteractType::Speakable:
+			string = "Speak";
+			break;
+		default:
+			break;
+
+		}
+
+		InteractWidget->Update((Cast<AActor>(InteractArray[0])->GetName()), string);
+		InteractWidget->SetVisibility(ESlateVisibility::Visible);
+	}
 }
 
 

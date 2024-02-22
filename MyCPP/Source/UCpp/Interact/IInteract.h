@@ -13,6 +13,13 @@ class UIInteract : public UInterface
 	GENERATED_BODY()
 };
 
+UENUM(BlueprintType)
+enum class EInteractType : uint8
+{
+	Speakable, Pickable, Openable, Max,
+};
+
+
 class UCPP_API IIInteract
 {
 	GENERATED_BODY()
@@ -20,4 +27,8 @@ class UCPP_API IIInteract
 public:
 	//virtual void Interact() {}
 	virtual void Interact(AActor* InOther) {}
+	FORCEINLINE EInteractType GetInteractType() { return InteractType; }
+
+protected:
+	EInteractType InteractType;
 };

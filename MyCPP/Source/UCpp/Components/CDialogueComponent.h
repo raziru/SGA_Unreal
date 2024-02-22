@@ -3,9 +3,24 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Engine/DataTable.h"
+#include "Components/CStateComponent.h"
 #include "CDialogueComponent.generated.h"
 
+USTRUCT(BlueprintType)
+struct FDialogueData : public FTableRowBase
+{
+	GENERATED_BODY()
 
+public:
+	UPROPERTY(EditAnywhere)
+		EStateType Type;
+
+	UPROPERTY(EditAnywhere)
+		FString String;
+
+	UPROPERTY(EditAnywhere)
+		int Index;
+};
 
 
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
@@ -25,6 +40,11 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		FName Name;
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "DataTable")
+		UDataTable* DataTable;
+
 public:	
 	UCDialogueComponent();
 

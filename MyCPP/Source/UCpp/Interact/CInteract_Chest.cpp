@@ -6,6 +6,8 @@
 ACInteract_Chest::ACInteract_Chest()
 {
 	CHelpers::CreateActorComponent<UCPickupComponent>(this, &Pickup, "Pickup");
+	InteractType = EInteractType::Openable;
+
 
 }
 

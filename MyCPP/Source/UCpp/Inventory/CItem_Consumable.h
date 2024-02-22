@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Inventory/CItem.h"
+#include "CItem.h"
 #include "Components/CActionComponent.h"
 #include "Components/CStatusComponent.h"
-#include "Inventory/CItem_Weapon.h"
+#include "CItem_Weapon.h"
 #include "CItem_Consumable.generated.h"
 
 UCLASS()
