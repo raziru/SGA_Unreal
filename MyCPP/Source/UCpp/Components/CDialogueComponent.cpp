@@ -20,6 +20,8 @@ void UCDialogueComponent::ShowDialogue(FString name, FString Text)
 	else
 	{
 		DialogueWidget->Update(name, Text);
+		DialogueWidget->SetVisibility(ESlateVisibility::Visible);
+
 		//DialogueWidget->AddToViewport();
 	}	
 }
@@ -27,7 +29,7 @@ void UCDialogueComponent::ShowDialogue(FString name, FString Text)
 void UCDialogueComponent::QuitDialogue()
 {
 	CheckNull(DialogueWidget);
-	DialogueWidget->RemoveFromParent();
+	DialogueWidget->SetVisibility(ESlateVisibility::Hidden);
 	OnDialogue = false;
 	Index = 0;
 }

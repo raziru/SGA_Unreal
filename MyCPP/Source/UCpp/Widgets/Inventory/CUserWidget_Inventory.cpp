@@ -85,24 +85,68 @@ void UCUserWidget_Inventory::BuildInventory(const TArray<FItemData>& Inventory, 
 	}
 }
 
-void UCUserWidget_Inventory::ClearInventory()
-{
-	if (InventoryPanel->GetAllChildren().Num()<=0)
-	{
-		return;
-	}
-	for (UWidget* widget : InventoryPanel->GetAllChildren())
-	{
-		widget->RemoveFromParent();
-	}
-	InventoryPanel->ClearChildren();
 
-}
 
 void UCUserWidget_Inventory::RefreshInventory(const TArray<FItemData>& Inventory, int MaxInventorySize, int ColumnSize)
 {
-	ClearInventory();
-	BuildInventory(Inventory, MaxInventorySize, ColumnSize);
+	/*ClearInventory();
+	BuildInventory(Inventory, MaxInventorySize, ColumnSize);*/
+
+	int index = 0;
+
+	for (UWidget* widget : InventoryPanel->GetAllChildren())
+	{
+		UCUserWidget_ItemButton* ItemButton = Cast<UCUserWidget_ItemButton>(widget);
+		ItemButton->Clicked.Clear();
+		ItemButton->RightClicked.Clear();
+		ItemButton->MakeEmptyButton();
+		
+	}
+
+	for (FItemData item : Inventory)
+	{
+		UCUserWidget_ItemButton* ItemButton = Cast<UCUserWidget_ItemButton>(InventoryPanel->GetAllChildren()[index]);
+		switch (InventoryType)
+		{
+		case EInventoryType::Main:
+			break;
+		case EInventoryType::Weapon:
+			if (item.ItemType != EItemType::Weapon)
+				continue;
+
+			break;
+		case EInventoryType::Armor:
+			if (item.ItemType != EItemType::Armor)
+				continue;
+
+			break;
+		case EInventoryType::Tool:
+			if (item.ItemType != EItemType::Tool)
+				continue;
+
+			break;
+		case EInventoryType::Consumable:
+			if (item.ItemType != EItemType::Consumable)
+				continue;
+
+			break;
+		case EInventoryType::Max:
+			break;
+		default:
+			break;
+		}
+
+		ItemButton->MakeItemButton(item);
+		ItemButton->Clicked.AddDynamic(this, &UCUserWidget_Inventory::OnClicked);
+		ItemButton->RightClicked.AddDynamic(this, &UCUserWidget_Inventory::OnRightClicked);
+
+		index++;
+
+		if (index>= MaxInventorySize)
+		{
+			break;
+		}
+	}
 }
 void UCUserWidget_Inventory::OnClicked(FItemData Item)
 {

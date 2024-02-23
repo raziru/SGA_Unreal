@@ -5,10 +5,7 @@
 #include "GameFramework/Character.h"
 
 // Sets default values
-ACInteract::ACInteract()
-{
 
-}
 
 void ACInteract::Interact(AActor* InOther)
 {

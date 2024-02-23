@@ -13,14 +13,13 @@ UCLASS()
 class UCPP_API ACInteract : public AActor, public IIInteract
 {
 	GENERATED_BODY()
-	
 public:	
-	ACInteract();
 
 	virtual void Interact(AActor* InOther) override;
 
 	UPROPERTY(BlueprintAssignable)
 		FEndInteract EndInteract;
+
 protected:
 	virtual void BeginPlay() override;
 
