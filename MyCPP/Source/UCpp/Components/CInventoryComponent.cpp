@@ -240,8 +240,7 @@ void UCInventoryComponent::OpenInventory(EInventoryType NewInventoryType)
 		else
 		{
 			InventoryWidget->SetInventoryType(NewInventoryType);
-			InventoryWidget->ClearInventory();
-			InventoryWidget->BuildInventory(Inventory, MaxInventorySize, ColumnSize);
+			InventoryWidget->RefreshInventory(Inventory, MaxInventorySize, ColumnSize);
 			InventoryWidget->SetVisibility(ESlateVisibility::Visible);
 		}
 		//CLog::Print(Inventory.Num());
@@ -295,8 +294,7 @@ void UCInventoryComponent::OpenMagicInventory(EInventoryType NewInventoryType)
 		else
 		{
 			MagicInventoryWidget->SetInventoryType(NewInventoryType);
-			MagicInventoryWidget->ClearInventory();
-			MagicInventoryWidget->BuildInventory(MagicInventory, MaxInventorySize, ColumnSize);
+			MagicInventoryWidget->RefreshInventory(MagicInventory, MaxInventorySize, ColumnSize);
 			//MagicInventoryWidget->AddToViewport();
 			MagicInventoryWidget->SetVisibility(ESlateVisibility::Visible);
 

@@ -33,7 +33,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void BuildInventory(const TArray<FItemData>& Inventory, int MaxInventorySize, int ColumnSize);
 	
-	void ClearInventory();
+	//void ClearInventory();
 
 	void RefreshInventory(const TArray<FItemData>& Inventory, int MaxInventorySize, int ColumnSize);
 
