@@ -253,16 +253,24 @@ void UCInventoryComponent::OpenInventory(EInventoryType NewInventoryType)
 		InventoryWidget->PrevInventory.AddDynamic(this, &UCInventoryComponent::PrevInventory);
 
 		//OnSelected.AddDynamic
-
+		APlayerController* controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		if (!!controller)
+		{
+			controller->SetShowMouseCursor(true);
+		}
 	}
 	else
 	{
+		APlayerController* controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		if (!!controller)
+		{
+			controller->SetShowMouseCursor(false);
+		}
 		CheckNull(InventoryWidget);
-		//InventoryWidget->ClearInventory();
-		//InventoryWidget->RemoveFromParent();
 		InventoryWidget->SetVisibility(ESlateVisibility::Hidden);
 		InventoryWidget->ItemClicked.Clear();
 		InventoryWidget->ItemRightClicked.Clear();
+	
 	}
 	IsInventoryOpened = !IsInventoryOpened;
 }
@@ -310,13 +318,20 @@ void UCInventoryComponent::OpenMagicInventory(EInventoryType NewInventoryType)
 
 		//OnSelected.AddDynamic
 
-		
+		APlayerController* controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		if (!!controller)
+		{
+			controller->SetShowMouseCursor(true);
+		}
 	}
 	else
 	{
 		CheckNull(MagicInventoryWidget);
-		//MagicInventoryWidget->ClearInventory();
-//`		MagicInventoryWidget->RemoveFromParent();
+		APlayerController* controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		if (!!controller)
+		{
+			controller->SetShowMouseCursor(false);
+		}
 		MagicInventoryWidget->SetVisibility(ESlateVisibility::Hidden);
 		
 		MagicInventoryWidget->ItemClicked.Clear();

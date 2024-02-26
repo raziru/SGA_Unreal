@@ -13,14 +13,15 @@ class UCPP_API ACInteract_Door : public ACInteract
 	GENERATED_BODY()
 
 	ACInteract_Door();
-public:
-	//ACInteract_Door();
+protected:
+	/*UPROPERTY(EditDefaultsOnly)
+		class USceneComponent* Scene;*/
 
-	UPROPERTY(EditDefaultsOnly, Category = "Door")
+	UPROPERTY(EditDefaultsOnly)
 		class UStaticMeshComponent* DoorFrame;
 
-	/*UPROPERTY(EditDefaultsOnly, Category = "Door")
-		class UStaticMeshComponent* Door;*/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		class UStaticMeshComponent* Door;
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void Open();

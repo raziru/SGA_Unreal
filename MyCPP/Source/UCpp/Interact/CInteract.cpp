@@ -6,7 +6,6 @@
 
 // Sets default values
 
-
 void ACInteract::Interact(AActor* InOther)
 {
 	if (EndInteract.IsBound())

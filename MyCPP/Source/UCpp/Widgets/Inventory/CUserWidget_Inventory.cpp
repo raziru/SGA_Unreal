@@ -53,23 +53,19 @@ void UCUserWidget_Inventory::BuildInventory(const TArray<FItemData>& Inventory, 
 			break;
 		case EInventoryType::Weapon:
 			if (item.ItemType != EItemType::Weapon)
-				continue;
-			
+				continue;			
 			break;
 		case EInventoryType::Armor:
 			if (item.ItemType != EItemType::Armor)
-				continue;
-			
+				continue;			
 			break;
 		case EInventoryType::Tool:
 			if (item.ItemType != EItemType::Tool)
-				continue;
-			
+				continue;			
 			break;
 		case EInventoryType::Consumable:
 			if (item.ItemType != EItemType::Consumable)
-				continue;
-			
+				continue;			
 			break;
 		case EInventoryType::Max:
 			break;
@@ -89,9 +85,7 @@ void UCUserWidget_Inventory::BuildInventory(const TArray<FItemData>& Inventory, 
 
 void UCUserWidget_Inventory::RefreshInventory(const TArray<FItemData>& Inventory, int MaxInventorySize, int ColumnSize)
 {
-	/*ClearInventory();
-	BuildInventory(Inventory, MaxInventorySize, ColumnSize);*/
-
+	
 	int index = 0;
 
 	for (UWidget* widget : InventoryPanel->GetAllChildren())
@@ -99,8 +93,7 @@ void UCUserWidget_Inventory::RefreshInventory(const TArray<FItemData>& Inventory
 		UCUserWidget_ItemButton* ItemButton = Cast<UCUserWidget_ItemButton>(widget);
 		ItemButton->Clicked.Clear();
 		ItemButton->RightClicked.Clear();
-		ItemButton->MakeEmptyButton();
-		
+		ItemButton->MakeEmptyButton();		
 	}
 
 	for (FItemData item : Inventory)
@@ -113,22 +106,18 @@ void UCUserWidget_Inventory::RefreshInventory(const TArray<FItemData>& Inventory
 		case EInventoryType::Weapon:
 			if (item.ItemType != EItemType::Weapon)
 				continue;
-
 			break;
 		case EInventoryType::Armor:
 			if (item.ItemType != EItemType::Armor)
 				continue;
-
 			break;
 		case EInventoryType::Tool:
 			if (item.ItemType != EItemType::Tool)
 				continue;
-
 			break;
 		case EInventoryType::Consumable:
 			if (item.ItemType != EItemType::Consumable)
 				continue;
-
 			break;
 		case EInventoryType::Max:
 			break;

@@ -13,6 +13,7 @@ UCLASS()
 class UCPP_API ACInteract : public AActor, public IIInteract
 {
 	GENERATED_BODY()
+
 public:	
 
 	virtual void Interact(AActor* InOther) override;
