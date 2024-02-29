@@ -14,4 +14,6 @@ class UCPP_API UCUserWidget_Interact : public UUserWidget
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void Update(const FString& Name, const FString& Text);
+	/*UFUNCTION(BlueprintCallable)
+		FString LastWord(const FString& Word);*/
 };

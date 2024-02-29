@@ -167,7 +167,9 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("VerticalLook", this, &ACPlayer::OnVerticalLook);
 	PlayerInputComponent->BindAxis("Zoom", this, &ACPlayer::OnZoom);
 
-	PlayerInputComponent->BindAction("Avoid", EInputEvent::IE_Pressed, this, &ACPlayer::OnAvoid);
+	PlayerInputComponent->BindAction("Avoid", EInputEvent::IE_Pressed, this, &ACPlayer::OnAvoidAndJump);
+	PlayerInputComponent->BindAction("Avoid", EInputEvent::IE_Released, this, &ACPlayer::OnJumpEnd);
+
 
 	PlayerInputComponent->BindAction("Walk", EInputEvent::IE_Pressed, this, &ACPlayer::OnWalk);
 	PlayerInputComponent->BindAction("Walk", EInputEvent::IE_Released, this, &ACPlayer::OffWalk);
@@ -241,6 +243,19 @@ void ACPlayer::OnZoom(float InAxis)
 	SpringArm->TargetArmLength = FMath::Clamp(SpringArm->TargetArmLength, 50.0f, 500.0f);
 }
 
+void ACPlayer::OnAvoidAndJump()
+{
+	CheckFalse(State->IsIdleMode());
+	if (Action->IsUnarmedMode())
+	{
+		OnJumpStart();
+	}
+	else
+	{
+		OnAvoid();
+	}
+}
+
 void ACPlayer::OnAvoid()
 {
 	CheckFalse(State->IsIdleMode());
@@ -252,6 +267,22 @@ void ACPlayer::OnAvoid()
 	}
 
 	State->SetRollMode();
+}
+
+void ACPlayer::OnJumpStart()
+{
+	CheckFalse(State->IsIdleMode());
+	State->SetJumpMode();
+	bPressedJump = true;
+}
+
+void ACPlayer::OnJumpEnd()
+{
+	CheckFalse(State->IsJumpMode());
+
+	bPressedJump = false;
+	State->SetIdleMode();
+
 }
 
 void ACPlayer::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
@@ -389,10 +420,6 @@ void ACPlayer::PickupMagic(ACItem* InItem)
 {
 	Inventory->PickupMagic(InItem);
 }
-
-
-
-
 
 void ACPlayer::OpenInventory()
 {

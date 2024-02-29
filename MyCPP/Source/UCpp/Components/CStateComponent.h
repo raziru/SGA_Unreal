@@ -10,7 +10,7 @@
 UENUM(BlueprintType)
 enum class EStateType : uint8
 {
-	Idle, Roll, Backstep, Equip, Action, Hitted, Dead, Max,
+	Idle, Roll, Backstep, Equip, Action, Hitted, Dead, Jump, Max,
 };
 
 
@@ -41,6 +41,9 @@ public:
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE bool IsDeadMode() { return Type == EStateType::Dead; }
 
+	UFUNCTION(BlueprintPure)
+		FORCEINLINE bool IsJumpMode() { return Type == EStateType::Jump; }
+
 public:	
 	// Sets default values for this component's properties
 	UCStateComponent();
@@ -53,6 +56,7 @@ public:
 	void SetActionMode();
 	void SetHittedMode();
 	void SetDeadMode();
+	void SetJumpMode();
 
 
 private:

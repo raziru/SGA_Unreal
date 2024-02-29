@@ -23,6 +23,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		class UStaticMeshComponent* Door;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class UBoxComponent* DoorProxVolume;
+
 	UFUNCTION(BlueprintImplementableEvent)
 		void Open();
 

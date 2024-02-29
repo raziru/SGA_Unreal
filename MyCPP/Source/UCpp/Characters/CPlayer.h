@@ -129,7 +129,10 @@ private:
 	void OnZoom(float InAxis);
 
 private:
+	void OnAvoidAndJump();
 	void OnAvoid();
+	void OnJumpStart();
+	void OnJumpEnd();
 
 private:
 //Weapon Equip

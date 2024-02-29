@@ -43,6 +43,9 @@ protected:
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere)
         float Pitch;
+
+    UPROPERTY(BlueprintReadOnly, EditAnywhere)
+        bool isFalling;
 public:
     virtual void NativeBeginPlay() override;
     virtual void NativeUpdateAnimation(float DeltaSeconds) override;

@@ -52,6 +52,11 @@ void UCStateComponent::SetDeadMode()
 {
 	ChangeType(EStateType::Dead);
 }
+void UCStateComponent::SetJumpMode()
+{
+	ChangeType(EStateType::Jump);
+}
+
 void UCStateComponent::ChangeType(EStateType InType)
 {
 	EStateType type = Type;
@@ -60,3 +65,4 @@ void UCStateComponent::ChangeType(EStateType InType)
 	if (OnStateTypeChanged.IsBound())
 		OnStateTypeChanged.Broadcast(type, InType);
 }
+
