@@ -1,6 +1,10 @@
-﻿
+﻿#include "Interact/CInteract_Teleport.h"
 
-#include "Interact/CInteract_Teleport.h"
+ACInteract_Teleport::ACInteract_Teleport()
+{
+	InteractType = EInteractType::Openable;
+
+}
 
 void ACInteract_Teleport::Interact(AActor* InOther)
 {

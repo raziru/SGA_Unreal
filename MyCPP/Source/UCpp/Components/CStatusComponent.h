@@ -65,7 +65,7 @@ class UCPP_API UCStatusComponent : public UActorComponent
 	GENERATED_BODY()
 private:
     
-    UPROPERTY(EditDefaultsOnly, Category = "DefaultStatus")
+	UPROPERTY(EditAnywhere, Category = "DefaultStatus")
         FStatusData DefaultStatus;
 
     FStatusData CurrentStatus;

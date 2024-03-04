@@ -12,6 +12,7 @@
 #include "Components/CStatusComponent.h"
 #include "Components/CMontagesComponent.h"
 #include "Components/CDialogueComponent.h"
+#include "Components/CPickupComponent.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Components/WidgetComponent.h"
@@ -25,7 +26,6 @@ ACEnemy::ACEnemy()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	InteractType = EInteractType::Speakable;
 
 	CHelpers::CreateComponent<UWidgetComponent>(this, &NameWidget, "NameWidget", GetMesh());
 	CHelpers::CreateComponent<UWidgetComponent>(this, &HealthWidget, "HealthWidget", GetMesh());
@@ -35,6 +35,8 @@ ACEnemy::ACEnemy()
 	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
 	CHelpers::CreateActorComponent<UCDialogueComponent>(this, &Dialogue, "Dialogue");
+	CHelpers::CreateActorComponent<UCPickupComponent>(this, &Pickup, "Pickup");
+
 
 
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
@@ -113,7 +115,19 @@ void ACEnemy::Interact(AActor* InOther)
 	CLog::Print(InOther->GetName());
 	//Dialogue->ShowDialogue();
 	//CHelpers::GetComponent(&Dialogue);
-	Dialogue->SpeakTo(InOther);
+	if (State->IsDeadMode())
+	{
+		InteractType = EInteractType::Openable;
+		
+		Pickup->Pickup(InOther);
+	}
+	else
+	{
+		InteractType = EInteractType::Speakable;
+
+		Dialogue->SpeakTo(InOther);
+	}
+	
 	
 	//Destroy();
 }
@@ -190,7 +204,7 @@ void ACEnemy::Dead()
 }
 void ACEnemy::Begin_Backstep()
 {
-	//CheckFalse(State->IsIdleMode());
+	CheckFalse(State->IsIdleMode());
 	Montages->PlayBackstep();
 
 }
@@ -202,12 +216,17 @@ void ACEnemy::End_Backstep()
 void ACEnemy::Begin_Dead()
 {
 	Action->OffAllCollision();
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Status->SetStop();
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 }
 void ACEnemy::End_Dead()
 {
-	Action->DestoryAction();
-	Destroy();
+	//Action->DestoryAction();
+	//Destroy();
+	//CanPickup = true;
+	HealthWidget->SetVisibility(false);
+	InteractType = EInteractType::Openable;
+
 }
 void ACEnemy::RestoreColor()
 {

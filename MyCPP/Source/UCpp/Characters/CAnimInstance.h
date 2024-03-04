@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
 #include "Components/CActionComponent.h"
+#include "Components/CStateComponent.h"
 #include "Components/CFeetComponent.h"
 #include "CAnimInstance.generated.h"
 
@@ -43,6 +44,9 @@ protected:
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere)
         float Pitch;
+
+    UPROPERTY(BlueprintReadOnly, EditAnywhere)
+        bool IsDead;
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere)
         bool isFalling;

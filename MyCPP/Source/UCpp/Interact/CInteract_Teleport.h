@@ -11,7 +11,7 @@ class UCPP_API ACInteract_Teleport : public ACInteract
 {
 	GENERATED_BODY()
 
-
+	ACInteract_Teleport();
 public:
 
 	virtual void Interact(AActor* InOther) override;

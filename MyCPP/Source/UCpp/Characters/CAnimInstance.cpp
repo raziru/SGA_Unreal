@@ -30,6 +30,12 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	action->OnActionPress.AddDynamic(this, &UCAnimInstance::OnActionPress);
 	action->OnSecondHand.AddDynamic(this, &UCAnimInstance::OnSecondHand);
 
+	UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(character);
+	if (!!state)
+	{
+		IsDead = state->IsDeadMode();
+	}
+
 	UCFeetComponent* feet = CHelpers::GetComponent<UCFeetComponent>(character);
 	if (!!feet)
 		FeetData = feet->GetData();

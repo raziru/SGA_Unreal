@@ -22,7 +22,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Item")
 		TArray<class ACItem*> Items;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Item")
+	UPROPERTY(EditAnywhere, Category = "Item")
 		TMap<TSubclassOf<class ACItem>,int> ItemClasses;
 
 };

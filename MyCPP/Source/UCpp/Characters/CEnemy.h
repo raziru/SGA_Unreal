@@ -31,6 +31,9 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCMontagesComponent* Montages;
 
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCPickupComponent* Pickup;
+
 private:
 	
 
@@ -89,5 +92,5 @@ private:
 private:
 	class AController* DamageInstigator;
 	float DamageValue;
-
+	bool CanPickup;
 };
