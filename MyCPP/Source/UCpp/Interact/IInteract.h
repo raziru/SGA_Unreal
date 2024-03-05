@@ -16,7 +16,7 @@ class UIInteract : public UInterface
 UENUM(BlueprintType)
 enum class EInteractType : uint8
 {
-	Speakable, Pickable, Openable, Max,
+	Speakable, Pickable, Openable, Disabled, Max,
 };
 
 

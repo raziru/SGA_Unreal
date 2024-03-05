@@ -59,6 +59,11 @@ void UCInteractComponent::OnComponentBeginOverlap(UPrimitiveComponent* Overlappe
 
 	CLog::Print(OtherActor->GetName());
 
+	if (Interacted->GetInteractType() == EInteractType::Disabled)
+	{
+		return;
+	}
+
 	InteractArray.AddUnique(Interacted);
 	
 	UpdateWidget();
@@ -68,6 +73,11 @@ void UCInteractComponent::OnComponentEndOverlap(UPrimitiveComponent* OverlappedC
 {
 	IIInteract* Interacted = Cast<IIInteract>(OtherActor);
 	CheckNull(Interacted);
+
+	/*if (Interacted->GetInteractType() == EInteractType::Disabled)
+	{
+		return;
+	}*/
 
 	InteractArray.Remove(Interacted);
 	UpdateWidget();
@@ -106,6 +116,9 @@ void UCInteractComponent::UpdateWidget()
 		case EInteractType::Speakable:
 			string = "Speak";
 			break;
+
+		case EInteractType::Disabled:
+			string = "None";
 		default:
 			break;
 

@@ -34,14 +34,12 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCPickupComponent* Pickup;
 
-private:
-	
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCStateComponent* State;
+private:	
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCStatusComponent* Status;
-
-	UPROPERTY(VisibleDefaultsOnly)
-		class UCStateComponent* State;
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCDialogueComponent* Dialogue;
@@ -76,14 +74,15 @@ protected:
 	void Hitted();
 	void Dead();
 
-private:
+protected:
 	virtual void Begin_Dead() override;
 	virtual void End_Dead()   override;
 
 	void Begin_Backstep();
 	virtual void End_Backstep();
 
-
+	UPROPERTY(EditAnywhere)
+		EInteractType OwnInteractType;
 
 private:
 	class UMaterialInstanceDynamic* BodyMaterial;
@@ -93,4 +92,6 @@ private:
 	class AController* DamageInstigator;
 	float DamageValue;
 	bool CanPickup;
+
+	
 };

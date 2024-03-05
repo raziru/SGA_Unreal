@@ -21,7 +21,7 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	Speed = character->GetVelocity().Size2D();
 	Direction = CalculateDirection(character->GetVelocity(), character->GetControlRotation());
 	Pitch = character->GetBaseAimRotation().Pitch;
-	isFalling = character->GetCharacterMovement()->IsFalling();
+	IsFalling = character->GetCharacterMovement()->IsFalling();
 
 	UCActionComponent* action = CHelpers::GetComponent<UCActionComponent>(character);
 	CheckNull(action);
@@ -33,7 +33,7 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(character);
 	if (!!state)
 	{
-		IsDead = state->IsDeadMode();
+		IsDead = state->IsCorpseMode();
 	}
 
 	UCFeetComponent* feet = CHelpers::GetComponent<UCFeetComponent>(character);

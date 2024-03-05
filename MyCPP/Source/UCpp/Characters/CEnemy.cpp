@@ -61,6 +61,7 @@ ACEnemy::ACEnemy()
 	HealthWidget->SetRelativeLocation(FVector(0, 0, 190));
 	HealthWidget->SetDrawSize(FVector2D(120, 20));
 	HealthWidget->SetWidgetSpace(EWidgetSpace::Screen);
+
 }
 
 
@@ -70,6 +71,8 @@ void ACEnemy::BeginPlay()
 {
 	//construct helper외의 create는 생성자에서 사용할 수 없다.
 	//그리고 begin play전에 실행해야 제대로 반영된다.
+	InteractType = OwnInteractType;
+
 	UMaterialInstanceConstant* body;
 	UMaterialInstanceConstant* logo;
 
@@ -115,7 +118,7 @@ void ACEnemy::Interact(AActor* InOther)
 	CLog::Print(InOther->GetName());
 	//Dialogue->ShowDialogue();
 	//CHelpers::GetComponent(&Dialogue);
-	if (State->IsDeadMode())
+	/*if (State->IsCorpseMode())
 	{
 		InteractType = EInteractType::Openable;
 		
@@ -126,8 +129,27 @@ void ACEnemy::Interact(AActor* InOther)
 		InteractType = EInteractType::Speakable;
 
 		Dialogue->SpeakTo(InOther);
-	}
+	}*/
 	
+
+	switch (InteractType)
+	{
+	case EInteractType::Speakable:
+		Dialogue->SpeakTo(InOther);
+		break;
+	case EInteractType::Pickable:
+		Pickup->Pickup(InOther);
+		break;
+	case EInteractType::Openable:
+		Pickup->Pickup(InOther);
+		break;
+	case EInteractType::Disabled:
+		break;
+	case EInteractType::Max:
+		break;
+	default:
+		break;
+	}
 	
 	//Destroy();
 }
@@ -142,9 +164,18 @@ void ACEnemy::OnDefaultMode()
 float ACEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	DamageInstigator = EventInstigator;
-	DamageValue = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+	if (State->IsCorpseMode())
+	{
+		DamageValue = 0;
+
+	}
+	else
+	{
+		DamageValue = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+		State->SetHittedMode();
+
+	}
 	CLog::Log(Damage);
-	State->SetHittedMode();
 
 	return Status->GetHealth();
 }
@@ -216,16 +247,18 @@ void ACEnemy::End_Backstep()
 void ACEnemy::Begin_Dead()
 {
 	Action->OffAllCollision();
-	Status->SetStop();
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 void ACEnemy::End_Dead()
 {
-	//Action->DestoryAction();
-	//Destroy();
-	//CanPickup = true;
+	
 	HealthWidget->SetVisibility(false);
 	InteractType = EInteractType::Openable;
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	State->SetCorpseMode();
+
+	//InteractType = EInteractType::Openable;
+
 
 }
 void ACEnemy::RestoreColor()

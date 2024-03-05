@@ -57,6 +57,11 @@ void UCStateComponent::SetJumpMode()
 	ChangeType(EStateType::Jump);
 }
 
+void UCStateComponent::SetCorpseMode()
+{
+	ChangeType(EStateType::Corpse);
+}
+
 void UCStateComponent::ChangeType(EStateType InType)
 {
 	EStateType type = Type;
