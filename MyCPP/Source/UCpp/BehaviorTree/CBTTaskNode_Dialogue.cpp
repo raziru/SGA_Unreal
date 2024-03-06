@@ -21,7 +21,13 @@ EBTNodeResult::Type UCBTTaskNode_Dialogue::ExecuteTask(UBehaviorTreeComponent& O
 	ACAIController* controller = Cast<ACAIController>(OwnerComp.GetOwner());
 
 	ACEnemy_AI* ai = Cast<ACEnemy_AI>(controller->GetPawn());
-	UCDialogueComponent* Dialogue = CHelpers::GetComponent<UCDialogueComponent>(ai);
+	//UCDialogueComponent* Dialogue = CHelpers::GetComponent<UCDialogueComponent>(ai);
+	//iaglogue->Shou
+	if (!!ai)
+	{
+		ai->Shout();
+	}
+	
 
 //	State->SetBackstepMode();
 

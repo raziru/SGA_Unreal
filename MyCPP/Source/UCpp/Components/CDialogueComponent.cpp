@@ -1,10 +1,12 @@
 #include "Components/CDialogueComponent.h"
 #include "Global.h"
 #include "Widgets/CUserWidget_Dialogue.h"
+#include "Components/WidgetComponent.h"
+#include "Widgets/CUserWidget_Shout.h"
 
 UCDialogueComponent::UCDialogueComponent()
 {
-
+	
 }
 
 void UCDialogueComponent::ShowDialogue(FString name, FString Text)
@@ -47,6 +49,22 @@ FString UCDialogueComponent::GetText()
 		Index++;
 		return Speak[Index-1];
 	}
+}
+
+void UCDialogueComponent::Shout()
+{
+	UWidgetComponent* ShoutWidget = CHelpers::GetComponent<UWidgetComponent>(GetOwner());
+	ShoutWidget->InitWidget();
+	CheckNull(ShoutWidget);
+	
+	//for (FString text: Dialogue->GetShout())
+	{
+		//ShoutWidget->Update(text);
+		//Cast<UCUserWidget_Shout>(ShoutWidget->GetUserWidgetObject())->Update(text);
+
+	}
+	//(Cast<UCUserWidget_Shout>(Shout))->Update();
+
 }
 
 void UCDialogueComponent::SpeakTo(AActor* InOther)

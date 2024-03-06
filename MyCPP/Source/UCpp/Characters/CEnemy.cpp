@@ -20,6 +20,7 @@
 #include "Widgets/CUserWidget_Health.h"
 
 
+
 // Sets default values
 ACEnemy::ACEnemy()
 {
@@ -29,6 +30,7 @@ ACEnemy::ACEnemy()
 
 	CHelpers::CreateComponent<UWidgetComponent>(this, &NameWidget, "NameWidget", GetMesh());
 	CHelpers::CreateComponent<UWidgetComponent>(this, &HealthWidget, "HealthWidget", GetMesh());
+
 
 	CHelpers::CreateActorComponent<UCActionComponent>(this, &Action, "Action");
 	CHelpers::CreateActorComponent<UCMontagesComponent>(this, &Montages, "Montages");
@@ -62,6 +64,7 @@ ACEnemy::ACEnemy()
 	HealthWidget->SetDrawSize(FVector2D(120, 20));
 	HealthWidget->SetWidgetSpace(EWidgetSpace::Screen);
 
+	
 }
 
 
@@ -115,22 +118,7 @@ void ACEnemy::ChangeColor(FLinearColor InColor)
 
 void ACEnemy::Interact(AActor* InOther)
 {
-	CLog::Print(InOther->GetName());
-	//Dialogue->ShowDialogue();
-	//CHelpers::GetComponent(&Dialogue);
-	/*if (State->IsCorpseMode())
-	{
-		InteractType = EInteractType::Openable;
-		
-		Pickup->Pickup(InOther);
-	}
-	else
-	{
-		InteractType = EInteractType::Speakable;
-
-		Dialogue->SpeakTo(InOther);
-	}*/
-	
+	CLog::Print(InOther->GetName());	
 
 	switch (InteractType)
 	{

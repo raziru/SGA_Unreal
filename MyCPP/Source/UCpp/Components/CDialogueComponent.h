@@ -37,6 +37,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		TArray<FString> Speak;
+	UPROPERTY(EditAnywhere)
+		TArray<FString> ShoutList;
 
 	UPROPERTY(EditAnywhere)
 		FName Name;
@@ -44,7 +46,8 @@ private:
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "DataTable")
 		UDataTable* DataTable;
-
+	
+	
 public:	
 	UCDialogueComponent();
 
@@ -54,7 +57,13 @@ public:
 
 	FString GetText();
 
+	TArray<FString> GetShout() { return ShoutList; }
+
+	void Shout();
+
 	void SpeakTo(AActor* InOther);
+
+	
 protected:
 	virtual void BeginPlay() override;
 

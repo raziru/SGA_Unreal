@@ -24,6 +24,7 @@ protected:
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UWidgetComponent* HealthWidget;
+
 protected:
 	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly)
 		class UCActionComponent* Action;
@@ -36,13 +37,15 @@ protected:
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCStateComponent* State;
+
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCDialogueComponent* Dialogue;
 private:	
 
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCStatusComponent* Status;
 
-	UPROPERTY(VisibleDefaultsOnly)
-		class UCDialogueComponent* Dialogue;
+	
 public:
 	ACEnemy();
 
