@@ -6,6 +6,9 @@
 #include "Characters/CAIController.h"
 #include "Characters/CEnemy_AI.h"
 #include "Components/CDialogueComponent.h"
+#include "Components/CStateComponent.h"
+#include "Components/CBehaviorComponent.h"
+
 
 
 UCBTTaskNode_Dialogue::UCBTTaskNode_Dialogue()
@@ -21,15 +24,13 @@ EBTNodeResult::Type UCBTTaskNode_Dialogue::ExecuteTask(UBehaviorTreeComponent& O
 	ACAIController* controller = Cast<ACAIController>(OwnerComp.GetOwner());
 
 	ACEnemy_AI* ai = Cast<ACEnemy_AI>(controller->GetPawn());
-	//UCDialogueComponent* Dialogue = CHelpers::GetComponent<UCDialogueComponent>(ai);
-	//iaglogue->Shou
+
+	UCBehaviorComponent* behavior = CHelpers::GetComponent<UCBehaviorComponent>(controller);
+
 	if (!!ai)
 	{
 		ai->Shout();
 	}
-	
-
-//	State->SetBackstepMode();
 
 	return EBTNodeResult::Succeeded;
 

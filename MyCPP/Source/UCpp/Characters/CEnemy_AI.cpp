@@ -4,7 +4,9 @@
 #include "Global.h"
 #include "Components/CPickupComponent.h"
 #include "Components/CPatrolComponent.h"
+#include "Components/CDialogueComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Components/CBehaviorComponent.h"
 #include "Widgets/CUserWidget_Shout.h"
 
 
@@ -38,13 +40,12 @@ void ACEnemy_AI::Shout()
 {
 	ShoutWidget->InitWidget();
 	CheckNull(ShoutWidget);
-
-	for (FString text : Dialogue->GetShout())
+	if (Dialogue->GetShout().Find(State->CurrentMode()))
 	{
-		//ShoutWidget->Update(text);
-		Cast<UCUserWidget_Shout>(ShoutWidget->GetUserWidgetObject())->Update(text);
+		Cast<UCUserWidget_Shout>(ShoutWidget->GetUserWidgetObject())->Update(Dialogue->GetShout()[State->CurrentMode()]);
 
 	}
+	
 }
 
 
@@ -52,13 +53,6 @@ void ACEnemy_AI::Shout()
 ACEnemy_AI::ACEnemy_AI()
 {
 	CHelpers::CreateActorComponent<UCPatrolComponent>(this, &Patrol, "Patrol");
-	CHelpers::CreateComponent<UWidgetComponent>(this, &ShoutWidget, "ShoutWidget", GetMesh());
-
-	TSubclassOf<UCUserWidget_Shout> ShoutClass;
-	CHelpers::GetClass<UCUserWidget_Shout>(&ShoutClass, "WidgetBlueprint'/Game/Widgets/WB_Shout.WB_Shout_C'");
-	ShoutWidget->SetWidgetClass(ShoutClass);
-	ShoutWidget->SetRelativeLocation(FVector(0, 190, 190));
-	ShoutWidget->SetDrawSize(FVector2D(240, 30));
-	ShoutWidget->SetWidgetSpace(EWidgetSpace::Screen);
+	
 
 }

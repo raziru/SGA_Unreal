@@ -87,6 +87,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 		EInteractType OwnInteractType;
 
+	UPROPERTY(VisibleDefaultsOnly)
+		class UWidgetComponent* ShoutWidget;
 private:
 	class UMaterialInstanceDynamic* BodyMaterial;
 	class UMaterialInstanceDynamic* LogoMaterial;

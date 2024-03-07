@@ -47,6 +47,10 @@ public:
 	UFUNCTION(BlueprintPure)
 		FORCEINLINE bool IsCorpseMode() { return Type == EStateType::Corpse; }
 
+	UFUNCTION(BlueprintPure)
+		FORCEINLINE EStateType CurrentMode() { return Type; }
+
+
 public:	
 	// Sets default values for this component's properties
 	UCStateComponent();

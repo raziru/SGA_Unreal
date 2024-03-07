@@ -31,6 +31,12 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 
     UCPatrolComponent* patrol = CHelpers::GetComponent<UCPatrolComponent>(ai);
 
+    if (state->IsCorpseMode())
+    {
+        behavior->SetWaitMode();
+        return;
+    }
+
     if (CanAvoid)
     {
         CanAvoid = false;

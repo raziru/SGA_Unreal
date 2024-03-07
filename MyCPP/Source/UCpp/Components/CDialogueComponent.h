@@ -37,8 +37,10 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		TArray<FString> Speak;
+
+
 	UPROPERTY(EditAnywhere)
-		TArray<FString> ShoutList;
+		TMap<EStateType, FString> ShoutList;
 
 	UPROPERTY(EditAnywhere)
 		FName Name;
@@ -57,7 +59,7 @@ public:
 
 	FString GetText();
 
-	TArray<FString> GetShout() { return ShoutList; }
+	TMap<EStateType, FString> GetShout() { return ShoutList; }
 
 	void Shout();
 

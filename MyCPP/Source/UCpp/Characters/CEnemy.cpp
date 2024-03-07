@@ -18,7 +18,7 @@
 #include "Components/WidgetComponent.h"
 #include "Widgets/CUserWidget_Name.h"
 #include "Widgets/CUserWidget_Health.h"
-
+#include "Widgets/CUserWidget_Shout.h"
 
 
 // Sets default values
@@ -30,6 +30,7 @@ ACEnemy::ACEnemy()
 
 	CHelpers::CreateComponent<UWidgetComponent>(this, &NameWidget, "NameWidget", GetMesh());
 	CHelpers::CreateComponent<UWidgetComponent>(this, &HealthWidget, "HealthWidget", GetMesh());
+	CHelpers::CreateComponent<UWidgetComponent>(this, &ShoutWidget, "ShoutWidget", GetMesh());
 
 
 	CHelpers::CreateActorComponent<UCActionComponent>(this, &Action, "Action");
@@ -39,6 +40,7 @@ ACEnemy::ACEnemy()
 	CHelpers::CreateActorComponent<UCDialogueComponent>(this, &Dialogue, "Dialogue");
 	CHelpers::CreateActorComponent<UCPickupComponent>(this, &Pickup, "Pickup");
 
+	
 
 
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
@@ -64,6 +66,12 @@ ACEnemy::ACEnemy()
 	HealthWidget->SetDrawSize(FVector2D(120, 20));
 	HealthWidget->SetWidgetSpace(EWidgetSpace::Screen);
 
+	TSubclassOf<UCUserWidget_Shout> ShoutClass;
+	CHelpers::GetClass<UCUserWidget_Shout>(&ShoutClass, "WidgetBlueprint'/Game/Widgets/WB_Shout.WB_Shout_C'");
+	ShoutWidget->SetWidgetClass(ShoutClass);
+	ShoutWidget->SetRelativeLocation(FVector(0, 190, 190));
+	ShoutWidget->SetDrawSize(FVector2D(240, 30));
+	ShoutWidget->SetWidgetSpace(EWidgetSpace::Screen);
 	
 }
 
