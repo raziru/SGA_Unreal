@@ -85,11 +85,25 @@ public:
 protected:
 	UPROPERTY(VisibleDefaultsOnly)
 		class UWidgetComponent* EquipWidget;
+
+private:
+	UPROPERTY(EditAnywhere, Category = "Hitted")
+		float LaunchAmount = 5.0f;
 public:
 	ACPlayer();
 
 protected:
 	virtual void BeginPlay() override;
+
+	float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+
+	virtual void Begin_Dead() override;
+	virtual void End_Dead()   override;
+
+protected:
+	void Hitted();
+	void Dead();
 
 public:	
 	virtual FGenericTeamId GetGenericTeamId() const override;
@@ -101,6 +115,11 @@ public:
 	virtual void Interact() override;
 
 	virtual void OnDefaultMode() override;
+
+	//virtual void ChangeColor(FLinearColor InColor);
+
+	UFUNCTION()
+		void RestoreColor();
 
 	UFUNCTION(BlueprintCallable)
 		void BPAddHealth(float InAmount);
@@ -215,5 +234,7 @@ private:
 	class UMaterialInstanceDynamic* BodyMaterial;
 	class UMaterialInstanceDynamic* LogoMaterial;
 
+	class AController* DamageInstigator;
+	float DamageValue;
 
 };

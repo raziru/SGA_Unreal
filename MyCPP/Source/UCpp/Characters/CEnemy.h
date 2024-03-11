@@ -73,6 +73,14 @@ private:
 
 	UFUNCTION()
 		void OnUnarmed();
+
+public:
+	UFUNCTION()
+		void Shout(EStateType InPrevType, EStateType InNewType);
+
+	UFUNCTION()
+		void Say(FString Text);
+
 protected:
 	void Hitted();
 	void Dead();

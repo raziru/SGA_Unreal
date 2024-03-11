@@ -23,8 +23,6 @@ void UCDialogueComponent::ShowDialogue(FString name, FString Text)
 	{
 		DialogueWidget->Update(name, Text);
 		DialogueWidget->SetVisibility(ESlateVisibility::Visible);
-
-		//DialogueWidget->AddToViewport();
 	}	
 }
 
@@ -51,21 +49,7 @@ FString UCDialogueComponent::GetText()
 	}
 }
 
-void UCDialogueComponent::Shout()
-{
-	UWidgetComponent* ShoutWidget = CHelpers::GetComponent<UWidgetComponent>(GetOwner());
-	ShoutWidget->InitWidget();
-	CheckNull(ShoutWidget);
-	
-	//for (FString text: Dialogue->GetShout())
-	{
-		//ShoutWidget->Update(text);
-		//Cast<UCUserWidget_Shout>(ShoutWidget->GetUserWidgetObject())->Update(text);
 
-	}
-	//(Cast<UCUserWidget_Shout>(Shout))->Update();
-
-}
 
 void UCDialogueComponent::SpeakTo(AActor* InOther)
 {
@@ -91,7 +75,31 @@ void UCDialogueComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	CheckNull(BehaviorSpeakTable);
 
+	TArray< FBehaviorShoutData*> Bdatas;
+	BehaviorSpeakTable->GetAllRows<FBehaviorShoutData>("", Bdatas);
+
+	for (FBehaviorShoutData* data : Bdatas)
+	{
+		TPair<EBehaviorType, FString> Script;
+		Script.Key = data->Type;
+		Script.Value = data->String;
+		BehaviorSpeak.Add(Script);
+	}
+
+	CheckNull(BehaviorSpeakTable);
+
+	TArray<  FActionShoutData*> Adatas;
+	ActionSpeakTable->GetAllRows< FActionShoutData>("", Adatas);
+
+	for (FActionShoutData* data : Adatas)
+	{
+		TPair<EStateType, FString> Script;
+		Script.Key = data->Type;
+		Script.Value = data->String;
+		ActionSpeak.Add(Script);
+	}
 }
 
 

@@ -7,7 +7,7 @@
 UENUM(BlueprintType)
 enum class EBehaviorType : uint8
 {
-	Wait, Approach, Action, Patrol, Hitted, Avoid,
+	Wait, Approach, Action, Patrol, Hitted, Avoid, Max,
 };
 //Event는 클래스를 소유해야한다.
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBehaviorTypeChanged, EBehaviorType, InPrevType, EBehaviorType, InNewType);

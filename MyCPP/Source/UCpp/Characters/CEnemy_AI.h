@@ -25,15 +25,9 @@ public:
     FORCEINLINE class UBehaviorTree* GetBehaviorTree() { return BehaviorTree; }
     FORCEINLINE uint8 GetTeamID() { return TeamID; }
 
-    virtual void End_Dead()   override;
 
     virtual void Interact(AActor* InOther) override;
 
-    void Shout();
- 
-
-protected:
-    
 public:
     ACEnemy_AI();
 

@@ -38,10 +38,7 @@ ACEnemy::ACEnemy()
 	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
 	CHelpers::CreateActorComponent<UCDialogueComponent>(this, &Dialogue, "Dialogue");
-	CHelpers::CreateActorComponent<UCPickupComponent>(this, &Pickup, "Pickup");
-
-	
-
+	CHelpers::CreateActorComponent<UCPickupComponent>(this, &Pickup, "Pickup");	
 
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
@@ -69,7 +66,7 @@ ACEnemy::ACEnemy()
 	TSubclassOf<UCUserWidget_Shout> ShoutClass;
 	CHelpers::GetClass<UCUserWidget_Shout>(&ShoutClass, "WidgetBlueprint'/Game/Widgets/WB_Shout.WB_Shout_C'");
 	ShoutWidget->SetWidgetClass(ShoutClass);
-	ShoutWidget->SetRelativeLocation(FVector(0, 190, 190));
+	ShoutWidget->SetRelativeLocation(FVector(0, 0, 190));
 	ShoutWidget->SetDrawSize(FVector2D(240, 30));
 	ShoutWidget->SetWidgetSpace(EWidgetSpace::Screen);
 	
@@ -99,6 +96,8 @@ void ACEnemy::BeginPlay()
 	Super::BeginPlay();
 	
 	State->OnStateTypeChanged.AddDynamic(this, &ACEnemy::OnStateTypeChanged);
+	State->OnStateTypeChanged.AddDynamic(this, &ACEnemy::Shout);
+
 
 	NameWidget->InitWidget();
 	Cast<UCUserWidget_Name>(NameWidget->GetUserWidgetObject())->SetNameText(GetActorLabel());
@@ -261,4 +260,28 @@ void ACEnemy::RestoreColor()
 {
 	FLinearColor color = Action->GetCurrent()->GetEquipmentColor();
 	ChangeColor(color);
+}
+
+
+void ACEnemy::Shout(EStateType InPrevType, EStateType InNewType)
+{
+	ShoutWidget->InitWidget();
+	CheckNull(ShoutWidget);
+	if (Dialogue->GetShout().Find(InNewType))
+	{
+		Cast<UCUserWidget_Shout>(ShoutWidget->GetUserWidgetObject())->Update(Dialogue->GetShout()[InNewType]);
+
+	}
+
+}
+
+void ACEnemy::Say(FString Text)
+{
+	ShoutWidget->InitWidget();
+	CheckNull(ShoutWidget);
+	//if (Dialogue->GetShout().Find(InNewType))
+	{
+		Cast<UCUserWidget_Shout>(ShoutWidget->GetUserWidgetObject())->Update(Text);
+
+	}
 }

@@ -19,6 +19,7 @@
 #include "Components/CEquipComponent.h"
 #include "Components/CDialogueComponent.h"
 
+#include "Kismet/KismetSystemLibrary.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Components/WidgetComponent.h"
@@ -145,6 +146,8 @@ void ACPlayer::BeginPlay()
 	StatusWidget->SetVisibility(ESlateVisibility::Hidden);
 
 }
+
+
 
 FGenericTeamId ACPlayer::GetGenericTeamId() const
 {
@@ -292,6 +295,9 @@ void ACPlayer::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
 	{
 		case EStateType::Roll:  Begin_Roll(); break;
 		case EStateType::Backstep: Begin_Backstep(); break;
+		case EStateType::Hitted: Hitted(); break;
+		case EStateType::Dead: Dead(); break;
+
 	}
 	if (InNewType == EStateType::Idle)
 	{
@@ -303,9 +309,80 @@ void ACPlayer::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
 	}
 }
 
+float ACPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	DamageInstigator = EventInstigator;
+	if (State->IsCorpseMode())
+	{
+		DamageValue = 0;
+
+	}
+	else
+	{
+		DamageValue = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+		State->SetHittedMode();
+
+	}
+	CLog::Log(Damage);
+
+	return Status->GetHealth();
+}
+
+void ACPlayer::Begin_Dead()
+{
+}
+
+void ACPlayer::End_Dead()
+{
+	//FGenericPlatformMisc::RequestExit(false);
+	UKismetSystemLibrary::QuitGame(this, 0, EQuitPreference::Quit, false);
+}
+
+void ACPlayer::Hitted()
+{
+	Status->SubHealth(DamageValue);
+	StatusWidget->Update(Status->GetHealth(), Status->GetMaxHealth());
+	//Cast<UCUserWidget_Health>(HealthWidget->GetUserWidgetObject())->Update(Status->GetHealth(), Status->GetMaxHealth());
+	DamageValue = 0.0f;
+
+	if (Status->GetHealth() <= 0.0f)
+	{
+		State->SetDeadMode();
+
+		return;
+	}
+
+	Status->SetStop();
 
 
+	FVector start = GetActorLocation();
+	FVector target = DamageInstigator->GetPawn()->GetActorLocation();
+	SetActorRotation(UKismetMathLibrary::FindLookAtRotation(start, target));
+	DamageInstigator = NULL;
 
+	FVector direction = target - start;
+	direction.Normalize();
+	LaunchCharacter(-direction * LaunchAmount, true, false);//z축이 개입할거냐 아닐거냐
+
+	ChangeColor(FLinearColor(1, 0, 0, 1));
+
+	UKismetSystemLibrary::K2_SetTimer(this, "RestoreColor", 0.1f, false);//delay
+	Montages->PlayHitted();
+}
+
+void ACPlayer::Dead()
+{
+	CheckFalse(State->IsDeadMode());
+
+	Montages->PlayDead();
+}
+
+void ACPlayer::RestoreColor()
+{
+	FLinearColor color = Action->GetCurrent()->GetEquipmentColor();
+	ChangeColor(color);
+	Status->SetMove();
+}
 
 void ACPlayer::EquipSecond(EActionType InActionType)
 {

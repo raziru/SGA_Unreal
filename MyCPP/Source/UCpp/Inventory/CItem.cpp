@@ -5,7 +5,7 @@
 ACItem::ACItem()
 {
 	InteractType = EInteractType::Pickable;
-
+	
 }
 
 void ACItem::BeginPlay()

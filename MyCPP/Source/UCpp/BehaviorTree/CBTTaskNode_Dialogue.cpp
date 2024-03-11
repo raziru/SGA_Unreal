@@ -27,10 +27,23 @@ EBTNodeResult::Type UCBTTaskNode_Dialogue::ExecuteTask(UBehaviorTreeComponent& O
 
 	UCBehaviorComponent* behavior = CHelpers::GetComponent<UCBehaviorComponent>(controller);
 
-	if (!!ai)
+	UCDialogueComponent* dialogue = CHelpers::GetComponent<UCDialogueComponent>(ai);
+
+	if (behavior->IsApproachMode())
 	{
-		ai->Shout();
+		if (dialogue->GetBehaviorShout().Find(EBehaviorType::Approach))
+		{
+			ai->Say(dialogue->GetBehaviorShout()[EBehaviorType::Approach]);
+		}
 	}
+	else if (behavior->IsPatrolMode())
+	{
+		if (dialogue->GetBehaviorShout().Find(EBehaviorType::Patrol))
+		{
+			ai->Say(dialogue->GetBehaviorShout()[EBehaviorType::Patrol]);
+		}
+	}
+
 
 	return EBTNodeResult::Succeeded;
 

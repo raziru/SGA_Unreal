@@ -34,6 +34,20 @@ void UCPickupComponent::Pickup(AActor* InOther)
 void UCPickupComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	CheckNull(DataTable);
+
+	TArray< FItemTableData*> datas;
+	DataTable->GetAllRows<FItemTableData>("", datas);
+
+
+	for (FItemTableData* data : datas)
+	{
+		TPair<TSubclassOf<class ACItem>, int> ItemData;
+		ItemData.Key = data->item;
+		ItemData.Value = data->Count;
+		ItemClasses.Add(ItemData);
+	};
 	
 	
 }
