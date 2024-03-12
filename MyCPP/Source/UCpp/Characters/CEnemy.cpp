@@ -66,7 +66,7 @@ ACEnemy::ACEnemy()
 	TSubclassOf<UCUserWidget_Shout> ShoutClass;
 	CHelpers::GetClass<UCUserWidget_Shout>(&ShoutClass, "WidgetBlueprint'/Game/Widgets/WB_Shout.WB_Shout_C'");
 	ShoutWidget->SetWidgetClass(ShoutClass);
-	ShoutWidget->SetRelativeLocation(FVector(0, 0, 190));
+	ShoutWidget->SetRelativeLocation(FVector(0, 0, 270));
 	ShoutWidget->SetDrawSize(FVector2D(240, 30));
 	ShoutWidget->SetWidgetSpace(EWidgetSpace::Screen);
 	

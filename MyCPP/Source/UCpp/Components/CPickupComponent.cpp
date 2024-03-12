@@ -16,6 +16,8 @@ void UCPickupComponent::Pickup(AActor* InOther)
 {
 	UCInventoryComponent* Inventory = CHelpers::GetComponent<UCInventoryComponent>(InOther);
 	CheckNull(Inventory);
+	
+	CheckFalse(IsOpened);
 
 	for (TPair<UClass*, int> ItemClass: ItemClasses)
 	{
@@ -29,6 +31,7 @@ void UCPickupComponent::Pickup(AActor* InOther)
 		}
 		item->Destroy();
 	}
+	IsOpened = true;
 }
 
 void UCPickupComponent::BeginPlay()
@@ -41,13 +44,33 @@ void UCPickupComponent::BeginPlay()
 	DataTable->GetAllRows<FItemTableData>("", datas);
 
 
-	for (FItemTableData* data : datas)
+	if (IsRand)
 	{
-		TPair<TSubclassOf<class ACItem>, int> ItemData;
-		ItemData.Key = data->item;
-		ItemData.Value = data->Count;
-		ItemClasses.Add(ItemData);
-	};
+		for (FItemTableData* data : datas)
+		{
+			if (FMath::RandRange(0.0f, 1.0f) >= 0.5f)
+			{
+				TPair<TSubclassOf<class ACItem>, int> ItemData;
+				ItemData.Key = data->item;
+				ItemData.Value = FMath::RandRange(1, 4);
+				ItemClasses.Add(ItemData);
+			}
+
+		};
+	}
+	else
+	{
+		for (FItemTableData* data : datas)
+		{
+			
+			TPair<TSubclassOf<class ACItem>, int> ItemData;
+			ItemData.Key = data->item;
+			ItemData.Value = data->Count;
+			ItemClasses.Add(ItemData);		
+
+		};
+	}
+	
 	
 	
 }

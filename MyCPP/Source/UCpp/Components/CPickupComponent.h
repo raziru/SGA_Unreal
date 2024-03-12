@@ -42,4 +42,10 @@ private:
 	UPROPERTY(EditAnywhere, Category = "DataTable")
 		UDataTable* DataTable;
 
+
+private:
+	UPROPERTY(EditAnywhere)
+		bool IsRand;
+	UPROPERTY(EditAnywhere)
+		bool IsOpened;
 };
