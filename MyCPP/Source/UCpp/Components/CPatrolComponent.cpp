@@ -14,6 +14,11 @@ void UCPatrolComponent::BeginPlay()
 {
     Super::BeginPlay();
 
+    if (!!Path)
+    {
+        //CHelpers::GetClass()
+    }
+
 }
 
 bool UCPatrolComponent::GetMoveTo(FVector& OutLocation, float& OutAcceptanceRadius)

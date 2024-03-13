@@ -153,6 +153,14 @@ void UCActionComponent::DestoryAction()
 	}
 }
 
+void UCActionComponent::SetEnemyWeapon()
+{
+	CheckNull(EnemyWeaponData);
+	SetNewMainWeapon(EnemyWeaponData, EnemyActionType);
+	SetMainWeaponMode();
+
+}
+
 void UCActionComponent::SetNewMainWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType)
 {
 	CheckNull(NewItemAction);
@@ -276,6 +284,10 @@ void UCActionComponent::DoAction()
 
 		if (!!action)
 			action->DoAction();
+	}
+	if (IsEnemyBow)
+	{
+		DoActionRelease();
 	}
 }
 

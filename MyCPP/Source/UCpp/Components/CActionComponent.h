@@ -37,7 +37,7 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 		class UCActionData* UnarmedData;
 private:
-	UPROPERTY(EditDefaultsOnly, Category = "Weapons")
+	UPROPERTY(EditAnywhere, Category = "Weapons")
 		class UCActionData* MainWeaponData;
 
 	EActionType MainWeaponType;
@@ -91,6 +91,7 @@ public:
 public:	
 	// Sets default values for this component's properties
 	UCActionComponent();
+
 	UFUNCTION(BlueprintCallable)
 		void SetUnarmedMode();
 	UFUNCTION(BlueprintCallable)
@@ -102,12 +103,19 @@ public:
 	void SetWarpMode();
 	void SetFireStormMode();
 	void SetThrowMode();
+
 	void SetMainWeaponMode();
+	UFUNCTION(BlueprintCallable)
+		void SetEnemyBow(bool NewEnemyBow) { this->IsEnemyBow = NewEnemyBow; }
+
 	void SetSecondWeaponMode();
 	void SetToolMode();
 
 	void OffAllCollision();
 	void DestoryAction();
+
+	UFUNCTION(BlueprintCallable)
+		void SetEnemyWeapon();
 
 	UFUNCTION()
 		void SetNewMainWeapon(class UCActionData* NewItemAction, EActionType NewItemActionType);
@@ -206,17 +214,18 @@ private:
 
 	ACharacter* Owner;
 
-
-	
 	bool IsAiming = false;
 	bool OnShield = false;
 	bool OnGuard  = false;
 
-
 	bool IsConsumableTool = false;
 
+	bool IsEnemyBow;
 private:
 	class UCUserWidget_ActionList* ActionList;
 	class UCAction* Datas[(int32)EActionType::Max];
-
+	UPROPERTY(EditAnywhere)
+		class UCActionData* EnemyWeaponData;
+	UPROPERTY(EditAnywhere)
+		EActionType EnemyActionType;
 };
