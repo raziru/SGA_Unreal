@@ -27,9 +27,11 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 
     ACEnemy_AI* ai = Cast<ACEnemy_AI>(controller->GetPawn());
     UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(ai);
-    
-
     UCPatrolComponent* patrol = CHelpers::GetComponent<UCPatrolComponent>(ai);
+    UCActionComponent* action = CHelpers::GetComponent<UCActionComponent>(ai);
+
+
+
 
     if (state->IsCorpseMode())
     {
@@ -41,7 +43,7 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
     {
         CanAvoid = false;
         AvoidCount = 0;
-        AvoidTime = 0.0f;
+        //AvoidTime = 0.0f;
         behavior->SetAvoidMode();
         return;
     }
@@ -50,7 +52,7 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
     {
         behavior->SetHittedMode();
         AvoidCount++;
-        if (AvoidCount>=(FMath::RandRange(4, 7)))
+        if (AvoidCount>=(FMath::RandRange(2, 4)))
         {
             CanAvoid = true;
 
@@ -77,16 +79,31 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
     }
 
     float distance = ai->GetDistanceTo(target);
-    if (distance < controller->GetMeleeActionRange())
+    if (action->IsUnarmedMode()||action->IsOneHandMode()||action->IsTwoHandMode())
     {
-        behavior->SetActionMode();
-        AvoidTime += DeltaSeconds;
-        if (AvoidTime>= FMath::RandRange(3.0f, 4.0f))
+        if (distance < controller->GetMeleeActionRange())
         {
-            CLog::Print(AvoidTime);
-            CanAvoid = true;
+           
+            FVector start = ai->GetActorLocation();
+            FVector dest = target->GetActorLocation();
+            ai->SetActorRotation(UKismetMathLibrary::FindLookAtRotation(start, dest));
+            behavior->SetActionMode();
+
+            return;
         }
-        return;
+    }   
+    else
+    {
+        if (distance < controller->GetRangeActionRange())
+        {
+        
+            FVector start = ai->GetActorLocation();
+            FVector dest = target->GetActorLocation();
+            ai->SetActorRotation(UKismetMathLibrary::FindLookAtRotation(start, dest));
+            behavior->SetActionMode();
+
+            return;
+        }
     }
 
     if (distance < controller->GetSightRadius())

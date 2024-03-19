@@ -15,6 +15,9 @@ private:
         float MeleeActionRange = 150;
 
     UPROPERTY(EditAnywhere)
+        float RangeActionRange = 600;
+
+    UPROPERTY(EditAnywhere)
         bool bDrawDebug = true;
 
     UPROPERTY(EditAnywhere)
@@ -28,6 +31,8 @@ private:
         class UCBehaviorComponent* Behavior;
 public:
     FORCEINLINE float GetMeleeActionRange() { return MeleeActionRange; }
+    FORCEINLINE float GetRangeActionRange() { return RangeActionRange; }
+
 protected:
     virtual void BeginPlay() override;
 

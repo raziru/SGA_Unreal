@@ -23,7 +23,6 @@ void UCAim::BeginPlay(ACharacter* InCharacter)
 
 	HUD = OwnerCharacter->GetWorld()->GetFirstPlayerController()->GetHUD<ACHUD>();
 
-
 	TimelineFloat.BindUFunction(this, "Zooming");
 
 	Timeline.AddInterpFloat(Curve, TimelineFloat);

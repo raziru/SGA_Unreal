@@ -7,6 +7,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "Components/CBehaviorComponent.h"
+#include "Components/CActionComponent.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 
@@ -21,8 +22,8 @@ ACAIController::ACAIController()
 	CHelpers::CreateActorComponent<UCBehaviorComponent>(this, &Behavior, "Behavior");
 
 	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>("Sight");
-	Sight->SightRadius = 600;
-	Sight->LoseSightRadius = 800;
+	Sight->SightRadius = 800;
+	Sight->LoseSightRadius = 1000;
 	Sight->PeripheralVisionAngleDegrees = 90;
 	Sight->SetMaxAge(2);
 
@@ -59,6 +60,7 @@ void ACAIController::OnPossess(APawn* InPawn)
 	Behavior->SetBlackboard(Blackboard);
 
 	RunBehaviorTree(OwnerEnemy->GetBehaviorTree());
+
 }
 
 void ACAIController::OnUnPossess()
@@ -97,4 +99,7 @@ void ACAIController::OnPerceptionUpdated(const TArray<AActor*>& UpdateActors)
 	}
 
 	Blackboard->SetValueAsObject("Player", player);
+
+	
 }
+

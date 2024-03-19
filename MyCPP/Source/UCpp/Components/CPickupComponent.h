@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Engine/DataTable.h"
 #include "CPickupComponent.generated.h"
 
 USTRUCT(BlueprintType)
