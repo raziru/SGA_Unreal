@@ -40,6 +40,22 @@ public:
 };
 
 
+USTRUCT(BlueprintType)
+struct FSpeakData : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere)
+		int ID;
+
+	UPROPERTY(EditAnywhere)
+		FString String;
+
+	UPROPERTY(EditAnywhere)
+		int Index;
+};
+
 UCLASS( ClassGroup=(GameProject), meta=(BlueprintSpawnableComponent) )
 class UCPP_API UCDialogueComponent : public UActorComponent
 {
@@ -68,12 +84,18 @@ private:
 	UPROPERTY(EditAnywhere)
 		FName Name;
 
+	UPROPERTY(EditAnywhere)
+		int SpeakID;
+
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "DataTable")
 		UDataTable* ActionSpeakTable;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "DataTable")
 		UDataTable* BehaviorSpeakTable;
+
+	UPROPERTY(EditDefaultsOnly, Category = "DataTable")
+		UDataTable* SpeakTable;
 
 public:	
 	UCDialogueComponent();

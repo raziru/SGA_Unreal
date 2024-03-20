@@ -17,7 +17,7 @@ void UCPickupComponent::Pickup(AActor* InOther)
 	UCInventoryComponent* Inventory = CHelpers::GetComponent<UCInventoryComponent>(InOther);
 	CheckNull(Inventory);
 	
-	CheckFalse(IsOpened);
+	CheckTrue(IsOpened);
 
 	for (TPair<UClass*, int> ItemClass: ItemClasses)
 	{

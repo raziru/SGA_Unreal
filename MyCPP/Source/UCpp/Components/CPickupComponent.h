@@ -37,7 +37,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Item")
 		TArray<class ACItem*> Items;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Item")
+	UPROPERTY(VisibleAnywhere, Category = "Item")
 		TMap<TSubclassOf<class ACItem>,int> ItemClasses;
 
 	UPROPERTY(EditAnywhere, Category = "DataTable")

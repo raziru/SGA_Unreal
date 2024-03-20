@@ -100,6 +100,19 @@ void UCDialogueComponent::BeginPlay()
 		Script.Value = data->String;
 		ActionSpeak.Add(Script);
 	}
+
+	CheckNull(SpeakTable);
+
+	TArray<  FSpeakData*> Sdatas;
+	ActionSpeakTable->GetAllRows< FSpeakData>("", Sdatas);
+
+	for (FSpeakData* data : Sdatas)
+	{
+		if (data->ID == SpeakID)
+		{
+			Speak.Add(data->String);
+		}
+	}
 }
 
 

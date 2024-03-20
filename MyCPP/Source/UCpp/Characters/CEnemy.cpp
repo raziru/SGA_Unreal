@@ -47,6 +47,10 @@ ACEnemy::ACEnemy()
 	CHelpers::GetAsset<USkeletalMesh>(&mesh, "SkeletalMesh'/Game/Character/Mesh/SK_Mannequin.SK_Mannequin'");
 	GetMesh()->SetSkeletalMesh(mesh);
 	
+	TSubclassOf<UAnimInstance> animInstance;
+	CHelpers::GetClass<UAnimInstance>(&animInstance, "AnimBlueprint'/Game/Enemies/ABP_CEnemy.ABP_CEnemy_C'");
+	GetMesh()->SetAnimInstanceClass(animInstance);
+
 	GetCharacterMovement()->RotationRate = FRotator(0, 720, 0);
 
 	TSubclassOf<UCUserWidget_Name> nameClass;
